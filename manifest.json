@@ -1,0 +1,18 @@
+{
+  "name": "奔虎锂电 · 车型电池智能匹配",
+  "short_name": "奔虎电池匹配",
+  "description": "输入电动车车型，秒查可安装的奔虎锂电池型号。覆盖小牛、九号、极核、雅迪等10+品牌",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#e2720c",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.8em' font-size='90'%3E🔋%3C/text%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
