@@ -26,9 +26,9 @@ function checkFit(battery, vehicle) {
   var vVolt = vMatch ? parseInt(vMatch[1]) : 0;
   var battVolt = battery.电压_V || 0;
   var voltOk = true;
-  if (vVolt === 60 && battVolt !== 48) { voltOk = false; reasons.push('电压不匹配：60V原厂需用64V锂电'); }
-  if (vVolt === 72 && battVolt !== 72) { voltOk = false; reasons.push('电压不匹配：72V原厂需用76V锂电'); }
-  if (vVolt === 48 && battVolt !== 48) { voltOk = false; reasons.push('电压不匹配：48V原厂需用64V锂电'); }
+  if (vVolt === 60 && battVolt !== 64) { voltOk = false; reasons.push('电压不匹配：60V原厂需用64V锂电'); }
+  if (vVolt === 72 && battVolt !== 76.8) { voltOk = false; reasons.push('电压不匹配：72V原厂需用76.8V锂电'); }
+  if (vVolt === 48 && battVolt !== 64) { voltOk = false; reasons.push('电压不匹配：48V原厂需用64V锂电'); }
   // Power matching
   var battMaxPwr = battery.适用电机功率_最大_W || 99999;
   var vehPwr = vehicle.电机_额定功率_W || 0;
