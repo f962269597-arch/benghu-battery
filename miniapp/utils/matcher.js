@@ -22,7 +22,7 @@ function checkFit(battery, vehicle) {
   var sizeFit = lOk && wOk && hOk;
   // Voltage matching
   var vSpec = (vehicle.原厂电池规格 || '').toLowerCase();
-  var vMatch = vSpec.match(/(\d+)\s*v/);
+  var vMatch = vSpec.match(/(\d+)\s*v/i);
   var vVolt = vMatch ? parseInt(vMatch[1]) : 0;
   var battVolt = battery.电压_V || 0;
   var voltOk = true;
