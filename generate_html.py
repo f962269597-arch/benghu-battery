@@ -157,12 +157,26 @@ if(!lOk)reasons.push('长度超限('+bl+'>'+vl+'mm)');
 if(!wOk)reasons.push('宽度超限('+bw+'>'+vw+'mm)');
 if(!hOk)reasons.push('高度超限('+bh+'>'+vh+'mm)');
 if(vehicle.电池仓_宽窄处_mm&&bw>vehicle.电池仓_宽窄处_mm)reasons.push('宽度超窄处限制');
+// T型仓检查：如果标注了T型，电池需适配分段尺寸
+if(vehicle.电池仓_T型&&vehicle.电池仓_T型前宽_mm&&bw>vehicle.电池仓_T型前宽_mm)reasons.push('T型仓前段宽度超限');
 var sizeFit=lOk&&wOk&&hOk;
+// 电压匹配：60V原厂→64V锂电(48V标称), 72V原厂→76V锂电(72V标称)
+var vSpec=(vehicle.原厂电池规格||'').toLowerCase();
+var vVolt=0;
+var vm=vSpec.match(/(\\d+)\\s*v/);
+if(vm)vVolt=parseInt(vm[1]);
+var battVolt=battery.电压_V||0;
+var voltOk=true;
+if(vVolt===60&&battVolt!==48){{voltOk=false;reasons.push('电压不匹配：60V原厂需用64V锂电(48V标称)');}}
+if(vVolt===72&&battVolt!==72){{voltOk=false;reasons.push('电压不匹配：72V原厂需用76V锂电(72V标称)');}}
+if(vVolt===48&&battVolt!==48){{voltOk=false;reasons.push('电压不匹配：48V原厂需用64V锂电(48V标称)');}}
+// 功率匹配
 var battMaxPwr=battery.适用电机功率_最大_W||99999;
 var vehPwr=vehicle.电机_额定功率_W||0;
 var powerFit=vehPwr<=battMaxPwr;
-var level=sizeFit?(powerFit?'完美匹配':'尺寸合适(功率需确认)'):'尺寸不匹配';
-return{{fits:sizeFit,powerFit:powerFit,fitLevel:level,reasons:reasons}};
+var level=(sizeFit&&voltOk)?(powerFit?'完美匹配':'尺寸合适(功率需确认)'):(sizeFit&&!voltOk?'电压不匹配':'尺寸不匹配');
+var fits=sizeFit&&voltOk;
+return{{fits:fits,powerFit:powerFit,voltOk:voltOk,fitLevel:level,reasons:reasons}};
 }}
 
 function matchVehicleToBatteries(vehicle){{return allBatteriesFlat.map(function(b){{var r=checkFit(b,vehicle);r.battery=b;return r;}}).sort(function(a,b){{var o={{'完美匹配':0,'尺寸合适(功率需确认)':1,'尺寸不匹配':2}};return(o[a.fitLevel]||3)-(o[b.fitLevel]||3);}});}}
