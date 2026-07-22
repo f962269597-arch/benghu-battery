@@ -1,0 +1,162 @@
+<view class="header">
+  <view class="header-title">奔虎锂电 · 电池匹配</view>
+  <view class="header-sub">{{stats.vehicles}}款车型 · {{stats.batteries}}款电池 · {{stats.brands}}品牌</view>
+</view>
+
+<view class="container">
+  <!-- Stats -->
+  <view class="stats">
+    <view class="stat-card">
+      <view class="stat-num">{{stats.vehicles}}</view>
+      <view class="stat-label">收录车型</view>
+    </view>
+    <view class="stat-card">
+      <view class="stat-num">{{stats.brands}}</view>
+      <view class="stat-label">覆盖品牌</view>
+    </view>
+    <view class="stat-card">
+      <view class="stat-num">{{stats.batteries}}</view>
+      <view class="stat-label">电池型号</view>
+    </view>
+    <view class="stat-card">
+      <view class="stat-num">{{resultCount}}</view>
+      <view class="stat-label">匹配结果</view>
+    </view>
+  </view>
+
+  <!-- Search box -->
+  <view class="search-box">
+    <!-- Mode tabs -->
+    <view class="mode-tabs">
+      <view class="mode-tab {{mode==='vehicle'?'active':''}}" bindtap="switchMode" data-mode="vehicle">按车型查电池</view>
+      <view class="mode-tab {{mode==='battery'?'active':''}}" bindtap="switchMode" data-mode="battery">按电池查车型</view>
+    </view>
+
+    <!-- Vehicle search -->
+    <view class="search-row" wx:if="{{mode==='vehicle'}}">
+      <input class="search-input" placeholder="输入车型，如：M95c、NX play、AE5..." value="{{keyword}}" bindinput="onKeywordInput" bindconfirm="doSearch" />
+      <picker class="brand-picker" value="{{brandIndex}}" range="{{brandNames}}" bindchange="onBrandChange">
+        <view class="picker-text">{{brandNames[brandIndex] || '全部品牌'}}</view>
+      </picker>
+      <button class="btn-search" bindtap="doSearch">搜索</button>
+      <button class="btn-reset" bindtap="resetSearch">重置</button>
+    </view>
+
+    <!-- Battery search -->
+    <view class="search-row" wx:if="{{mode==='battery'}}">
+      <input class="search-input" placeholder="输入电池型号，如：奔虎7660..." value="{{keyword}}" bindinput="onKeywordInput" bindconfirm="doSearch" />
+      <button class="btn-search" bindtap="doSearch">搜索</button>
+      <button class="btn-reset" bindtap="resetSearch">重置</button>
+    </view>
+  </view>
+
+  <!-- Empty state -->
+  <view class="empty" wx:if="{{results.length === 0 && !loading}}">
+    <view class="empty-icon">&#x1F50D;</view>
+    <view>搜索车型，即刻匹配可安装的奔虎电池</view>
+  </view>
+
+  <!-- Vehicle Results -->
+  <view wx:if="{{mode==='vehicle'}}">
+    <view class="result-summary" wx:if="{{results.length > 0}}">
+      找到 <text class="highlight">{{results.length}}</text> 款车型
+    </view>
+    <view class="card" wx:for="{{results}}" wx:key="model" bindtap="showDetail" data-id="{{index}}">
+      <view class="card-header">
+        <view class="card-left">
+          <view class="card-title">{{item['型号']}}</view>
+          <view class="card-brand">
+            {{item._brandShort}} · {{item['类型']}}
+            <text class="src-badge src-{{item._confClass}}">{{item['可信度']}}可信 · {{item['数据来源']}}</text>
+          </view>
+        </view>
+        <view class="power-tag power-{{item._powerLevel}}">{{item._powerLabel}}</view>
+      </view>
+      <view class="card-specs">
+        <view class="spec-row">
+          <text class="spec-label">电池仓：</text>
+          <text class="spec-value">{{item['电池仓_长_mm']}}×{{item['电池仓_宽_mm']}}×{{item['电池仓_高_mm']}} mm</text>
+        </view>
+        <view class="spec-row">
+          <text class="spec-label">电机功率：</text>
+          <text class="spec-value">{{item['电机_额定功率_W']}}W{{item['电机_峰值功率_W'] ? ' / 峰值'+item["电机_峰值功率_W"]+'W' : ''}}</text>
+        </view>
+        <view class="spec-row">
+          <text class="spec-label">原厂电池：</text>
+          <text class="spec-value">{{item['原厂电池规格'] || '-'}}</text>
+        </view>
+        <view class="spec-row">
+          <text class="spec-label">可匹配：</text>
+          <text class="spec-value highlight">{{item._fitCount}}款{{item._perfectCount ? ' ('+item._perfectCount+'款完美)' : ''}}</text>
+        </view>
+      </view>
+      <view class="card-note" wx:if="{{item['备注']}}">💡 {{item['备注']}}</view>
+      <view class="card-battery-list" wx:if="{{item._fitBatteries.length > 0}}">
+        <view class="battery-label">🔋 可装奔虎电池：</view>
+        <view class="battery-item" wx:for="{{item._fitBatteries}}" wx:for-item="br" wx:key="*this" wx:if="{{index < 3}}">
+          <text class="batt-name">{{br.battery['型号']}}</text>
+          {{br.battery['电压_V']}}V{{br.battery['容量_Ah']}}Ah {{br.battery['长_mm']}}×{{br.battery['宽_mm']}}×{{br.battery['高_mm']}}mm
+          <text class="match-badge fit">{{br.fitLevel}}</text>
+        </view>
+        <view class="more-hint" wx:if="{{item._fitBatteries.length > 3}}">+ {{item._fitBatteries.length - 3}} 款更多...</view>
+      </view>
+      <view class="card-no-match" wx:if="{{item._fitBatteries.length === 0}}">⚠️ 暂无匹配电池</view>
+    </view>
+  </view>
+
+  <!-- Battery Results -->
+  <view wx:if="{{mode==='battery' && batteryResults.length > 0}}">
+    <view class="result-summary">电池可匹配 <text class="highlight">{{resultCount}}</text> 款车型</view>
+    <view class="card match-card" wx:for="{{batteryResults}}" wx:for-item="r" wx:key="_key">
+      <view class="card-header">
+        <view class="card-left">
+          <view class="card-title">{{r.vehicle['型号']}}</view>
+          <view class="card-brand">{{r.vehicle._brandShort}} · {{r.vehicle['类型']}}</view>
+        </view>
+        <text class="match-badge fit">✅ {{r.fitLevel}}</text>
+      </view>
+      <view class="card-specs">
+        <view class="spec-row"><text class="spec-label">电池仓：</text><text class="spec-value">{{r.vehicle['电池仓_长_mm']}}×{{r.vehicle['电池仓_宽_mm']}}×{{r.vehicle['电池仓_高_mm']}} mm</text></view>
+        <view class="spec-row"><text class="spec-label">电池：</text><text class="spec-value">{{r.battery['型号']}} ({{r.battery['长_mm']}}×{{r.battery['宽_mm']}}×{{r.battery['高_mm']}}mm)</text></view>
+        <view class="spec-row"><text class="spec-label">电机：</text><text class="spec-value">{{r.vehicle['电机_额定功率_W']}}W / 电池{{r.battery['电压_V']}}V</text></view>
+      </view>
+      <view class="card-warning" wx:if="{{r.reasons.length > 0 && r.fitLevel !== '完美匹配'}}">⚠️ {{r.reasons.join('；')}}</view>
+    </view>
+  </view>
+
+</view>
+
+<!-- Detail Modal -->
+<view class="modal-overlay {{showModal?'show':''}}" bindtap="closeModal">
+  <view class="modal" catchtap="noop">
+    <view class="modal-header">
+      <view class="modal-title">{{detail['型号']}}</view>
+      <view class="modal-close" bindtap="closeModal">✕</view>
+    </view>
+    <view class="modal-brand">
+      {{detail._brandName}} · {{detail['类型']}}
+      <text class="src-badge src-{{detail._confClass}}">{{detail['可信度']}}可信 · {{detail['数据来源']}}</text>
+    </view>
+    <view class="modal-specs">
+      <view class="mspec"><text class="mspec-label">电池仓：</text>{{detail['电池仓_长_mm']}} × {{detail['电池仓_宽_mm']}} × {{detail['电池仓_高_mm']}} mm</view>
+      <view class="mspec" wx:if="{{detail['电池仓_宽窄处_mm']}}"><text class="mspec-label">窄处宽：</text>{{detail['电池仓_宽窄处_mm']}} mm</view>
+      <view class="mspec" wx:if="{{detail['电池仓_T型']}}"><text class="mspec-label">类型：</text>T型电池仓</view>
+      <view class="mspec"><text class="mspec-label">额定功率：</text>{{detail['电机_额定功率_W']}}W</view>
+      <view class="mspec"><text class="mspec-label">峰值功率：</text>{{detail['电机_峰值功率_W'] || '-'}}W</view>
+      <view class="mspec"><text class="mspec-label">原厂电池：</text>{{detail['原厂电池规格'] || '-'}}</view>
+    </view>
+    <view class="modal-note" wx:if="{{detail['备注']}}">💡 {{detail['备注']}}</view>
+    <view class="modal-divider"></view>
+    <view class="modal-batt-title">🔋 匹配的奔虎电池 ({{detail._fitBatteries.length}}款)</view>
+    <view wx:if="{{detail._fitBatteries.length === 0}}" class="no-match">暂无匹配电池</view>
+    <view class="modal-batt-item" wx:for="{{detail._fitBatteries}}" wx:for-item="br" wx:key="*this">
+      <view class="mbi-header">
+        <text class="mbi-name">{{br.battery['型号']}}</text>
+        <text class="match-badge fit">{{br.fitLevel}}</text>
+      </view>
+      <view class="mbi-info">{{br.battery['电压_V']}}V {{br.battery['容量_Ah']}}Ah | {{br.battery['长_mm']}}×{{br.battery['宽_mm']}}×{{br.battery['高_mm']}}mm | {{br.battery['持续放电电流_A']}}A/{{br.battery['峰值放电电流_A']}}A{{br.battery['重量_kg'] ? ' | '+br.battery["重量_kg"]+'kg' : ''}}</view>
+      <view class="mbi-extra">适配电机：{{br.battery['适用电机功率_最小_W']}}-{{br.battery['适用电机功率_最大_W']}}W | {{br.battery['电芯类型']}} | {{br.battery['壳体材质']}}</view>
+    </view>
+    <view class="modal-warning" wx:if="{{detail._perfectCount === 0 && detail._fitBatteries.length > 0}}">⚠️ 功率范围需进一步确认</view>
+  </view>
+</view>
