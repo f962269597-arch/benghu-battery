@@ -6,1121 +6,630 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="奔虎电池匹配">
-<meta name="theme-color" content="#1a1a2e">
+<meta name="theme-color" content="#f7f7f8">
 <link rel="manifest" href="manifest.json">
-<title>奔虎锂电 · 车型电池智能匹配系统</title>
+<title>奔虎锂电 · 产品展示与车型电池智能匹配</title>
 <style>
+:root{
+  --bg:#f7f7f8;--card:#ffffff;--border:#d9dadc;--fg:#33363b;--muted:#6b7077;
+  --yellow:#e8b20a;--yellow-fg:#221d08;--yellow-soft:rgba(232,178,10,.12);
+  --gray-start:#4a4f57;--gray-end:#767c84;
+  --green:#16a34a;--green-bg:#dcfce7;
+  --red:#dc2626;--red-bg:#fee2e2;
+  --amber:#b45309;--amber-bg:#fef3c7;
+  --blue:#2563eb;--blue-bg:#dbeafe;
+  --radius:12px;
+  --shadow:0 1px 3px rgba(0,0,0,.07),0 6px 20px rgba(0,0,0,.05);
+}
+html.dark{
+  --bg:#16161a;--card:#1f2025;--border:#2e3037;--fg:#e9e9ee;--muted:#9aa0a9;
+  --yellow:#f0c33c;--yellow-fg:#231c04;--yellow-soft:rgba(240,195,60,.14);
+  --gray-start:#a7adb8;--gray-end:#cdd2da;
+  --green:#4ade80;--green-bg:rgba(74,222,128,.14);
+  --red:#f87171;--red-bg:rgba(248,113,113,.14);
+  --amber:#fbbf24;--amber-bg:rgba(251,191,36,.14);
+  --blue:#60a5fa;--blue-bg:rgba(96,165,250,.14);
+  --shadow:0 1px 3px rgba(0,0,0,.4),0 6px 20px rgba(0,0,0,.35);
+}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:#f0f2f5;color:#333;min-height:100vh}
-.header{background:linear-gradient(135deg,#1a1a2e,#e2720c);color:#fff;padding:20px 0;text-align:center}
-.header h1{font-size:clamp(20px,5vw,28px);font-weight:700;letter-spacing:2px}
-.header p{font-size:14px;opacity:.85;margin-top:6px}
-.container{max-width:1200px;margin:0 auto;padding:12px}
-.search-box{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 12px rgba(0,0,0,.08)}
+html{scroll-behavior:smooth}
+body{font-family:'Microsoft YaHei','PingFang SC',-apple-system,'Segoe UI',sans-serif;background:var(--bg);color:var(--fg);min-height:100vh;line-height:1.55}
+img{display:block}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+/* ===== 顶栏 ===== */
+.topbar{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.topbar-in{max-width:1280px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:9px;flex-shrink:0}
+.logo-badge{width:34px;height:34px;border-radius:9px;background:var(--yellow);display:flex;align-items:center;justify-content:center;font-size:19px;color:var(--yellow-fg);box-shadow:0 2px 8px rgba(232,178,10,.35)}
+.logo-name{font-weight:800;font-size:17px;letter-spacing:1px;background:linear-gradient(to right,var(--gray-start),var(--gray-end));-webkit-background-clip:text;background-clip:text;color:transparent}
+.top-search{flex:1;min-width:200px;max-width:480px;position:relative}
+.top-search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--muted)}
+.top-search input{width:100%;height:38px;padding:0 36px 0 34px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--fg);font-size:14px;outline:none;transition:border-color .15s}
+.top-search input:focus{border-color:var(--yellow)}
+.top-search input::placeholder{color:var(--muted)}
+.top-actions{margin-left:auto;display:flex;align-items:center;gap:8px}
+.top-link{font-size:13px;color:var(--muted);padding:6px 10px;border-radius:8px;transition:all .15s}
+.top-link:hover{color:var(--fg);background:color-mix(in srgb,var(--fg) 6%,transparent)}
+.icon-btn{width:36px;height:36px;border-radius:9px;border:1px solid var(--border);background:var(--card);color:var(--fg);display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .15s}
+.icon-btn:hover{border-color:var(--yellow)}
+/* ===== Hero ===== */
+.hero{position:relative;overflow:hidden;color:#fff;text-align:center}
+.hero-bg{position:absolute;inset:0;background:url('assets/img/hero-bg.jpg') center 38%/cover no-repeat}
+.hero-mask{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,12,16,.62) 0%,rgba(10,12,16,.45) 55%,var(--bg) 100%)}
+.hero-in{position:relative;max-width:1280px;margin:0 auto;padding:64px 16px 46px}
+.hero h1{font-size:clamp(26px,5vw,40px);font-weight:800;letter-spacing:3px;text-shadow:0 2px 14px rgba(0,0,0,.45)}
+.hero h1 em{font-style:normal;color:var(--yellow)}
+.hero p{margin-top:10px;font-size:15px;opacity:.88;letter-spacing:1px}
+.hero-stats{margin-top:26px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.hstat{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(6px);border-radius:12px;padding:10px 20px;min-width:96px}
+.hstat .n{font-size:24px;font-weight:800;color:var(--yellow)}
+.hstat .l{font-size:12px;opacity:.85;margin-top:2px}
+/* ===== 主体 ===== */
+.container{max-width:1280px;margin:0 auto;padding:26px 16px 60px}
+section.block{margin-bottom:34px}
+.sec-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.sec-head h2{font-size:21px;font-weight:800;letter-spacing:1px}
+.sec-head .sub{font-size:13px;color:var(--muted)}
+.sec-tag{display:inline-block;background:var(--yellow-soft);color:var(--yellow);font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px}
+/* ===== 搜索区 ===== */
+.search-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
 .search-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.search-row input{flex:1;min-width:200px;padding:12px 16px;border:2px solid #e0e0e0;border-radius:8px;font-size:16px}
-.search-row input:focus{border-color:#e2720c;outline:none}
-.search-row select{padding:12px 16px;border:2px solid #e0e0e0;border-radius:8px;font-size:16px;background:#fff;min-width:120px}
-.search-row button{padding:12px 24px;background:#e2720c;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;white-space:nowrap}
-.search-row button:hover{background:#c9600a}
-.search-row button.secondary{background:#fff;color:#e2720c;border:2px solid #e2720c}
-.search-row button.secondary:hover{background:#fff8f3}
-.mode-tabs{display:flex;gap:4px;margin-bottom:14px;background:#f5f5f5;border-radius:8px;padding:4px}
-.mode-tab{flex:1;padding:10px 16px;border:none;background:transparent;border-radius:6px;cursor:pointer;font-size:14px;font-weight:500}
-.mode-tab.active{background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.1);color:#e2720c;font-weight:700}
-.result-summary{margin-bottom:12px;font-size:14px;color:#666}
-.result-summary strong{color:#e2720c}
-.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
-.card{background:#fff;border-radius:12px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.06);border-left:4px solid transparent;cursor:pointer;transition:all .2s}
-.card.match{border-left-color:#22c55e}
-.card.no-match{border-left-color:#ef4444;opacity:.7}
-.card:hover{box-shadow:0 4px 16px rgba(0,0,0,.12);transform:translateY(-2px)}
-.card h3{font-size:17px;margin-bottom:2px;color:#1a1a2e}
-.card .brand{font-size:11px;color:#999;margin-bottom:8px}
-.card .specs{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;font-size:13px}
-.card .specs .label{color:#888}
-.card .specs .value{font-weight:600;color:#333}
-.power-tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px}
-.power-tag.high{background:#fee2e2;color:#dc2626}
-.power-tag.mid{background:#fef3c7;color:#d97706}
-.power-tag.low{background:#dbeafe;color:#2563eb}
-.src-badge{display:inline-block;padding:1px 6px;border-radius:8px;font-size:10px}
-.src-badge.src-high{background:#dcfce7;color:#16a34a}
-.src-badge.src-mid{background:#fef3c7;color:#d97706}
-.src-badge.src-low{background:#fee2e2;color:#dc2626}
-.match-badge{display:inline-block;padding:4px 12px;border-radius:12px;font-size:12px;font-weight:600}
-.match-badge.fit{background:#dcfce7;color:#16a34a}
-.match-badge.nofit{background:#fee2e2;color:#dc2626}
-.battery-info{margin-top:10px;padding-top:10px;border-top:1px solid #f0f0f0}
-.battery-info .batt-name{font-weight:700;color:#e2720c}
-.stats{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
-.stat-card{background:#fff;padding:14px 18px;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,.06);text-align:center;min-width:80px;flex:1}
-.stat-card .num{font-size:26px;font-weight:700;color:#e2720c}
-.stat-card .label{font-size:11px;color:#888;margin-top:2px}
-.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:100;justify-content:center;align-items:center}
-.modal-overlay.show{display:flex}
-.modal{background:#fff;border-radius:16px;padding:28px;max-width:500px;width:95%;max-height:85vh;overflow-y:auto}
-.modal h2{margin-bottom:14px}
-.modal .close{float:right;background:none;border:none;font-size:24px;cursor:pointer;color:#999}
-.empty{text-align:center;padding:50px 20px;color:#999}
-.empty .icon{font-size:56px;margin-bottom:12px}
-.footer{text-align:center;padding:20px;color:#999;font-size:12px}
-@media (max-width:640px){.card-grid{grid-template-columns:1fr}.search-row input,.search-row select,.search-row button{width:100%}.stats{gap:6px}.stat-card{padding:10px 12px}.stat-card .num{font-size:20px}}
+.search-row .input-wrap{flex:1;min-width:230px;position:relative}
+.search-row .input-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--muted)}
+.search-row input{width:100%;height:44px;padding:0 14px 0 38px;border-radius:10px;border:1.5px solid var(--border);background:var(--bg);color:var(--fg);font-size:15px;outline:none;transition:border-color .15s}
+.search-row input:focus{border-color:var(--yellow)}
+.search-row select{height:44px;padding:0 12px;border-radius:10px;border:1.5px solid var(--border);background:var(--bg);color:var(--fg);font-size:14px;outline:none}
+.btn{height:44px;padding:0 22px;border-radius:10px;border:none;font-size:14px;font-weight:700;transition:all .15s}
+.btn-primary{background:var(--yellow);color:var(--yellow-fg);box-shadow:0 3px 10px rgba(232,178,10,.3)}
+.btn-primary:hover{filter:brightness(1.06)}
+.btn-ghost{background:var(--card);color:var(--fg);border:1.5px solid var(--border)}
+.btn-ghost:hover{border-color:var(--yellow);color:var(--yellow)}
+.search-tip{margin-top:10px;font-size:12px;color:var(--muted)}
+.search-tip b{color:var(--yellow);font-weight:600}
+/* ===== 结果 ===== */
+.result-summary{margin:16px 0 12px;font-size:14px;color:var(--muted)}
+.result-summary strong{color:var(--yellow)}
+.result-group-title{font-size:14px;font-weight:700;margin:18px 0 10px;display:flex;align-items:center;gap:8px}
+.result-group-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px}
+/* ===== 车辆卡片 ===== */
+.vcard{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s}
+.vcard:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.1);border-color:var(--yellow)}
+.vcard-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.vcard h3{font-size:16px}
+.vcard .brand{font-size:12px;color:var(--muted);margin-top:2px}
+.vspecs{display:grid;grid-template-columns:1fr 1fr;gap:5px 14px;font-size:12.5px;margin-top:10px}
+.vspecs .lb{color:var(--muted)}
+.vspecs .vl{font-weight:600}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600;white-space:nowrap}
+.badge-green{background:var(--green-bg);color:var(--green)}
+.badge-red{background:var(--red-bg);color:var(--red)}
+.badge-amber{background:var(--amber-bg);color:var(--amber)}
+.badge-blue{background:var(--blue-bg);color:var(--blue)}
+.badge-gray{background:color-mix(in srgb,var(--fg) 8%,transparent);color:var(--muted)}
+.batt-list{margin-top:10px;padding-top:10px;border-top:1px dashed var(--border)}
+.batt-list .t{font-size:11px;color:var(--muted);margin-bottom:5px}
+.batt-item{display:flex;align-items:center;gap:7px;font-size:12px;padding:3px 0;flex-wrap:wrap}
+.batt-item .nm{font-weight:700;color:var(--yellow)}
+.batt-item .sz{color:var(--muted);font-size:11px}
+.batt-more{font-size:11px;color:var(--yellow);margin-top:3px}
+/* ===== 产品卡片 ===== */
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.chip{padding:7px 16px;border-radius:999px;border:1.5px solid var(--border);background:var(--card);color:var(--muted);font-size:13px;font-weight:600;transition:all .15s}
+.chip:hover{border-color:var(--yellow);color:var(--yellow)}
+.chip.active{background:var(--yellow);border-color:var(--yellow);color:var(--yellow-fg)}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(262px,1fr));gap:16px}
+.pcard{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s;display:flex;flex-direction:column}
+.pcard:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,.12);border-color:var(--yellow)}
+.pphoto{position:relative;height:190px;overflow:hidden;background:#2a2d34;flex-shrink:0}
+.pphoto img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.pcard:hover .pphoto img{transform:scale(1.05)}
+.photo-hint{position:absolute;left:50%;bottom:9px;transform:translateX(-50%);background:rgba(0,0,0,.62);color:#fff;font-size:11px;padding:4px 12px;border-radius:999px;white-space:nowrap;backdrop-filter:blur(4px);pointer-events:none}
+/* 占位图 */
+.ph{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:linear-gradient(140deg,#2a2d34 0%,#3d4149 55%,#33363d 100%);color:#fff;position:relative}
+.ph::before{content:'';position:absolute;inset:0;background:radial-gradient(420px 130px at 50% -10%,rgba(232,178,10,.16),transparent)}
+.ph .ph-model{font-size:23px;font-weight:800;letter-spacing:1px;color:#fff}
+.ph .ph-eng{font-size:14px;font-weight:700;color:var(--yellow);letter-spacing:2px}
+.ph .ph-dims{font-size:11.5px;color:rgba(255,255,255,.62);margin-top:3px}
+.ph .ph-note{position:absolute;bottom:8px;font-size:10.5px;color:rgba(255,255,255,.5)}
+.pbody{padding:14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.pbody h3{font-size:16.5px;font-weight:800}
+.pbody .pmodel{font-size:11px;color:var(--muted);font-weight:400;margin-left:6px}
+.pspecs{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;font-size:12px}
+.pspecs .lb{color:var(--muted)}
+.pspecs .vl{font-weight:600}
+.pfunc{font-size:12px;color:var(--muted)}
+.pfunc em{font-style:normal;color:var(--yellow);font-weight:600}
+.plinks{display:flex;gap:8px;flex-wrap:wrap}
+.plink{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;padding:5px 11px;border-radius:8px;border:1px solid var(--border);color:var(--muted);transition:all .15s}
+.plink:hover{border-color:var(--gray-end);color:var(--fg)}
+.click-hint{margin-top:auto;padding-top:9px;border-top:1px dashed var(--border);font-size:11.5px;color:var(--muted);display:flex;align-items:center;gap:5px}
+.click-hint b{color:var(--yellow);font-weight:700}
+.empty{background:var(--card);border:1.5px dashed var(--border);border-radius:var(--radius);padding:44px 16px;text-align:center;color:var(--muted)}
+.empty .ic{font-size:34px;margin-bottom:8px}
+/* ===== 弹窗 ===== */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);z-index:100;display:none;align-items:flex-start;justify-content:center;padding:26px 14px;overflow-y:auto}
+.overlay.show{display:flex}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:16px;max-width:960px;width:100%;padding:22px;position:relative;box-shadow:0 24px 70px rgba(0,0,0,.35);animation:pop .18s ease}
+@keyframes pop{from{transform:translateY(14px);opacity:0}to{transform:none;opacity:1}}
+.modal .close{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:9px;border:none;background:var(--bg);color:var(--fg);font-size:15px;display:flex;align-items:center;justify-content:center}
+.modal .close:hover{background:var(--red);color:#fff}
+.modal h2{font-size:20px;padding-right:44px}
+.modal .m-sub{font-size:13px;color:var(--muted);margin:4px 0 14px}
+.bm-top{display:grid;grid-template-columns:minmax(200px,300px) 1fr;gap:16px;margin-bottom:18px}
+.bm-photo{border-radius:12px;overflow:hidden;border:1px solid var(--border);background:#2a2d34;min-height:220px}
+.bm-photo img{width:100%;height:100%;object-fit:cover}
+.bm-photo .ph{min-height:220px}
+.bm-side{display:flex;flex-direction:column;gap:12px}
+.bm-params{display:grid;grid-template-columns:1fr 1fr;gap:7px 14px;font-size:13px}
+.bm-params .lb{color:var(--muted)}
+.bm-params .vl{font-weight:600}
+.bm-pdfs{display:flex;gap:10px;flex-wrap:wrap}
+.bm-pdfs a{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:8px 16px;border-radius:9px;background:var(--gray-start);color:#fff;transition:filter .15s}
+.bm-pdfs a:hover{filter:brightness(1.15)}
+.matches-title{font-size:15px;font-weight:700;margin:16px 0 10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.matches-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.vm-list{display:flex;flex-direction:column;gap:8px;max-height:400px;overflow-y:auto;padding-right:4px}
+.vm-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:10px;border:1px solid var(--border);background:color-mix(in srgb,var(--bg) 60%,transparent);flex-wrap:wrap}
+.vm-item .info{flex:1;min-width:200px}
+.vm-item .nm{font-weight:700;font-size:14px}
+.vm-item .sub{font-size:11.5px;color:var(--muted);margin-top:2px}
+.vm-item .dims{font-size:12px;color:var(--muted);white-space:nowrap}
+.mt-note{margin-top:10px;font-size:12px;color:var(--amber)}
+/* ===== 页脚 ===== */
+.footer{border-top:1px solid var(--border);padding:26px 16px 40px;text-align:center;font-size:12.5px;color:var(--muted)}
+.footer a{color:var(--yellow)}
+.footer .row{margin-top:6px}
+/* ===== 响应式 ===== */
+@media(max-width:720px){
+  .bm-top{grid-template-columns:1fr}
+  .hero-in{padding:44px 14px 34px}
+  .grid{grid-template-columns:1fr}
+  .pgrid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+  .pphoto{height:140px}
+  .pspecs{grid-template-columns:1fr}
+  .top-search{order:3;flex-basis:100%;max-width:none}
+}
 </style>
 </head>
 <body>
-<div class="header"><h1>🔋 奔虎锂电 · 车型电池智能匹配</h1><p>输入车型 → 秒出可装电池 | 62款车型 · 10款电池 · 10品牌</p></div>
-<div class="container">
-<div class="stats" id="stats"></div>
-<div class="search-box">
-<div class="mode-tabs">
-<button class="mode-tab active" data-mode="vehicle">🚗 按车型查电池</button>
-<button class="mode-tab" data-mode="battery">🔋 按电池查车型</button>
-</div>
-<div class="search-row" id="searchVehicleRow">
-<input type="text" id="vehicleSearch" placeholder="输入车型搜索，如：M95C、FXT、AE5、F0...">
-<select id="brandFilter"><option value="">全部品牌</option></select>
-<button onclick="searchVehicles()">🔍 搜索</button>
-<button class="secondary" onclick="resetSearch()">↺ 重置</button>
-</div>
-<div class="search-row" id="searchBatteryRow" style="display:none">
-<input type="text" id="batterySearch" placeholder="输入电池型号搜索...">
-<button onclick="searchBatteries()">🔍 搜索</button>
-<button class="secondary" onclick="resetSearch()">↺ 重置</button>
-</div>
-</div>
-<div class="result-summary" id="resultSummary"></div>
-<div class="card-grid" id="cardGrid"></div>
-<div class="empty" id="emptyState"><div class="icon">🔍</div><p>上方搜索车型，即刻匹配可安装的奔虎电池</p></div>
-</div>
-<div class="modal-overlay" id="modalOverlay"><div class="modal" id="modalContent"></div></div>
-<div class="footer">奔虎锂电 · 智能匹配系统 v2.0 | 数据持续更新 | <a href="javascript:void(0)" onclick="alert('数据来源说明：\n高可信=多源验证/官方数据 | 中可信=单源实测/经销商 | 低可信=估算值需实测确认\n数据来源：品牌官方参数+车友实测+经销商+网络收集\n更新时间：2025-07-17\n来电咨询：奔虎锂电')">📋 数据来源说明</a></div>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="logo" href="#top">
+      <span class="logo-badge">⚡</span>
+      <span class="logo-name">奔虎锂电</span>
+    </a>
+    <div class="top-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input type="text" id="searchTop" placeholder="搜索车型 / 电池型号，如：NX、M95c、AE5、6435…">
+    </div>
+    <div class="top-actions">
+      <a class="top-link" href="#match">智能匹配</a>
+      <a class="top-link" href="#products">产品展示</a>
+      <button class="icon-btn" id="themeBtn" title="切换明暗主题">🌓</button>
+    </div>
+  </div>
+</header>
+
+<div id="top"></div>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-mask"></div>
+  <div class="hero-in">
+    <h1>奔虎锂电 · <em>产品展示</em></h1>
+    <p>磷酸铁锂(LFP)电池专家 · 为二轮电动车提供安全、长续航的电池方案</p>
+    <div class="hero-stats" id="heroStats"></div>
+  </div>
+</section>
+
+<main class="container">
+  <section class="block" id="match">
+    <div class="sec-head">
+      <h2>🔍 智能匹配</h2>
+      <span class="sec-tag">车型 ⇄ 电池</span>
+      <span class="sub">输入车型秒出可装电池 · 输入电池型号查看适配车型</span>
+    </div>
+    <div class="search-card">
+      <div class="search-row">
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" id="searchMain" placeholder="输入车型或电池型号，如：NX、M95c、AE5、领跑400、6435…">
+        </div>
+        <select id="brandFilter"><option value="">全部品牌</option></select>
+        <button class="btn btn-primary" onclick="doSearch()">搜 索</button>
+        <button class="btn btn-ghost" onclick="resetSearch()">重 置</button>
+      </div>
+      <div class="search-tip">💡 车型示例：<b>NX Sport</b>、<b>M95c</b>、<b>AE5</b>、<b>苍穹酷版</b>；电池示例：<b>6435</b>、<b>7650</b>、<b>76.8V</b>。也可以只输入品牌名，如 <b>九号</b>、<b>小牛</b>。</div>
+    </div>
+    <div class="result-summary" id="resultSummary"></div>
+    <div id="matchGrid"></div>
+    <div class="empty" id="emptyState" style="display:none">
+      <div class="ic">🔍</div>
+      <p>未找到匹配结果，试试其他关键词</p>
+    </div>
+  </section>
+
+  <section class="block" id="products">
+    <div class="sec-head">
+      <h2>⚡ 产品展示</h2>
+      <span class="sec-tag">共 <span id="prodCount"></span> 款</span>
+      <span class="sub">点击产品图片，查看该电池可匹配的车型</span>
+    </div>
+    <div class="chips" id="prodChips">
+      <button class="chip active" data-v="">全部</button>
+      <button class="chip" data-v="64">64V 系列</button>
+      <button class="chip" data-v="76.8">76.8V 系列</button>
+    </div>
+    <div class="pgrid" id="prodGrid"></div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div>奔虎锂电 · 产品展示与智能匹配系统 v3.0 | 数据持续更新 | <a href="javascript:void(0)" onclick="showDataInfo()">📋 数据来源说明</a></div>
+  <div class="row">备案信息 · 技术支持：比克新动力</div>
+</footer>
+
+<div class="overlay" id="overlay"><div class="modal" id="modalContent"></div></div>
+
 <script>
-var EMBEDDED_VEHICLES = {
-    "小牛_NIU": [
-        {
-            "型号": "FX / FX风速版",
-            "类型": "电摩",
-            "电池仓_长_mm": 630,
-            "电池仓_宽_mm": 260,
-            "电池仓_高_mm": 172,
-            "电池仓_宽窄处_mm": 240,
-            "电池仓_高后段_mm": 200,
-            "电机_额定功率_W": 1200,
-            "电机_峰值功率_W": 2000,
-            "原厂电池规格": "72V",
-            "备注": "脚踏仓，长约60-67.5cm可调，宽窄处约24cm，后段高可达20cm"
-        },
-        {
-            "型号": "FXT 老款",
-            "类型": "电摩",
-            "电池仓_长_mm": 655,
-            "电池仓_宽_mm": 280,
-            "电池仓_高_mm": 180,
-            "电机_额定功率_W": 1200,
-            "电机_峰值功率_W": 2000,
-            "原厂电池规格": "72V",
-            "备注": "已停产，可装72V200Ah，轴距1.93m"
-        },
-        {
-            "型号": "FXT 新款",
-            "类型": "电摩",
-            "电池仓_长_mm": 500,
-            "电池仓_宽_mm": 245,
-            "电池仓_高_mm": 175,
-            "电池仓_宽窄处_mm": 225,
-            "电机_额定功率_W": 1200,
-            "电机_峰值功率_W": 1800,
-            "原厂电池规格": "72V",
-            "备注": "2024/2025款，长度比老款缩减约5cm"
-        },
-        {
-            "型号": "NPlay",
-            "类型": "电摩",
-            "电池仓_长_mm": 390,
-            "电池仓_宽_mm": 310,
-            "电池仓_高_mm": 160,
-            "电机_额定功率_W": 1200,
-            "电机_峰值功率_W": 1800,
-            "原厂电池规格": "72V",
-            "备注": "可直上72V35Ah，宽度很宽"
-        },
-        {
-            "型号": "N1S 动力版",
-            "类型": "电摩",
-            "电池仓_长_mm": 640,
-            "电池仓_宽_mm": 320,
-            "电池仓_高_mm": 180,
-            "电机_额定功率_W": 1200,
-            "电机_峰值功率_W": 1200,
-            "原厂电池规格": "60V 35Ah",
-            "备注": "博世电机，最大扭矩110N·m，极速约45km/h"
-        },
-        {
-            "型号": "NQi 都市版",
-            "类型": "电摩",
-            "电池仓_长_mm": 550,
-            "电池仓_宽_mm": 160,
-            "电池仓_高_mm": 140,
-            "电机_额定功率_W": 800,
-            "电机_峰值功率_W": 1500,
-            "原厂电池规格": "60V 26Ah",
-            "备注": "电池包尺寸550×160×140mm，极速约50km/h"
-        },
-        {
-            "型号": "NQi 动力版",
-            "类型": "电摩",
-            "电池仓_长_mm": 550,
-            "电池仓_宽_mm": 160,
-            "电池仓_高_mm": 140,
-            "电机_额定功率_W": 1200,
-            "电机_峰值功率_W": 2200,
-            "原厂电池规格": "60V 26Ah",
-            "备注": "电池包尺寸参照NQi都市版"
-        },
-        {
-            "型号": "NQi 顶配版",
-            "类型": "电摩",
-            "电池仓_长_mm": 550,
-            "电池仓_宽_mm": 160,
-            "电池仓_高_mm": 140,
-            "电机_额定功率_W": 1500,
-            "电机_峰值功率_W": 3000,
-            "原厂电池规格": "60V 34Ah / 2040Wh",
-            "备注": "极速55km/h"
-        },
-        {
-            "型号": "NQi GT",
-            "类型": "电摩",
-            "电池仓_长_mm": 550,
-            "电池仓_宽_mm": 160,
-            "电池仓_高_mm": 140,
-            "电机_额定功率_W": 1800,
-            "电机_峰值功率_W": 3500,
-            "原厂电池规格": "60V 35Ah",
-            "备注": "中置电机，0-50加速约6.5秒"
-        },
-        {
-            "型号": "MQi+ 动力版",
-            "类型": "电轻摩",
-            "电池仓_长_mm": 450,
-            "电池仓_宽_mm": 160,
-            "电池仓_高_mm": 140,
-            "电机_额定功率_W": 800,
-            "电机_峰值功率_W": 1500,
-            "原厂电池规格": "48V 26Ah",
-            "备注": "极速43km/h"
-        },
-        {
-            "型号": "MQi+ 都市版",
-            "类型": "电轻摩",
-            "电池仓_长_mm": 450,
-            "电池仓_宽_mm": 160,
-            "电池仓_高_mm": 140,
-            "电机_额定功率_W": 600,
-            "电机_峰值功率_W": 1000,
-            "原厂电池规格": "48V 20Ah",
-            "备注": "轻便电摩"
-        },
-        {
-            "型号": "UQi 系列",
-            "类型": "新国标电自",
-            "电池仓_长_mm": 380,
-            "电池仓_宽_mm": 130,
-            "电池仓_高_mm": 100,
-            "电机_额定功率_W": 400,
-            "电机_峰值功率_W": 1200,
-            "原厂电池规格": "48V 15Ah",
-            "备注": "新国标，最大可装约26Ah电池"
-        },
-        {
-            "型号": "F0 / GOVA F0",
-            "类型": "新国标电自",
-            "电池仓_长_mm": 330,
-            "电池仓_宽_mm": 185,
-            "电池仓_高_mm": 110,
-            "电机_额定功率_W": 400,
-            "电机_峰值功率_W": 800,
-            "原厂电池规格": "48V 14Ah/18Ah",
-            "备注": "脚踏下电池仓，磷酸铁锰锂18650电芯",
-            "数据来源": "官方参数+车友实测",
-            "可信度": "中"
-        },
-        {
-            "型号": "F2",
-            "类型": "新国标电自",
-            "电池仓_长_mm": 350,
-            "电池仓_宽_mm": 200,
-            "电池仓_高_mm": 110,
-            "电机_额定功率_W": 400,
-            "电机_峰值功率_W": 800,
-            "原厂电池规格": "48V",
-            "备注": "脚踏仓",
-            "数据来源": "官方参数",
-            "可信度": "高"
-        },
-        {
-            "型号": "U2",
-            "类型": "新国标电自",
-            "电池仓_长_mm": 220,
-            "电池仓_宽_mm": 172,
-            "电池仓_高_mm": 350,
-            "电机_额定功率_W": 400,
-            "电机_峰值功率_W": 1200,
-            "原厂电池规格": "48V",
-            "备注": "电仓竖放，全能电仓",
-            "数据来源": "车友实测",
-            "可信度": "中"
-        },
-        {
-            "型号": "U+b",
-            "类型": "新国标电自",
-            "电池仓_长_mm": 225,
-            "电池仓_宽_mm": 185,
-            "电池仓_高_mm": 350,
-            "电机_额定功率_W": 400,
-            "电机_峰值功率_W": 1200,
-            "原厂电池规格": "48V",
-            "备注": "电仓竖放，全能电仓",
-            "数据来源": "车友实测",
-            "可信度": "中"
-        },
-        {
-            "型号": "U1d",
-            "类型": "新国标电自",
-            "电池仓_长_mm": 225,
-            "电池仓_宽_mm": 180,
-            "电池仓_高_mm": 350,
-            "电机_额定功率_W": 400,
-            "电机_峰值功率_W": 800,
-            "原厂电池规格": "48V",
-            "备注": "电仓竖放",
-            "数据来源": "车友实测",
-            "可信度": "中"
-        },
-        {
-            "型号": "F400",
-            "类型": "新国标电自",
-            "电池仓_长_mm": 360,
-            "电池仓_宽_mm": 160,
-            "电池仓_高_mm": 100,
-            "电机_额定功率_W": 400,
-            "电机_峰值功率_W": 800,
-            "原厂电池规格": "48V",
-            "备注": "标准脚踏仓",
-            "数据来源": "车友实测",
-            "可信度": "中"
-        },
-        {
-            "型号": "NX 风速",
-            "类型": "电摩",
-            "电池仓_长_mm": 672,
-            "电池仓_宽_mm": 285,
-            "电池仓_高_mm": 200,
-            "电机_额定功率_W": 1200,
-            "电机_峰值功率_W": 2000,
-            "原厂电池规格": "72V",
-            "备注": "总长672mm宽285渐缩至246mm",
-            "数据来源": "车友实测",
-            "可信度": "高"
-        }
-    ],
-    "九号_Ninebot": [
-        {
-            "型号": "M95C / M95C+",
-            "类型": "电摩",
-            "电池仓_长_mm": 540,
-            "电池仓_宽_mm": 235,
-            "电池仓_高_mm": 175,
-            "电机_额定功率_W": 1500,
-            "电机_峰值功率_W": 2600,
-            "原厂电池规格": "72V 32Ah 铅酸",
-            "备注": "座桶30L，极速55km/h，三档续航约107km"
-        },
-        {
-            "型号": "M5",
-            "类型": "电摩",
-            "电池仓_长_mm": 540,
-            "电池仓_宽_mm": 235,
-            "电池仓_高_mm": 175,
-            "电机_额定功率_W": 1500,
-            "电机_峰值功率_W": 2600,
-            "原厂电池规格": "72V 32Ah 铅酸",
-            "备注": "电池仓与M95C同规格，座桶30L"
-        },
-        {
-            "型号": "N5",
-            "类型": "电摩",
-            "电池仓_长_mm": 650,
-            "电池仓_宽_mm": 250,
-            "电池仓_高_mm": 175,
-            "电池仓_极限宽_mm": 270,
-            "电池仓_极限高_mm": 185,
-            "电机_额定功率_W": 1500,
-            "电机_峰值功率_W": 2600,
-            "原厂电池规格": "72V",
-            "备注": "极限尺寸670×270×185mm，可装72V210Ah"
-        },
-        {
-            "型号": "N85C 新款",
-            "类型": "电摩",
-            "电池仓_长_mm": 470,
-            "电池仓_宽_mm": 185,
-            "电池仓_高_mm": 175,
-            "电机_额定功率_W": 1200,
-            "电机_峰值功率_W": 2200,
-            "原厂电池规格": "72V 23Ah 铅酸",
-            "备注": "直列六节排列，极速51km/h，座桶约23L"
-        },
-        {
-            "型号": "N85C 旧款",
-            "类型": "电摩",
-            "电池仓_长_mm": 550,
-            "电池仓_宽_mm": 160,
-            "电池仓_高_mm": 175,
-            "电机_额定功率_W": 1200,
-            "电机_峰值功率_W": 2200,
-            "原厂电池规格": "72V 23Ah 铅酸",
-            "备注": "纵向双列排列，已逐步被新款替代"
-        },
-        {
-            "型号": "N70C",
-            "类型": "电轻摩",
-            "电池仓_长_mm": 385,
-            "电池仓_宽_mm": 185,
-            "电池仓_高_mm": 175,
-            "电机_额定功率_W": 800,
-            "电机_峰值功率_W": 1500,
-            "原厂电池规格": "60V 20Ah",
-            "备注": "60V车型"
-        },
-        {
-            "型号": "MZMIX / NZMIX",
-            "类型": "电自/电轻摩",
-            "电池仓_长_mm": 510,
-            "电池仓_宽_mm": 270,
-            "电池仓_高_mm": 175,
-            "电池仓_T型前宽_mm": 235,
-            "电池仓_T型后宽_mm": 270,
-            "电机_额定功率_W": 400,
-            "电机_峰值功率_W": 2600,
-            "原厂电池规格": "48V 13Ah (可升72V32Ah)",
-            "备注": "T型分仓，M95C同款L55控制器，实际可达1500W"
-        },
-        {
-            "型号": "FastMax",
-            "类型": "电轻摩",
-            "电池仓_长_mm": 410,
-            "电池仓_宽_mm": 235,
-            "电池仓_高_mm": 175,
-            "电池仓_T型前宽_mm": 185,
-            "电池仓_T型后宽_mm": 235,
-            "电机_额定功率_W": 800,
-            "电机_峰值功率_W": 1500,
-            "原厂电池规格": "72V",
-            "备注": "T型（小）电池仓"
-        },
-        {
-            "型号": "E80C",
-            "类型": "电摩",
-            "电池仓_长_mm": 450,
-            "电池仓_宽_mm": 185,
-            "电池仓_高_mm": 175,
-            "电机_额定功率_W": 1200,
-            "电机_峰值功率_W": 2400,
-            "原厂电池规格": "72V 23Ah铅酸",
-            "备注": "极速51km/h，续航约68km"
-        },
-        {
-            "型号": "E80C MK2",
-            "类型": "电摩",
-            "电池仓_长_mm": 450,
-            "电池仓_宽_mm": 185,
-            "电池仓_高_mm": 175,
-            "电机_额定功率_W": 1800,
-            "电机_峰值功率_W": 2600,
-            "原厂电池规格": "72V 23Ah铅酸",
-            "备注": "极速60km/h，续航约70km"
-        },
-        {
-            "型号": "E100",
-            "类型": "电摩",
-            "电池仓_长_mm": 450,
-            "电池仓_宽_mm": 185,
-            "电池仓_高_mm": 175,
-            "电机_额定功率_W": 1800,
-            "电机_峰值功率_W": 2400,
-            "原厂电池规格": "72V 20Ah锂电",
-            "备注": "极速58km/h"
-        },
-        {
-            "型号": "E125 MK2",
-            "类型": "电摩",
-            "电池仓_长_mm": 500,
-            "电池仓_宽_mm": 200,
-            "电池仓_高_mm": 175,
-            "电机_额定功率_W": 2700,
-            "电机_峰值功率_W": 3600,
-            "原厂电池规格": "72V 27Ah",
-            "备注": "极速70km/h"
-        },
-        {
-            "型号": "E150 MK2",
-            "类型": "电摩",
-            "电池仓_长_mm": 550,
-            "电池仓_宽_mm": 220,
-            "电池仓_高_mm": 180,
-            "电机_额定功率_W": 5000,
-            "电机_峰值功率_W": 7500,
-            "原厂电池规格": "72V 54Ah",
-            "备注": "极速90km/h，续航约110km"
-        },
-        {
-            "型号": "E200P MK2",
-            "类型": "电摩",
-            "电池仓_长_mm": 550,
-            "电池仓_宽_mm": 220,
-            "电池仓_高_mm": 180,
-            "电机_额定功率_W": 5000,
-            "电机_峰值功率_W": 15000,
-            "原厂电池规格": "74V 54Ah锂电",
-            "备注": "极速100km/h，续航约150km"
-        },
-        {
-            "型号": "E300P / E300P MK2",
-            "类型": "电摩",
-            "电池仓_长_mm": 600,
-            "电池仓_宽_mm": 250,
-            "电池仓_高_mm": 200,
-            "电机_额定功率_W": 10000,
-            "电机_峰值功率_W": 29000,
-            "原厂电池规格": "74V 81-84Ah（三电）",
-            "备注": "旗舰车型，极速135km/h"
-        }
-    ],
-    "极核_Zeeho": [
-        {
-            "型号": "AE5i / AE5",
-            "类型": "电自/电轻摩",
-            "电池仓_长_mm": 503,
-            "电池仓_宽_mm": 272,
-            "电池仓_高_mm": 170,
-            "电池仓_座桶长_mm": 218,
-            "电池仓_座桶宽_mm": 265,
-            "电池仓_座桶高_mm": 287,
-            "电机_额定功率_W": 1100,
-            "电机_峰值功率_W": 3600,
-            "原厂电池规格": "72V23Ah/38Ah",
-            "备注": "座桶24.5L，脚踏仓大，座桶也可放电池"
-        },
-        {
-            "型号": "AE4 SE+ 2026款",
-            "类型": "电摩",
-            "电池仓_长_mm": 610,
-            "电池仓_宽_mm": 230,
-            "电池仓_高_mm": 140,
-            "电机_额定功率_W": 1600,
-            "电机_峰值功率_W": 3000,
-            "原厂电池规格": "72V23Ah",
-            "备注": "不切割最长可放570mm，切割后可放610mm"
-        },
-        {
-            "型号": "AE4 Max2 2026款",
-            "类型": "电摩",
-            "电池仓_长_mm": 600,
-            "电池仓_宽_mm": 234,
-            "电池仓_高_mm": 170,
-            "电机_额定功率_W": 3500,
-            "电机_峰值功率_W": 5620,
-            "原厂电池规格": "72V",
-            "备注": "极速85+km/h，高配带ABS"
-        },
-        {
-            "型号": "AE4 MY25",
-            "类型": "电摩",
-            "电池仓_长_mm": 580,
-            "电池仓_宽_mm": 230,
-            "电池仓_高_mm": 170,
-            "电机_额定功率_W": 1600,
-            "电机_峰值功率_W": 3500,
-            "原厂电池规格": "72V23Ah/32Ah铅酸，74V27Ah锂电",
-            "备注": "2025款，极速70km/h，12寸轮毂电机"
-        },
-        {
-            "型号": "AE4 SE",
-            "类型": "电摩",
-            "电池仓_长_mm": 580,
-            "电池仓_宽_mm": 230,
-            "电池仓_高_mm": 170,
-            "电机_额定功率_W": 1600,
-            "电机_峰值功率_W": 2400,
-            "原厂电池规格": "72V23Ah",
-            "备注": "极速65km/h，性价比款"
-        },
-        {
-            "型号": "AE3 Pro 电摩版",
-            "类型": "电摩",
-            "电池仓_长_mm": 535,
-            "电池仓_宽_mm": 232,
-            "电池仓_高_mm": 175,
-            "电机_额定功率_W": 1300,
-            "电机_峰值功率_W": 2450,
-            "原厂电池规格": "72V23A铅酸",
-            "备注": "极速55km/h，标准54cm可拓长3cm"
-        },
-        {
-            "型号": "AE3 Pro 电轻摩版",
-            "类型": "电轻摩",
-            "电池仓_长_mm": 535,
-            "电池仓_宽_mm": 232,
-            "电池仓_高_mm": 175,
-            "电机_额定功率_W": 800,
-            "电机_峰值功率_W": 1750,
-            "原厂电池规格": "60V23Ah",
-            "备注": "极速47km/h"
-        }
-    ],
-    "雅迪_Yadea": [
-        {
-            "型号": "EZ4 电摩",
-            "类型": "电摩",
-            "电池仓_长_mm": 610,
-            "电池仓_宽_mm": 230,
-            "电池仓_高_mm": 172,
-            "电机_额定功率_W": 1300,
-            "电机_峰值功率_W": 2400,
-            "原厂电池规格": "72V23Ah铅酸",
-            "备注": "极速53km/h，座桶30L"
-        },
-        {
-            "型号": "EZ4 Pro 电摩",
-            "类型": "电摩",
-            "电池仓_长_mm": 610,
-            "电池仓_宽_mm": 230,
-            "电池仓_高_mm": 172,
-            "电机_额定功率_W": 1600,
-            "电机_峰值功率_W": 3500,
-            "原厂电池规格": "72V23Ah铅酸",
-            "备注": "极速56km/h，6.2寸TFT屏"
-        },
-        {
-            "型号": "EZ4 Max Li",
-            "类型": "电摩",
-            "电池仓_长_mm": 608,
-            "电池仓_宽_mm": 230,
-            "电池仓_高_mm": 163,
-            "电机_额定功率_W": 1600,
-            "电机_峰值功率_W": 3500,
-            "原厂电池规格": "锂电",
-            "备注": "锂电池版，高度略低"
-        },
-        {
-            "型号": "EZ4 电轻摩",
-            "类型": "电轻摩",
-            "电池仓_长_mm": 610,
-            "电池仓_宽_mm": 230,
-            "电池仓_高_mm": 172,
-            "电机_额定功率_W": 800,
-            "电机_峰值功率_W": 2000,
-            "原厂电池规格": "60V23Ah铅酸",
-            "备注": "极速47km/h"
-        },
-        {
-            "型号": "G5 石墨烯版",
-            "类型": "电摩",
-            "电池仓_长_mm": 320,
-            "电池仓_宽_mm": 230,
-            "电池仓_高_mm": 170,
-            "电机_额定功率_W": 1000,
-            "电机_峰值功率_W": 2000,
-            "原厂电池规格": "72V20Ah",
-            "备注": "12寸轮胎"
-        },
-        {
-            "型号": "T30",
-            "类型": "电摩",
-            "电池仓_长_mm": 510,
-            "电池仓_宽_mm": 210,
-            "电池仓_高_mm": 210,
-            "电机_额定功率_W": 1200,
-            "电机_峰值功率_W": 2200,
-            "原厂电池规格": "72V20Ah铅酸/24Ah锂电",
-            "备注": "踏板下电池仓"
-        },
-        {
-            "型号": "冠能T2 动力版",
-            "类型": "电摩",
-            "电池仓_长_mm": 480,
-            "电池仓_宽_mm": 210,
-            "电池仓_高_mm": 175,
-            "电机_额定功率_W": 1200,
-            "电机_峰值功率_W": 2200,
-            "原厂电池规格": "72V22Ah石墨烯",
-            "备注": "续航约100km"
-        },
-        {
-            "型号": "冠能领跑T7",
-            "类型": "电摩",
-            "电池仓_长_mm": 500,
-            "电池仓_宽_mm": 220,
-            "电池仓_高_mm": 180,
-            "电机_额定功率_W": 1200,
-            "电机_峰值功率_W": 2200,
-            "原厂电池规格": "72V35Ah石墨烯",
-            "备注": "续航120-150km，座桶30L"
-        },
-        {
-            "型号": "路虎 顶配版",
-            "类型": "电摩",
-            "电池仓_长_mm": 550,
-            "电池仓_宽_mm": 230,
-            "电池仓_高_mm": 185,
-            "电机_额定功率_W": 1500,
-            "电机_峰值功率_W": 3000,
-            "原厂电池规格": "72V50Ah",
-            "备注": "极速70km/h，续航150km"
-        },
-        {
-            "型号": "DT3",
-            "类型": "新国标电自",
-            "电池仓_长_mm": 220,
-            "电池仓_宽_mm": 163,
-            "电池仓_高_mm": 345,
-            "电机_额定功率_W": 400,
-            "电机_峰值功率_W": 800,
-            "原厂电池规格": "48V12Ah/15Ah",
-            "备注": "脚踏下竖放电池"
-        },
-        {
-            "型号": "爱琪 Pro",
-            "类型": "电摩",
-            "电池仓_长_mm": 400,
-            "电池仓_宽_mm": 200,
-            "电池仓_高_mm": 170,
-            "电机_额定功率_W": 1000,
-            "电机_峰值功率_W": 1800,
-            "原厂电池规格": "72V20Ah铅酸",
-            "备注": "座桶27L，前后碟刹"
-        }
-    ],
-    "台铃_Tailg": [
-        {
-            "型号": "苍穹酷版 大黄蜂",
-            "类型": "电摩",
-            "电池仓_长_mm": 450,
-            "电池仓_宽_mm": 170,
-            "电池仓_高_mm": 180,
-            "电机_额定功率_W": 1200,
-            "电机_峰值功率_W": 2200,
-            "原厂电池规格": "72V",
-            "备注": "支持72120锂电，宽17cm"
-        },
-        {
-            "型号": "标兵 电摩版",
-            "类型": "电摩",
-            "电池仓_长_mm": 400,
-            "电池仓_宽_mm": 370,
-            "电池仓_高_mm": 170,
-            "电机_额定功率_W": 1200,
-            "电机_峰值功率_W": 2200,
-            "原厂电池规格": "72V23Ah石墨烯",
-            "备注": "32L座桶，S8云电机，极速约60km/h",
-            "数据来源": "官方参数",
-            "可信度": "中"
-        },
-        {
-            "型号": "标兵EB 电自版",
-            "类型": "新国标电自",
-            "电池仓_长_mm": 350,
-            "电池仓_宽_mm": 200,
-            "电池仓_高_mm": 170,
-            "电机_额定功率_W": 400,
-            "电机_峰值功率_W": 800,
-            "原厂电池规格": "48V锂电",
-            "备注": "可装60V和72V大电池",
-            "数据来源": "官方参数",
-            "可信度": "中"
-        }
-    ],
-    "绿源_Luyuan": [
-        {
-            "型号": "S70 电摩版",
-            "类型": "电摩",
-            "电池仓_长_mm": 377,
-            "电池仓_宽_mm": 210,
-            "电池仓_高_mm": 250,
-            "电机_额定功率_W": 1200,
-            "电机_峰值功率_W": 2000,
-            "原厂电池规格": "60V32Ah（双电并联）",
-            "备注": "座桶下方电池仓，尺寸不常规"
-        },
-        {
-            "型号": "S70 电自版",
-            "类型": "新国标电自",
-            "电池仓_长_mm": 420,
-            "电池仓_宽_mm": 175,
-            "电池仓_高_mm": 240,
-            "电机_额定功率_W": 400,
-            "电机_峰值功率_W": 800,
-            "原厂电池规格": "48V20Ah/24Ah铅酸",
-            "备注": "可装48V30Ah/32Ah锂电"
-        }
-    ],
-    "新大洲_PALLAS": [
-        {
-            "型号": "V80",
-            "类型": "电摩",
-            "电池仓_长_mm": 367,
-            "电池仓_宽_mm": 412,
-            "电池仓_高_mm": 116,
-            "电机_额定功率_W": 2000,
-            "电机_峰值功率_W": 2800,
-            "原厂电池规格": "72V35Ah石墨烯",
-            "备注": "车身1.8m，极速80km/h",
-            "数据来源": "经销商实测",
-            "可信度": "中"
-        }
-    ],
-    "五羊本田_WuyangHonda": [
-        {
-            "型号": "U-be",
-            "类型": "新国标电自",
-            "电池仓_长_mm": 300,
-            "电池仓_宽_mm": 180,
-            "电池仓_高_mm": 150,
-            "电机_额定功率_W": 400,
-            "电机_峰值功率_W": 400,
-            "原厂电池规格": "48V 12-30Ah锂电",
-            "备注": "可提锂电外置，尺寸为估算值需实测",
-            "数据来源": "官方参数",
-            "可信度": "低"
-        },
-        {
-            "型号": "U-GO",
-            "类型": "电摩",
-            "电池仓_长_mm": 350,
-            "电池仓_宽_mm": 200,
-            "电池仓_高_mm": 160,
-            "电机_额定功率_W": 1200,
-            "电机_峰值功率_W": 1800,
-            "原厂电池规格": "48V30Ah/72V20Ah锂电",
-            "备注": "座桶26L可加增程电池，尺寸为估算值",
-            "数据来源": "官方参数",
-            "可信度": "低"
-        }
-    ],
-    "小刀_XDAO": [
-        {
-            "型号": "青蜂侠",
-            "类型": "电摩",
-            "电池仓_长_mm": 380,
-            "电池仓_宽_mm": 200,
-            "电池仓_高_mm": 170,
-            "电机_额定功率_W": 1200,
-            "电机_峰值功率_W": 2000,
-            "原厂电池规格": "60-72V 10-20Ah锂电",
-            "备注": "电池仓尺寸为估算值需实测",
-            "数据来源": "网络收集",
-            "可信度": "低"
-        }
-    ],
-    "其他_Others": [
-        {
-            "型号": "小猴子 电摩",
-            "类型": "电摩",
-            "电池仓_长_mm": 150,
-            "电池仓_宽_mm": 190,
-            "电池仓_高_mm": 280,
-            "电机_额定功率_W": 1200,
-            "电机_峰值功率_W": 2000,
-            "原厂电池规格": "72V/84V",
-            "备注": "小型电摩，电池仓竖放",
-            "数据来源": "车友实测",
-            "可信度": "中"
-        }
-    ]
-};
-var EMBEDDED_BATTERIES = [
-    {
-        "型号": "奔虎6435LFP",
-        "电压_V": 48,
-        "电压范围": "50V~73V",
-        "容量_Ah": 38,
-        "电量_Wh": 1920,
-        "长_mm": 185,
-        "宽_mm": 165,
-        "高_mm": 340,
-        "持续放电电流_A": 40,
-        "峰值放电电流_A": 40,
-        "适用电机功率_最小_W": 400,
-        "适用电机功率_最大_W": 1200,
-        "电芯类型": "磷酸铁锂(LFP)",
-        "壳体材质": "钣金",
-        "重量_kg": 16.5,
-        "备注": "50V~73V, 1920Wh, 适配1200W及以下电机"
-    },
-    {
-        "型号": "奔虎6440LFP",
-        "电压_V": 48,
-        "电压范围": "50V~73V",
-        "容量_Ah": 45,
-        "电量_Wh": 2304,
-        "长_mm": 240,
-        "宽_mm": 170,
-        "高_mm": 350,
-        "持续放电电流_A": 40,
-        "峰值放电电流_A": 40,
-        "适用电机功率_最小_W": 400,
-        "适用电机功率_最大_W": 1200,
-        "电芯类型": "磷酸铁锂(LFP)",
-        "壳体材质": "钣金",
-        "重量_kg": 21.5,
-        "备注": "50V~73V, 2304Wh, 适配1200W及以下电机"
-    },
-    {
-        "型号": "奔虎6450LFP",
-        "电压_V": 48,
-        "电压范围": "50V~73V",
-        "容量_Ah": 56,
-        "电量_Wh": 2880,
-        "长_mm": 240,
-        "宽_mm": 170,
-        "高_mm": 350,
-        "持续放电电流_A": 60,
-        "峰值放电电流_A": 60,
-        "适用电机功率_最小_W": 600,
-        "适用电机功率_最大_W": 2000,
-        "电芯类型": "磷酸铁锂(LFP)",
-        "壳体材质": "钣金",
-        "重量_kg": 24.0,
-        "备注": "50V~73V, 2880Wh, 适配2000W及以下电机"
-    },
-    {
-        "型号": "奔虎6460LFP",
-        "电压_V": 48,
-        "电压范围": "50V~73V",
-        "容量_Ah": 62,
-        "电量_Wh": 3200,
-        "长_mm": 400,
-        "宽_mm": 259,
-        "高_mm": 185,
-        "持续放电电流_A": 60,
-        "峰值放电电流_A": 80,
-        "适用电机功率_最小_W": 800,
-        "适用电机功率_最大_W": 2500,
-        "电芯类型": "磷酸铁锂(LFP)",
-        "壳体材质": "钣金",
-        "重量_kg": 26.0,
-        "备注": "50V~73V, 3200Wh, 适配2500W及以下电机"
-    },
-    {
-        "型号": "奔虎6460LFP",
-        "电压_V": 48,
-        "电压范围": "50V~73V",
-        "容量_Ah": 62,
-        "电量_Wh": 3200,
-        "长_mm": 462,
-        "宽_mm": 267,
-        "高_mm": 170,
-        "持续放电电流_A": 60,
-        "峰值放电电流_A": 80,
-        "适用电机功率_最小_W": 800,
-        "适用电机功率_最大_W": 2500,
-        "电芯类型": "磷酸铁锂(LFP)",
-        "壳体材质": "PC+ABS",
-        "重量_kg": 22.8,
-        "备注": "50V~73V, 3200Wh, 适配2500W及以下电机"
-    },
-    {
-        "型号": "奔虎6480LFP",
-        "电压_V": 48,
-        "电压范围": "50V~73V",
-        "容量_Ah": 81,
-        "电量_Wh": 4160,
-        "长_mm": 400,
-        "宽_mm": 259,
-        "高_mm": 210,
-        "持续放电电流_A": 80,
-        "峰值放电电流_A": 80,
-        "适用电机功率_最小_W": 800,
-        "适用电机功率_最大_W": 3000,
-        "电芯类型": "磷酸铁锂(LFP)",
-        "壳体材质": "钣金",
-        "重量_kg": 29.5,
-        "备注": "50V~73V, 4160Wh, 适配3000W及以下电机"
-    },
-    {
-        "型号": "奔虎7635LFP",
-        "电压_V": 72,
-        "电压范围": "60V~87.6V",
-        "容量_Ah": 30,
-        "电量_Wh": 2304,
-        "长_mm": 220,
-        "宽_mm": 165,
-        "高_mm": 340,
-        "持续放电电流_A": 40,
-        "峰值放电电流_A": 40,
-        "适用电机功率_最小_W": 400,
-        "适用电机功率_最大_W": 1200,
-        "电芯类型": "磷酸铁锂(LFP)",
-        "壳体材质": "钣金",
-        "重量_kg": 19.5,
-        "备注": "60V~87.6V, 2304Wh, 适配1200W及以下电机"
-    },
-    {
-        "型号": "奔虎7650LFP",
-        "电压_V": 72,
-        "电压范围": "60V~87.6V",
-        "容量_Ah": 45,
-        "电量_Wh": 3456,
-        "长_mm": 460,
-        "宽_mm": 220,
-        "高_mm": 168,
-        "持续放电电流_A": 60,
-        "峰值放电电流_A": 60,
-        "适用电机功率_最小_W": 600,
-        "适用电机功率_最大_W": 2000,
-        "电芯类型": "磷酸铁锂(LFP)",
-        "壳体材质": "钣金",
-        "重量_kg": 28.5,
-        "备注": "60V~87.6V, 3456Wh, 适配2000W及以下电机"
-    },
-    {
-        "型号": "奔虎7660LFP",
-        "电压_V": 72,
-        "电压范围": "60V~87.6V",
-        "容量_Ah": 50,
-        "电量_Wh": 3840,
-        "长_mm": 462,
-        "宽_mm": 267,
-        "高_mm": 170,
-        "持续放电电流_A": 60,
-        "峰值放电电流_A": 80,
-        "适用电机功率_最小_W": 800,
-        "适用电机功率_最大_W": 2500,
-        "电芯类型": "磷酸铁锂(LFP)",
-        "壳体材质": "PC+ABS",
-        "重量_kg": 26.7,
-        "备注": "60V~87.6V, 3840Wh, 适配2500W及以下电机"
-    },
-    {
-        "型号": "奔虎7680LFP",
-        "电压_V": 72,
-        "电压范围": "60V~87.6V",
-        "容量_Ah": 65,
-        "电量_Wh": 4992,
-        "长_mm": 462,
-        "宽_mm": 267,
-        "高_mm": 200,
-        "持续放电电流_A": 80,
-        "峰值放电电流_A": 80,
-        "适用电机功率_最小_W": 800,
-        "适用电机功率_最大_W": 3000,
-        "电芯类型": "磷酸铁锂(LFP)",
-        "壳体材质": "PC+ABS",
-        "重量_kg": 30.7,
-        "备注": "60V~87.6V, 4992Wh, 适配3000W及以下电机"
-    }
-];
-var vehicles = EMBEDDED_VEHICLES;
-var allBatteriesFlat = EMBEDDED_BATTERIES;
-var currentMode = 'vehicle';
-var allVehiclesFlat = [];
+var VEHICLES = {"小牛_NIU": [{"型号": "NX marathon", "类型": "电摩", "电池仓_长_mm": 670, "电池仓_宽_mm": 280, "电池仓_高_mm": 170, "电机_额定功率_W": 1500, "电机_峰值功率_W": 2000, "原厂电池规格": "72V", "数据来源": "经销商数据", "可信度": "高"}, {"型号": "NX play", "类型": "电摩", "电池仓_长_mm": 675, "电池仓_宽_mm": 290, "电池仓_高_mm": 170, "电池仓_宽窄处_mm": 245, "电池仓_T型": true, "电机_额定功率_W": 2000, "电机_峰值功率_W": 2500, "原厂电池规格": "72V", "备注": "T型仓290/245mm", "数据来源": "经销商数据", "可信度": "高"}, {"型号": "NX Sport", "类型": "电摩", "电池仓_长_mm": 650, "电池仓_宽_mm": 267, "电池仓_高_mm": 170, "电机_额定功率_W": 2000, "电机_峰值功率_W": 2500, "原厂电池规格": "72V", "数据来源": "经销商数据", "可信度": "高"}, {"型号": "NX 动力版", "类型": "电摩", "电池仓_长_mm": 650, "电池仓_宽_mm": 265, "电池仓_高_mm": 170, "电机_额定功率_W": 1500, "电机_峰值功率_W": 2000, "原厂电池规格": "72V", "数据来源": "经销商数据", "可信度": "高"}, {"型号": "NX 大师", "类型": "电摩", "电池仓_长_mm": 675, "电池仓_宽_mm": 290, "电池仓_高_mm": 170, "电池仓_宽窄处_mm": 245, "电池仓_T型": true, "电机_额定功率_W": 5000, "电机_峰值功率_W": 7000, "原厂电池规格": "72V", "备注": "T型仓，高性能", "数据来源": "经销商数据", "可信度": "高"}, {"型号": "NX 赛道", "类型": "电摩", "电池仓_长_mm": 670, "电池仓_宽_mm": 280, "电池仓_高_mm": 170, "电机_额定功率_W": 3000, "电机_峰值功率_W": 4000, "原厂电池规格": "72V", "数据来源": "经销商数据", "可信度": "高"}, {"型号": "PXt", "类型": "电摩", "电池仓_长_mm": 500, "电池仓_宽_mm": 220, "电池仓_高_mm": 170, "电机_额定功率_W": 1200, "电机_峰值功率_W": 1800, "原厂电池规格": "72V", "数据来源": "经销商数据", "可信度": "高"}, {"型号": "FX 风速", "类型": "电摩", "电池仓_长_mm": 670, "电池仓_宽_mm": 280, "电池仓_高_mm": 170, "电机_额定功率_W": 3000, "电机_峰值功率_W": 4000, "原厂电池规格": "72V", "数据来源": "经销商数据", "可信度": "高"}, {"型号": "NLT", "类型": "电摩", "电池仓_长_mm": 270, "电池仓_宽_mm": 225, "电池仓_高_mm": 170, "电机_额定功率_W": 1200, "电机_峰值功率_W": 1500, "原厂电池规格": "72V", "数据来源": "经销商数据", "可信度": "高"}, {"型号": "NX 运动版", "类型": "电摩", "电池仓_长_mm": 675, "电池仓_宽_mm": 290, "电池仓_高_mm": 170, "电机_额定功率_W": 1500, "电机_峰值功率_W": 2000, "原厂电池规格": "72V", "数据来源": "经销商数据", "可信度": "高"}, {"型号": "NT play", "类型": "电摩", "电池仓_长_mm": 460, "电池仓_宽_mm": 267, "电池仓_高_mm": 170, "电机_额定功率_W": 1200, "电机_峰值功率_W": 1800, "原厂电池规格": "72V", "数据来源": "经销商数据", "可信度": "高"}], "九号_Ninebot": [{"型号": "M85c", "类型": "电摩", "电池仓_长_mm": 670, "电池仓_宽_mm": 230, "电池仓_高_mm": 170, "电机_额定功率_W": 2300, "电机_峰值功率_W": 2800, "原厂电池规格": "72V", "数据来源": "经销商数据", "可信度": "高"}, {"型号": "M95c", "类型": "电摩", "电池仓_长_mm": 670, "电池仓_宽_mm": 230, "电池仓_高_mm": 170, "电机_额定功率_W": 2600, "电机_峰值功率_W": 3000, "原厂电池规格": "72V", "数据来源": "经销商数据", "可信度": "高"}, {"型号": "M5100", "类型": "电摩", "电池仓_长_mm": 650, "电池仓_宽_mm": 280, "电池仓_高_mm": 173, "电机_额定功率_W": 3300, "电机_峰值功率_W": 4000, "原厂电池规格": "72V", "数据来源": "经销商数据", "可信度": "高"}, {"型号": "Mz", "类型": "电摩", "电池仓_长_mm": 530, "电池仓_宽_mm": 225, "电池仓_高_mm": 170, "电机_额定功率_W": 1500, "电机_峰值功率_W": 2000, "原厂电池规格": "72V", "数据来源": "经销商数据", "可信度": "高"}, {"型号": "Nz", "类型": "电轻摩", "电池仓_长_mm": 530, "电池仓_宽_mm": 225, "电池仓_高_mm": 170, "电机_额定功率_W": 700, "电机_峰值功率_W": 1000, "原厂电池规格": "60V", "数据来源": "经销商数据", "可信度": "高"}, {"型号": "N70c", "类型": "电摩", "电池仓_长_mm": 510, "电池仓_宽_mm": 228, "电池仓_高_mm": 168, "电机_额定功率_W": 1500, "电机_峰值功率_W": 2000, "原厂电池规格": "72V", "数据来源": "经销商数据", "可信度": "高"}, {"型号": "N85c", "类型": "电摩", "电池仓_长_mm": 540, "电池仓_宽_mm": 235, "电池仓_高_mm": 170, "电机_额定功率_W": 2000, "电机_峰值功率_W": 2500, "原厂电池规格": "72V", "数据来源": "经销商数据", "可信度": "高"}, {"型号": "E80c", "类型": "电摩", "电池仓_长_mm": 520, "电池仓_宽_mm": 235, "电池仓_高_mm": 150, "电机_额定功率_W": 2600, "电机_峰值功率_W": 3000, "原厂电池规格": "72V", "数据来源": "经销商数据", "可信度": "高"}], "极核_Zeeho": [{"型号": "AE5i", "类型": "电轻摩", "电池仓_长_mm": 503, "电池仓_宽_mm": 272, "电池仓_高_mm": 170, "电池仓_宽窄处_mm": 267, "电池仓_T型": true, "电机_额定功率_W": 1700, "电机_峰值功率_W": 2200, "原厂电池规格": "72V", "备注": "T型仓272/267mm", "数据来源": "经销商数据", "可信度": "高"}, {"型号": "AE5", "类型": "电摩", "电池仓_长_mm": 615, "电池仓_宽_mm": 230, "电池仓_高_mm": 170, "电机_额定功率_W": 1700, "电机_峰值功率_W": 2200, "原厂电池规格": "72V", "数据来源": "经销商数据", "可信度": "高"}, {"型号": "AE4", "类型": "电摩", "电池仓_长_mm": 615, "电池仓_宽_mm": 230, "电池仓_高_mm": 170, "电机_额定功率_W": 3500, "电机_峰值功率_W": 5000, "原厂电池规格": "72V", "数据来源": "经销商数据", "可信度": "高"}, {"型号": "AE3 Pro", "类型": "电摩", "电池仓_长_mm": 530, "电池仓_宽_mm": 230, "电池仓_高_mm": 160, "电机_额定功率_W": 2500, "电机_峰值功率_W": 3000, "原厂电池规格": "72V", "数据来源": "经销商数据", "可信度": "高"}, {"型号": "AE2 Pro", "类型": "电摩", "电池仓_长_mm": 550, "电池仓_宽_mm": 225, "电池仓_高_mm": 170, "电机_额定功率_W": 3000, "电机_峰值功率_W": 3500, "原厂电池规格": "72V", "数据来源": "经销商数据", "可信度": "高"}, {"型号": "Ez3", "类型": "电摩", "电池仓_长_mm": 460, "电池仓_宽_mm": 230, "电池仓_高_mm": 170, "电机_额定功率_W": 2200, "电机_峰值功率_W": 2800, "原厂电池规格": "72V", "数据来源": "经销商数据", "可信度": "高"}], "雅迪_Yadea": [{"型号": "EZ4 电摩", "类型": "电摩", "电池仓_长_mm": 610, "电池仓_宽_mm": 230, "电池仓_高_mm": 172, "电机_额定功率_W": 1300, "电机_峰值功率_W": 2400, "原厂电池规格": "72V23Ah铅酸", "备注": "极速53km/h，座桶30L", "数据来源": "官方参数", "可信度": "高"}, {"型号": "EZ4 Pro 电摩", "类型": "电摩", "电池仓_长_mm": 610, "电池仓_宽_mm": 230, "电池仓_高_mm": 172, "电机_额定功率_W": 1600, "电机_峰值功率_W": 3500, "原厂电池规格": "72V23Ah铅酸", "备注": "极速56km/h，6.2寸TFT屏", "数据来源": "官方参数", "可信度": "高"}, {"型号": "EZ4 Max Li", "类型": "电摩", "电池仓_长_mm": 608, "电池仓_宽_mm": 230, "电池仓_高_mm": 163, "电机_额定功率_W": 1600, "电机_峰值功率_W": 3500, "原厂电池规格": "锂电", "备注": "锂电池版，高度略低", "数据来源": "官方参数", "可信度": "高"}, {"型号": "EZ4 电轻摩", "类型": "电轻摩", "电池仓_长_mm": 610, "电池仓_宽_mm": 230, "电池仓_高_mm": 172, "电机_额定功率_W": 800, "电机_峰值功率_W": 2000, "原厂电池规格": "60V23Ah铅酸", "备注": "极速47km/h", "数据来源": "官方参数", "可信度": "高"}, {"型号": "G5 石墨烯版", "类型": "电摩", "电池仓_长_mm": 320, "电池仓_宽_mm": 230, "电池仓_高_mm": 170, "电机_额定功率_W": 1000, "电机_峰值功率_W": 2000, "原厂电池规格": "72V20Ah", "备注": "12寸轮胎", "数据来源": "官方参数", "可信度": "中"}, {"型号": "T30", "类型": "电摩", "电池仓_长_mm": 510, "电池仓_宽_mm": 210, "电池仓_高_mm": 210, "电机_额定功率_W": 1200, "电机_峰值功率_W": 2200, "原厂电池规格": "72V20Ah铅酸/24Ah锂电", "备注": "踏板下电池仓", "数据来源": "官方参数", "可信度": "中"}, {"型号": "冠能T2 动力版", "类型": "电摩", "电池仓_长_mm": 480, "电池仓_宽_mm": 210, "电池仓_高_mm": 175, "电机_额定功率_W": 1200, "电机_峰值功率_W": 2200, "原厂电池规格": "72V22Ah石墨烯", "备注": "续航约100km", "数据来源": "官方参数", "可信度": "中"}, {"型号": "冠能领跑T7", "类型": "电摩", "电池仓_长_mm": 500, "电池仓_宽_mm": 220, "电池仓_高_mm": 180, "电机_额定功率_W": 1200, "电机_峰值功率_W": 2200, "原厂电池规格": "72V35Ah石墨烯", "备注": "续航120-150km，座桶30L", "数据来源": "官方参数", "可信度": "中"}, {"型号": "路虎 顶配版", "类型": "电摩", "电池仓_长_mm": 550, "电池仓_宽_mm": 230, "电池仓_高_mm": 185, "电机_额定功率_W": 1500, "电机_峰值功率_W": 3000, "原厂电池规格": "72V50Ah", "备注": "极速70km/h，续航150km", "数据来源": "官方参数", "可信度": "中"}, {"型号": "冠能E8", "类型": "电摩", "电池仓_长_mm": 520, "电池仓_宽_mm": 230, "电池仓_高_mm": 175, "电机_额定功率_W": 1200, "电机_峰值功率_W": 2000, "原厂电池规格": "72V38Ah石墨烯", "备注": "TTFAR 2.0增程系统，尺寸为72V38Ah电池仓推算需实测", "数据来源": "官方参数", "可信度": "中"}], "台铃_Tailg": [{"型号": "苍穹酷版 大黄蜂", "类型": "电摩", "电池仓_长_mm": 450, "电池仓_宽_mm": 170, "电池仓_高_mm": 180, "电机_额定功率_W": 1200, "电机_峰值功率_W": 2200, "原厂电池规格": "72V", "备注": "支持72120锂电，宽17cm", "数据来源": "车友实测", "可信度": "中"}, {"型号": "标兵 电摩版", "类型": "电摩", "电池仓_长_mm": 400, "电池仓_宽_mm": 370, "电池仓_高_mm": 170, "电机_额定功率_W": 1200, "电机_峰值功率_W": 2200, "原厂电池规格": "72V23Ah石墨烯", "备注": "32L座桶，S8云电机，极速约60km/h", "数据来源": "官方参数", "可信度": "中"}, {"型号": "领跑400", "类型": "电摩", "电池仓_长_mm": 500, "电池仓_宽_mm": 230, "电池仓_高_mm": 170, "电机_额定功率_W": 1200, "电机_峰值功率_W": 2000, "原厂电池规格": "72V23/32/35Ah", "备注": "35L座桶，CN12电机，极速51km/h，尺寸为72V35Ah电池仓推算", "数据来源": "官方参数", "可信度": "中"}, {"型号": "优跑 超能版", "类型": "电摩", "电池仓_长_mm": 500, "电池仓_宽_mm": 230, "电池仓_高_mm": 175, "电机_额定功率_W": 1500, "电机_峰值功率_W": 2200, "原厂电池规格": "72V23/35Ah", "备注": "15管云控制器，脚踏下电池仓，尺寸为72V35Ah电池仓推算", "数据来源": "官方参数", "可信度": "中"}], "金箭_Jinjian": [{"型号": "金钢GT 850", "类型": "电摩", "电池仓_长_mm": 680, "电池仓_宽_mm": 278, "电池仓_高_mm": 175, "电机_额定功率_W": 2500, "电机_峰值功率_W": 3500, "原厂电池规格": "72V52Ah铅酸", "备注": "扩展电池仓680×278×175mm，座桶通底设计，72V120Ah轻松装", "数据来源": "经销商实测", "可信度": "高"}, {"型号": "850MAX", "类型": "电摩", "电池仓_长_mm": 650, "电池仓_宽_mm": 260, "电池仓_高_mm": 180, "电机_额定功率_W": 2500, "电机_峰值功率_W": 3500, "原厂电池规格": "72V", "备注": "可装72V120Ah锂电(轻松)，72V155Ah(困难)，极速100km/h", "数据来源": "车友实测", "可信度": "中"}], "黑骑士_BlackKnight": [{"型号": "M2", "类型": "电摩", "电池仓_长_mm": 440, "电池仓_宽_mm": 390, "电池仓_高_mm": 265, "电机_额定功率_W": 2500, "电机_峰值功率_W": 3500, "原厂电池规格": "72V", "备注": "脚踏完美适配60V80Ah，座桶可装72V140Ah(需切割)，双电池仓设计", "电池仓_双仓": true, "数据来源": "车友实测", "可信度": "高"}, {"型号": "M10", "类型": "电摩", "电池仓_长_mm": 400, "电池仓_宽_mm": 420, "电池仓_高_mm": 240, "电机_额定功率_W": 2500, "电机_峰值功率_W": 4200, "原厂电池规格": "72V", "备注": "座桶240×185×320mm，踏板400×420mm，双电池仓", "电池仓_双仓": true, "数据来源": "官方参数", "可信度": "高"}, {"型号": "G1R", "类型": "电摩", "电池仓_长_mm": 430, "电池仓_宽_mm": 400, "电池仓_高_mm": 200, "电机_额定功率_W": 2500, "电机_峰值功率_W": 3500, "原厂电池规格": "72V", "备注": "双电池仓(踏板+座桶)，续航300km+，极速75km/h", "电池仓_双仓": true, "数据来源": "官方参数", "可信度": "中"}], "爱玛_AIMA": [{"型号": "骁龙", "类型": "电摩", "电池仓_长_mm": 465, "电池仓_宽_mm": 180, "电池仓_高_mm": 170, "电机_额定功率_W": 1200, "电机_峰值功率_W": 2000, "原厂电池规格": "72V", "备注": "轻度改造可达470×185×177mm，深度改造可达550×190×185mm需切割", "数据来源": "车友实测", "可信度": "高"}]};
+var BATTERIES = [{"型号": "奔虎6428LFP", "电压_V": 64, "电压范围": "50V~73.0V", "容量_Ah": 24, "电量_Wh": 1536, "长_mm": 185, "宽_mm": 165, "高_mm": 340, "持续放电电流_A": 30, "峰值放电电流_A": 30, "适用电机功率_最小_W": 400, "适用电机功率_最大_W": 1200, "电芯类型": "磷酸铁锂(LFP)", "壳体材质": "待确认", "重量_kg": 15.5, "备注": "64V 24Ah, 1536Wh, 适配1200W及以下电机", "展示名": "6428LFP", "展示图": "", "参数图": "", "规格书": "", "认证报告": ""}, {"型号": "奔虎6435LFP", "电压_V": 64, "电压范围": "50V~73V", "容量_Ah": 30, "电量_Wh": 1920, "长_mm": 185, "宽_mm": 165, "高_mm": 340, "持续放电电流_A": 40, "峰值放电电流_A": 40, "适用电机功率_最小_W": 400, "适用电机功率_最大_W": 1200, "电芯类型": "磷酸铁锂(LFP)", "壳体材质": "钣金", "重量_kg": 16.5, "备注": "64V 30Ah, 1920Wh, 适配1200W及以下电机", "展示名": "6435LFP", "展示图": "assets/img/6435LFP.png", "参数图": "assets/img/6435LFP-参数.png", "规格书": "assets/files/6435LFP-规格书.pdf", "认证报告": "assets/files/6435LFP-认证报告.pdf"}, {"型号": "奔虎6440LFP", "电压_V": 64, "电压范围": "50V~73V", "容量_Ah": 36, "电量_Wh": 2304, "长_mm": 240, "宽_mm": 170, "高_mm": 350, "持续放电电流_A": 40, "峰值放电电流_A": 40, "适用电机功率_最小_W": 400, "适用电机功率_最大_W": 1200, "电芯类型": "磷酸铁锂(LFP)", "壳体材质": "钣金", "重量_kg": 21.5, "备注": "64V 36Ah, 2304Wh, 适配1200W及以下电机", "展示名": "6440LFP", "展示图": "assets/img/6440.png", "参数图": "", "规格书": "", "认证报告": ""}, {"型号": "奔虎6450LFP", "电压_V": 64, "电压范围": "50V~73V", "容量_Ah": 45, "电量_Wh": 2880, "长_mm": 240, "宽_mm": 170, "高_mm": 350, "持续放电电流_A": 60, "峰值放电电流_A": 60, "适用电机功率_最小_W": 666, "适用电机功率_最大_W": 2000, "电芯类型": "磷酸铁锂(LFP)", "壳体材质": "钣金", "重量_kg": 24.0, "备注": "64V 45Ah, 2880Wh, 适配2000W及以下电机", "展示名": "6450LFP", "展示图": "assets/img/6450LFP.png", "参数图": "assets/img/6450LFP-参数.png", "规格书": "assets/files/6450LFP-规格书.pdf", "认证报告": "assets/files/6450LFP-认证报告.pdf"}, {"型号": "奔虎6460LFP", "电压_V": 64, "电压范围": "50V~73V", "容量_Ah": 50, "电量_Wh": 3200, "长_mm": 400, "宽_mm": 259, "高_mm": 185, "持续放电电流_A": 60, "峰值放电电流_A": 60, "适用电机功率_最小_W": 833, "适用电机功率_最大_W": 2500, "电芯类型": "磷酸铁锂(LFP)", "壳体材质": "钣金", "重量_kg": 26.0, "备注": "64V 50Ah, 3200Wh, 适配2500W及以下电机", "展示名": "6460LFP（钣金）", "展示图": "assets/img/6460LFP.png", "参数图": "assets/img/6460LFP-参数.png", "规格书": "assets/files/6460LFP-规格书.pdf", "认证报告": "assets/files/6460LFP-认证报告.pdf"}, {"型号": "奔虎6460LFP", "电压_V": 64, "电压范围": "50V~73V", "容量_Ah": 50, "电量_Wh": 3200, "长_mm": 462, "宽_mm": 267, "高_mm": 170, "持续放电电流_A": 60, "峰值放电电流_A": 60, "适用电机功率_最小_W": 833, "适用电机功率_最大_W": 2500, "电芯类型": "磷酸铁锂(LFP)", "壳体材质": "PC+ABS", "重量_kg": 22.8, "备注": "64V 50Ah, 3200Wh, 适配2500W及以下电机", "展示名": "6460LFP（PC+ABS）", "展示图": "assets/img/6460（PC+ABS）.png", "参数图": "", "规格书": "", "认证报告": ""}, {"型号": "奔虎6480LFP", "电压_V": 64, "电压范围": "50V~73V", "容量_Ah": 65, "电量_Wh": 4160, "长_mm": 400, "宽_mm": 259, "高_mm": 210, "持续放电电流_A": 80, "峰值放电电流_A": 80, "适用电机功率_最小_W": 1000, "适用电机功率_最大_W": 3000, "电芯类型": "磷酸铁锂(LFP)", "壳体材质": "钣金", "重量_kg": 29.5, "备注": "64V 65Ah, 4160Wh, 适配3000W及以下电机", "展示名": "6480LFP", "展示图": "assets/img/6480.png", "参数图": "", "规格书": "", "认证报告": ""}, {"型号": "奔虎64120LFP（沈）", "电压_V": 64, "电压范围": "50V~73V", "容量_Ah": 100, "电量_Wh": 6400, "长_mm": 570, "宽_mm": 300, "高_mm": 200, "持续放电电流_A": 150, "峰值放电电流_A": 150, "适用电机功率_最小_W": 1500, "适用电机功率_最大_W": 6000, "电芯类型": "磷酸铁锂(LFP)", "壳体材质": "钣金", "重量_kg": 57, "备注": "64V 100Ah, 6400Wh", "展示名": "64120LFP（沈）", "展示图": "assets/img/64120（沈）.png", "参数图": "", "规格书": "", "认证报告": ""}, {"型号": "奔虎64120LFP（石）", "电压_V": 64, "电压范围": "50V~73V", "容量_Ah": 100, "电量_Wh": 6400, "长_mm": 500, "宽_mm": 460, "高_mm": 200, "持续放电电流_A": 150, "峰值放电电流_A": 150, "适用电机功率_最小_W": 1500, "适用电机功率_最大_W": 6000, "电芯类型": "磷酸铁锂(LFP)", "壳体材质": "钣金", "重量_kg": 0, "备注": "64V 100Ah, 6400Wh", "展示名": "64120LFP（石）", "展示图": "assets/img/64120（石）.jpg", "参数图": "", "规格书": "", "认证报告": ""}, {"型号": "奔虎7628LFP", "电压_V": 76.8, "电压范围": "60V~87.6V", "容量_Ah": 24, "电量_Wh": 1843, "长_mm": 200, "宽_mm": 165, "高_mm": 340, "持续放电电流_A": 30, "峰值放电电流_A": 30, "适用电机功率_最小_W": 400, "适用电机功率_最大_W": 1200, "电芯类型": "磷酸铁锂(LFP)", "壳体材质": "待确认", "重量_kg": 0, "备注": "76.8V 24Ah, 1843Wh, 适配1200W及以下电机", "展示名": "7628LFP", "展示图": "", "参数图": "", "规格书": "", "认证报告": ""}, {"型号": "奔虎7628LFP（卧）", "电压_V": 76.8, "电压范围": "60V~87.6V", "容量_Ah": 24, "电量_Wh": 1843, "长_mm": 400, "宽_mm": 185, "高_mm": 168, "持续放电电流_A": 30, "峰值放电电流_A": 30, "适用电机功率_最小_W": 400, "适用电机功率_最大_W": 1200, "电芯类型": "磷酸铁锂(LFP)", "壳体材质": "待确认", "重量_kg": 0, "备注": "76.8V 24Ah, 1843Wh, 适配1200W及以下电机", "展示名": "7628LFP（卧）", "展示图": "", "参数图": "", "规格书": "", "认证报告": ""}, {"型号": "奔虎7635LFP", "电压_V": 76.8, "电压范围": "60V~87.6V", "容量_Ah": 30, "电量_Wh": 2304, "长_mm": 220, "宽_mm": 165, "高_mm": 340, "持续放电电流_A": 40, "峰值放电电流_A": 40, "适用电机功率_最小_W": 400, "适用电机功率_最大_W": 1200, "电芯类型": "磷酸铁锂(LFP)", "壳体材质": "钣金", "重量_kg": 19.5, "备注": "76.8V 30Ah, 2304Wh, 适配1200W及以下电机", "展示名": "7635LFP", "展示图": "assets/img/7635（立）.png", "参数图": "", "规格书": "", "认证报告": ""}, {"型号": "奔虎7635LFP（卧）", "电压_V": 76.8, "电压范围": "60V~87.6V", "容量_Ah": 30, "电量_Wh": 2304, "长_mm": 400, "宽_mm": 185, "高_mm": 168, "持续放电电流_A": 40, "峰值放电电流_A": 40, "适用电机功率_最小_W": 666, "适用电机功率_最大_W": 2000, "电芯类型": "磷酸铁锂(LFP)", "壳体材质": "待确认", "重量_kg": 0, "备注": "76.8V 30Ah, 2304Wh, 适配2000W及以下电机", "展示名": "7635LFP（卧）", "展示图": "assets/img/7635LFP.png", "参数图": "assets/img/7635LFP-参数.png", "规格书": "assets/files/7635LFP-规格书.pdf", "认证报告": "assets/files/7635LFP-认证报告.pdf"}, {"型号": "奔虎7640LFP（卧）", "电压_V": 76.8, "电压范围": "60V~87.6V", "容量_Ah": 36, "电量_Wh": 2764, "长_mm": 460, "宽_mm": 200, "高_mm": 168, "持续放电电流_A": 40, "峰值放电电流_A": 40, "适用电机功率_最小_W": 666, "适用电机功率_最大_W": 2000, "电芯类型": "磷酸铁锂(LFP)", "壳体材质": "待确认", "重量_kg": 0, "备注": "76.8V 36Ah, 2764Wh, 适配2000W及以下电机", "展示名": "7640LFP（卧）", "展示图": "", "参数图": "", "规格书": "", "认证报告": ""}, {"型号": "奔虎7650LFP", "电压_V": 76.8, "电压范围": "60V~87.6V", "容量_Ah": 45, "电量_Wh": 3456, "长_mm": 460, "宽_mm": 220, "高_mm": 168, "持续放电电流_A": 60, "峰值放电电流_A": 60, "适用电机功率_最小_W": 666, "适用电机功率_最大_W": 2000, "电芯类型": "磷酸铁锂(LFP)", "壳体材质": "钣金", "重量_kg": 28.5, "备注": "76.8V 45Ah, 3456Wh, 适配2000W及以下电机", "展示名": "7650LFP", "展示图": "assets/img/7650LFP.png", "参数图": "assets/img/7650LFP-参数.png", "规格书": "assets/files/7650LFP-规格书.pdf", "认证报告": "assets/files/7650LFP-认证报告.pdf"}, {"型号": "奔虎7660LFP", "电压_V": 76.8, "电压范围": "60V~87.6V", "容量_Ah": 50, "电量_Wh": 3840, "长_mm": 462, "宽_mm": 267, "高_mm": 170, "持续放电电流_A": 60, "峰值放电电流_A": 60, "适用电机功率_最小_W": 833, "适用电机功率_最大_W": 2500, "电芯类型": "磷酸铁锂(LFP)", "壳体材质": "PC+ABS", "重量_kg": 26.7, "备注": "76.8V 50Ah, 3840Wh, 适配2500W及以下电机", "展示名": "7660LFP", "展示图": "assets/img/7660.png", "参数图": "", "规格书": "", "认证报告": ""}, {"型号": "奔虎7680LFP", "电压_V": 76.8, "电压范围": "60V~87.6V", "容量_Ah": 65, "电量_Wh": 4992, "长_mm": 462, "宽_mm": 267, "高_mm": 200, "持续放电电流_A": 80, "峰值放电电流_A": 80, "适用电机功率_最小_W": 1000, "适用电机功率_最大_W": 3000, "电芯类型": "磷酸铁锂(LFP)", "壳体材质": "PC+ABS", "重量_kg": 30.7, "备注": "76.8V 65Ah, 4992Wh, 适配3000W及以下电机", "展示名": "7680LFP", "展示图": "assets/img/7680.png", "参数图": "", "规格书": "", "认证报告": ""}, {"型号": "奔虎7670LFP", "电压_V": 76.8, "电压范围": "60V~87.6V", "容量_Ah": 60, "电量_Wh": 4608, "长_mm": 560, "宽_mm": 230, "高_mm": 170, "持续放电电流_A": 100, "峰值放电电流_A": 100, "适用电机功率_最小_W": 1000, "适用电机功率_最大_W": 5000, "电芯类型": "磷酸铁锂(LFP)", "壳体材质": "钣金", "重量_kg": 0, "备注": "76.8V 60Ah, 4608Wh, 适配5000W及以下电机", "展示名": "7670LFP", "展示图": "assets/img/7670.png", "参数图": "", "规格书": "", "认证报告": ""}, {"型号": "奔虎76120LFP", "电压_V": 76.8, "电压范围": "60V~87.6V", "容量_Ah": 100, "电量_Wh": 7680, "长_mm": 500, "宽_mm": 460, "高_mm": 200, "持续放电电流_A": 150, "峰值放电电流_A": 150, "适用电机功率_最小_W": 1500, "适用电机功率_最大_W": 6000, "电芯类型": "磷酸铁锂(LFP)", "壳体材质": "钣金", "重量_kg": 0, "备注": "76.8V 100Ah, 7680Wh", "展示名": "76120LFP", "展示图": "assets/img/76120.png", "参数图": "", "规格书": "", "认证报告": ""}];
+var allVehicles = [];
+var allBatteries = BATTERIES;
+var curQuery = '';
 
 function init(){
-allVehiclesFlat=[];
-for(var brand in vehicles){if(Array.isArray(vehicles[brand])){vehicles[brand].forEach(function(v){allVehiclesFlat.push(Object.assign({},v,{_brand:brand}));});}}
-if('serviceWorker' in navigator && location.protocol === 'https:'){navigator.serviceWorker.register('sw.js').catch(function(){});}
-var sel=document.getElementById('brandFilter');
-for(var b in vehicles){if(Array.isArray(vehicles[b])&&vehicles[b].length>0){var n=b.replace('_',' ');sel.innerHTML+='<option value="'+b.split('_')[0]+'">'+n+'</option>';}}
-updateStats();renderAllVehicles();setupListeners();
+  allVehicles = [];
+  for (var brand in VEHICLES) {
+    if (Array.isArray(VEHICLES[brand])) {
+      VEHICLES[brand].forEach(function(v){ allVehicles.push(Object.assign({}, v, {_brand: brand})); });
+    }
+  }
+  var sel = document.getElementById('brandFilter');
+  for (var b in VEHICLES) {
+    if (Array.isArray(VEHICLES[b]) && VEHICLES[b].length > 0) {
+      var opt = document.createElement('option');
+      opt.value = b.split('_')[0];
+      opt.textContent = b.split('_')[0];
+      sel.appendChild(opt);
+    }
+  }
+  renderHeroStats();
+  renderProducts('');
+  bindEvents();
+  if ('serviceWorker' in navigator && location.protocol === 'https:') {
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  }
 }
 
-function updateStats(){
-var brands=0;for(var b in vehicles){if(Array.isArray(vehicles[b])&&vehicles[b].length>0)brands++;}
-document.getElementById('stats').innerHTML='<div class="stat-card"><div class="num">'+allVehiclesFlat.length+'</div><div class="label">收录车型</div></div><div class="stat-card"><div class="num">'+brands+'</div><div class="label">覆盖品牌</div></div><div class="stat-card"><div class="num">'+allBatteriesFlat.length+'</div><div class="label">电池型号</div></div><div class="stat-card"><div class="num" id="matchCount">-</div><div class="label">匹配结果</div></div>';
+function renderHeroStats(){
+  var high = allVehicles.filter(function(v){ return v.可信度 === '高'; }).length;
+  var pct = Math.round(high / allVehicles.length * 100);
+  var brands = 0;
+  for (var b in VEHICLES) if (Array.isArray(VEHICLES[b]) && VEHICLES[b].length > 0) brands++;
+  document.getElementById('heroStats').innerHTML =
+    '<div class="hstat"><div class="n">' + allVehicles.length + '</div><div class="l">收录车型</div></div>' +
+    '<div class="hstat"><div class="n">' + allBatteries.length + '</div><div class="l">电池型号</div></div>' +
+    '<div class="hstat"><div class="n">' + brands + '</div><div class="l">覆盖品牌</div></div>' +
+    '<div class="hstat"><div class="n">' + pct + '%</div><div class="l">高可信数据</div></div>';
 }
 
-function setupListeners(){
-document.querySelectorAll('.mode-tab').forEach(function(t){t.addEventListener('click',function(){document.querySelectorAll('.mode-tab').forEach(function(x){x.classList.remove('active');});this.classList.add('active');currentMode=this.dataset.mode;document.getElementById('searchVehicleRow').style.display=currentMode==='vehicle'?'flex':'none';document.getElementById('searchBatteryRow').style.display=currentMode==='battery'?'flex':'none';resetSearch();});});
-document.getElementById('brandFilter').addEventListener('change',function(){renderAllVehicles();});
-document.getElementById('vehicleSearch').addEventListener('keypress',function(e){if(e.key==='Enter')searchVehicles();});
-document.getElementById('vehicleSearch').addEventListener('input',function(){if(!this.value.trim())renderAllVehicles();});
-document.getElementById('batterySearch').addEventListener('keypress',function(e){if(e.key==='Enter')searchBatteries();});
-document.getElementById('modalOverlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal();if(e.ctrlKey&&e.key==='k'){e.preventDefault();document.getElementById('vehicleSearch').focus();}});
+function bindEvents(){
+  document.getElementById('searchMain').addEventListener('input', function(){
+    document.getElementById('searchTop').value = this.value;
+    curQuery = this.value.trim();
+    runSearch();
+  });
+  document.getElementById('searchMain').addEventListener('keypress', function(e){ if (e.key === 'Enter') runSearch(); });
+  document.getElementById('searchTop').addEventListener('input', function(){
+    document.getElementById('searchMain').value = this.value;
+    curQuery = this.value.trim();
+    runSearch();
+    if (this.value.trim()) document.getElementById('match').scrollIntoView({behavior:'smooth'});
+  });
+  document.getElementById('brandFilter').addEventListener('change', runSearch);
+  document.getElementById('prodChips').addEventListener('click', function(e){
+    var chip = e.target.closest('.chip'); if (!chip) return;
+    this.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('active'); });
+    chip.classList.add('active');
+    renderProducts(chip.dataset.v);
+  });
+  document.getElementById('overlay').addEventListener('click', function(e){ if (e.target === this) closeModal(); });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') closeModal();
+    if (e.ctrlKey && e.key === 'k') { e.preventDefault(); document.getElementById('searchMain').focus(); }
+  });
+  var saved = localStorage.getItem('theme');
+  if (saved === 'dark') document.documentElement.classList.add('dark');
+  document.getElementById('themeBtn').addEventListener('click', function(){
+    var dark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', dark ? 'dark' : 'light');
+  });
 }
 
-function checkFit(battery,vehicle){
-var bl=battery.长_mm||0,bw=battery.宽_mm||0,bh=battery.高_mm||0;
-var vl=vehicle.电池仓_长_mm||0,vw=vehicle.电池仓_宽_mm||0,vh=vehicle.电池仓_高_mm||0;
-var lOk=bl<=vl,wOk=bw<=vw,hOk=bh<=vh,reasons=[];
-if(!lOk)reasons.push('长度超限('+bl+'>'+vl+'mm)');
-if(!wOk)reasons.push('宽度超限('+bw+'>'+vw+'mm)');
-if(!hOk)reasons.push('高度超限('+bh+'>'+vh+'mm)');
-if(vehicle.电池仓_宽窄处_mm&&bw>vehicle.电池仓_宽窄处_mm)reasons.push('宽度超窄处限制');
-var sizeFit=lOk&&wOk&&hOk;
-var battMaxPwr=battery.适用电机功率_最大_W||99999;
-var vehPwr=vehicle.电机_额定功率_W||0;
-var powerFit=vehPwr<=battMaxPwr;
-var level=sizeFit?(powerFit?'完美匹配':'尺寸合适(功率需确认)'):'尺寸不匹配';
-return{fits:sizeFit,powerFit:powerFit,fitLevel:level,reasons:reasons};
+/* ===== 匹配核心 ===== */
+function checkFit(battery, vehicle){
+  // 电池可任意姿态安装：立装 / 平放 / 侧放，6 种旋转逐一尝试
+  var D = [battery.长_mm || 0, battery.宽_mm || 0, battery.高_mm || 0];
+  var V = [vehicle.电池仓_长_mm || 0, vehicle.电池仓_宽_mm || 0, vehicle.电池仓_高_mm || 0];
+  var narrow = vehicle.电池仓_宽窄处_mm || 0;
+  var perms = [];
+  [[0,1,2],[0,2,1],[1,0,2],[1,2,0],[2,0,1],[2,1,0]].forEach(function(p){
+    var d = [D[p[0]], D[p[1]], D[p[2]]];
+    var key = d.join('x');
+    if (!perms.some(function(x){ return x.key === key; })) perms.push({ d: d, laid: p[2] !== 2, key: key });
+  });
+  perms.sort(function(a, b){ return (a.laid ? 1 : 0) - (b.laid ? 1 : 0); });
+  var fitPerm = null, reasons = [], bestOver = Infinity;
+  for (var i = 0; i < perms.length; i++) {
+    var d = perms[i].d;
+    if (d[0] <= V[0] && d[1] <= V[1] && d[2] <= V[2] && (!narrow || d[1] <= narrow)) { fitPerm = perms[i]; break; }
+    var over = [d[0]-V[0], d[1]-V[1], d[2]-V[2]].map(function(x){ return x > 0 ? x : 0; });
+    var total = over[0] + over[1] + over[2] + (narrow && d[1] > narrow ? 10000 : 0);
+    if (total < bestOver) {
+      bestOver = total;
+      reasons = [];
+      if (over[0]) reasons.push('长度超限(' + d[0] + '>' + V[0] + 'mm)');
+      if (over[1]) reasons.push('宽度超限(' + d[1] + '>' + V[1] + 'mm)');
+      if (over[2]) reasons.push('高度超限(' + d[2] + '>' + V[2] + 'mm)');
+      if (narrow && d[1] > narrow) reasons.push('宽度超窄处限制');
+    }
+  }
+  var sizeFit = !!fitPerm;
+  var vSpec = (vehicle.原厂电池规格 || '').toLowerCase();
+  var vm = vSpec.match(/(\d+)\s*v/);
+  var vVolt = vm ? parseInt(vm[1]) : 0;
+  var battVolt = battery.电压_V || 0;
+  var voltOk = true;
+  if (vVolt === 60 && battVolt !== 64) { voltOk = false; reasons.push('电压不匹配：60V原厂需用64V锂电'); }
+  if (vVolt === 72 && battVolt !== 76.8) { voltOk = false; reasons.push('电压不匹配：72V原厂需用76.8V锂电'); }
+  if (vVolt === 48 && battVolt !== 64) { voltOk = false; reasons.push('电压不匹配：48V原厂需用64V锂电'); }
+  var battMaxPwr = battery.适用电机功率_最大_W || 99999;
+  var vehPwr = vehicle.电机_额定功率_W || 0;
+  var powerFit = vehPwr <= battMaxPwr;
+  var level = (sizeFit && voltOk) ? (powerFit ? '完美匹配' : '尺寸合适(功率需确认)') : (sizeFit && !voltOk ? '电压不匹配' : '尺寸不匹配');
+  var fits = sizeFit && voltOk;
+  return { fits: fits, powerFit: powerFit, voltOk: voltOk, fitLevel: level, reasons: reasons,
+           laid: fitPerm ? fitPerm.laid : false, installDims: fitPerm ? fitPerm.d.join('×') : '' };
 }
 
-function matchVehicleToBatteries(vehicle){return allBatteriesFlat.map(function(b){var r=checkFit(b,vehicle);r.battery=b;return r;}).sort(function(a,b){var o={'完美匹配':0,'尺寸合适(功率需确认)':1,'尺寸不匹配':2};return(o[a.fitLevel]||3)-(o[b.fitLevel]||3);});}
-
-function matchBatteryToVehicles(battery){return allVehiclesFlat.map(function(v){var r=checkFit(battery,v);r.vehicle=v;return r;}).sort(function(a,b){var o={'完美匹配':0,'尺寸合适(功率需确认)':1,'尺寸不匹配':2};return(o[a.fitLevel]||3)-(o[b.fitLevel]||3);});}
-
-function searchVehicles(){
-var q=document.getElementById('vehicleSearch').value.trim().toLowerCase();
-if(!q){renderAllVehicles();return;}
-var brand=document.getElementById('brandFilter').value;
-var results=allVehiclesFlat.filter(function(v){if(brand&&!v._brand.includes(brand))return false;return(v._brand+' '+v.型号+' '+(v.类型||'')+' '+(v.备注||'')).toLowerCase().includes(q);});
-renderResults(results);
+function matchBatteryToVehicles(battery){
+  return allVehicles.map(function(v){
+    var r = checkFit(battery, v); r.vehicle = v; return r;
+  }).sort(function(a, b){
+    var o = {'完美匹配':0, '尺寸合适(功率需确认)':1, '尺寸不匹配':2, '电压不匹配':3};
+    return (o[a.fitLevel] === undefined ? 4 : o[a.fitLevel]) - (o[b.fitLevel] === undefined ? 4 : o[b.fitLevel]);
+  });
 }
 
-function searchBatteries(){
-var q=document.getElementById('batterySearch').value.trim().toLowerCase();
-if(!q){renderAllVehicles();return;}
-var matched=allBatteriesFlat.filter(function(b){return(b.型号+' '+b.电压_V+'V '+b.容量_Ah+'Ah').toLowerCase().includes(q);});
-if(!matched.length){document.getElementById('resultSummary').innerHTML='<strong>未找到匹配的电池</strong>';document.getElementById('cardGrid').innerHTML='';document.getElementById('emptyState').style.display='block';return;}
-var allRes=[];matched.forEach(function(batt){var vm=matchBatteryToVehicles(batt).filter(function(r){return r.fits;});allRes.push({battery:batt,vehicleMatches:vm});});
-renderBatteryResults(allRes);
+function matchVehicleToBatteries(vehicle){
+  return allBatteries.map(function(b){
+    var r = checkFit(b, vehicle); r.battery = b; return r;
+  }).sort(function(a, b){
+    var o = {'完美匹配':0, '尺寸合适(功率需确认)':1, '尺寸不匹配':2, '电压不匹配':3};
+    return (o[a.fitLevel] === undefined ? 4 : o[a.fitLevel]) - (o[b.fitLevel] === undefined ? 4 : o[b.fitLevel]);
+  });
 }
 
-function renderResults(list){
-var grid=document.getElementById('cardGrid'),summary=document.getElementById('resultSummary'),empty=document.getElementById('emptyState');
-if(!list.length){summary.innerHTML='<strong>未找到匹配车型</strong>，试试其他关键词';grid.innerHTML='';empty.style.display='block';document.getElementById('matchCount').textContent='0';return;}
-summary.innerHTML='找到 <strong>'+list.length+'</strong> 款车型';document.getElementById('matchCount').textContent=list.length;empty.style.display='none';
-grid.innerHTML=list.map(function(v){
-var brandShort=(v._brand||'').split('_')[0],pwr=v.电机_额定功率_W||0;
-var pwrLevel=pwr>=3000?'high':(pwr>=1200?'mid':'low'),pwrLabel=pwr>=3000?'高功率':(pwr>=1200?'中功率':'低功率');
-var src=v.数据来源||'网络收集',conf=v.可信度||'中',confClass=conf==='高'?'high':(conf==='低'?'low':'mid');
-var br=matchVehicleToBatteries(v),fitBatt=br.filter(function(r){return r.fits;}),perfect=br.filter(function(r){return r.fitLevel==='完美匹配';});
-return '<div class="card" onclick="showDetail(\''+v._brand.replace(/'/g,'\\\'')+'\',\''+v.型号.replace(/'/g,'\\\'')+'\')"><div style="display:flex;justify-content:space-between;align-items:start"><div><h3>'+v.型号+'</h3><div class="brand">'+brandShort+' · '+(v.类型||'')+' <span class="src-badge src-'+confClass+'">'+conf+'可信 · '+src+'</span></div></div><span class="power-tag '+pwrLevel+'">'+pwrLabel+'</span></div><div class="specs"><div><span class="label">电池仓：</span><span class="value">'+(v.电池仓_长_mm||'-')+'×'+(v.电池仓_宽_mm||'-')+'×'+(v.电池仓_高_mm||'-')+' mm</span></div><div><span class="label">电机功率：</span><span class="value">'+(v.电机_额定功率_W||'-')+'W'+(v.电机_峰值功率_W?' / 峰值'+v.电机_峰值功率_W+'W':'')+'</span></div><div><span class="label">原厂电池：</span><span class="value">'+(v.原厂电池规格||'-')+'</span></div><div><span class="label">可匹配：</span><span class="value" style="color:#e2720c">'+fitBatt.length+'款'+(perfect.length?' ('+perfect.length+'款完美)':'')+'</span></div></div>'+(v.备注?'<div style="margin-top:6px;font-size:12px;color:#888;">💡 '+v.备注+'</div>':'')+(fitBatt.length?'<div class="battery-info"><div style="font-size:11px;color:#888;margin-bottom:2px;">🔋 可装奔虎电池：</div>'+fitBatt.slice(0,3).map(function(r){return '<div style="font-size:12px;margin:1px 0;"><span class="batt-name">'+r.battery.型号+'</span> '+r.battery.电压_V+'V'+r.battery.容量_Ah+'Ah '+r.battery.长_mm+'×'+r.battery.宽_mm+'×'+r.battery.高_mm+'mm <span class="match-badge fit">'+r.fitLevel+'</span></div>';}).join('')+(fitBatt.length>3?'<div style="font-size:11px;color:#e2720c;">+ '+(fitBatt.length-3)+' 款更多...</div>':'')+'</div>':'<div class="battery-info" style="color:#ef4444;">⚠️ 暂无匹配电池</div>')+'</div>';
-}).join('');
+function fitBadge(level){
+  if (level === '完美匹配') return '<span class="badge badge-green">✅ 完美匹配</span>';
+  if (level === '尺寸合适(功率需确认)') return '<span class="badge badge-amber">⚠️ 尺寸合适(功率需确认)</span>';
+  return '<span class="badge badge-red">✖ ' + level + '</span>';
 }
 
-function renderBatteryResults(allRes){
-var grid=document.getElementById('cardGrid'),summary=document.getElementById('resultSummary');
-var total=allRes.reduce(function(s,r){return s+r.vehicleMatches.length;},0);
-summary.innerHTML='可匹配 <strong>'+total+'</strong> 款车型';document.getElementById('matchCount').textContent=total;
-document.getElementById('emptyState').style.display=total?'none':'block';
-grid.innerHTML=allRes.map(function(item){return item.vehicleMatches.map(function(r){return '<div class="card match"><div style="display:flex;justify-content:space-between;align-items:start"><div><h3>'+r.vehicle.型号+'</h3><div class="brand">'+(r.vehicle._brand||'').split('_')[0]+' · '+(r.vehicle.类型||'')+'</div></div><span class="match-badge fit">✅ '+r.fitLevel+'</span></div><div class="specs"><div><span class="label">电池仓：</span><span class="value">'+(r.vehicle.电池仓_长_mm||'-')+'×'+(r.vehicle.电池仓_宽_mm||'-')+'×'+(r.vehicle.电池仓_高_mm||'-')+' mm</span></div><div><span class="label">电池：</span><span class="value">'+item.battery.型号+' ('+item.battery.长_mm+'×'+item.battery.宽_mm+'×'+item.battery.高_mm+'mm)</span></div><div><span class="label">电机：</span><span class="value">'+(r.vehicle.电机_额定功率_W||'-')+'W / 电池'+item.battery.电压_V+'V</span></div><div><span class="label">原厂规格：</span><span class="value">'+(r.vehicle.原厂电池规格||'-')+'</span></div></div>'+(r.reasons.length&&r.fitLevel!=='完美匹配'?'<div style="margin-top:6px;font-size:11px;color:#ef4444;">⚠️ '+r.reasons.join('；')+'</div>':'')+'</div>';}).join('');}).join('');
+/* ===== 产品展示 ===== */
+function renderProducts(volt){
+  var list = volt ? allBatteries.filter(function(b){ return String(b.电压_V) === volt; }) : allBatteries;
+  document.getElementById('prodCount').textContent = list.length;
+  var grid = document.getElementById('prodGrid');
+  grid.innerHTML = list.map(function(b, i){
+    return productCardHTML(b, allBatteries.indexOf(b));
+  }).join('');
 }
 
-function renderAllVehicles(){var brand=document.getElementById('brandFilter').value,list=allVehiclesFlat;if(brand)list=list.filter(function(v){return v._brand.includes(brand);});renderResults(list);}
-
-function resetSearch(){document.getElementById('vehicleSearch').value='';document.getElementById('batterySearch').value='';document.getElementById('brandFilter').value='';renderAllVehicles();updateStats();}
-
-function showDetail(brand,model){
-var v=allVehiclesFlat.find(function(x){return x._brand===brand&&x.型号===model;});if(!v)return;
-var br=matchVehicleToBatteries(v),fitBatt=br.filter(function(r){return r.fits;}),perfect=br.filter(function(r){return r.fitLevel==='完美匹配';});
-var src=v.数据来源||'网络收集',conf=v.可信度||'中',confClass=conf==='高'?'high':(conf==='低'?'low':'mid');
-document.getElementById('modalContent').innerHTML='<button class="close" onclick="closeModal()">✕</button><h2>'+v.型号+'</h2><p style="color:#888;margin-bottom:12px;">'+(brand||'').replace('_',' ')+' · '+(v.类型||'')+' <span class="src-badge src-'+confClass+'">'+conf+'可信 · '+src+'</span></p><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;margin-bottom:12px"><div><strong>电池仓：</strong>'+(v.电池仓_长_mm||'-')+' × '+(v.电池仓_宽_mm||'-')+' × '+(v.电池仓_高_mm||'-')+' mm</div>'+(v.电池仓_宽窄处_mm?'<div><strong>窄处宽：</strong>'+v.电池仓_宽窄处_mm+' mm</div>':'')+'<div><strong>额定功率：</strong>'+(v.电机_额定功率_W||'-')+'W</div><div><strong>峰值功率：</strong>'+(v.电机_峰值功率_W||'-')+'W</div><div><strong>原厂电池：</strong>'+(v.原厂电池规格||'-')+'</div></div>'+(v.备注?'<p style="background:#fff8f3;padding:8px 12px;border-radius:6px;font-size:13px;">💡 '+v.备注+'</p>':'')+'<hr style="margin:14px 0;border-color:#f0f0f0"><h4 style="margin-bottom:8px;">🔋 匹配的奔虎电池 ('+fitBatt.length+'款)</h4>'+(fitBatt.length===0?'<p style="color:#ef4444;">暂无匹配电池</p>':fitBatt.map(function(r){return '<div style="padding:10px;margin:5px 0;background:#f8fdf8;border-radius:8px;border-left:3px solid #22c55e"><strong style="color:#e2720c;">'+r.battery.型号+'</strong><span class="match-badge fit" style="margin-left:8px">'+r.fitLevel+'</span><div style="font-size:12px;color:#666;margin-top:3px">'+r.battery.电压_V+'V '+r.battery.容量_Ah+'Ah | '+r.battery.长_mm+'×'+r.battery.宽_mm+'×'+r.battery.高_mm+'mm | '+(r.battery.持续放电电流_A||'-')+'A/'+(r.battery.峰值放电电流_A||'-')+'A'+(r.battery.重量_kg?' | '+r.battery.重量_kg+'kg':'')+'</div><div style="font-size:11px;color:#888">适配电机：'+(r.battery.适用电机功率_最小_W||0)+'-'+(r.battery.适用电机功率_最大_W||'不限')+'W | '+r.battery.电芯类型+' | '+r.battery.壳体材质+'</div></div>';}).join(''))+(perfect.length===0&&fitBatt.length>0?'<p style="font-size:11px;color:#d97706;margin-top:6px">⚠️ 功率范围需进一步确认</p>':'');document.getElementById('modalOverlay').classList.add('show');
+function productCardHTML(b, idx){
+  var photo = b.展示图
+    ? '<img src="' + b.展示图 + '" alt="' + b.展示名 + '" loading="lazy">'
+    : '<div class="ph"><div class="ph-eng">BENGHU LFP</div><div class="ph-model">' + b.展示名 + '</div><div class="ph-dims">' + b.电压_V + 'V · ' + b.电量_Wh + 'Wh · ' + b.长_mm + '×' + b.宽_mm + '×' + b.高_mm + 'mm</div><div class="ph-note">📷 产品图待补充</div></div>';
+  var pdfs = '';
+  if (b.规格书) pdfs += '<a class="plink" href="' + b.规格书 + '" target="_blank" onclick="event.stopPropagation()">📄 规格书</a>';
+  if (b.认证报告) pdfs += '<a class="plink" href="' + b.认证报告 + '" target="_blank" onclick="event.stopPropagation()">✅ 认证报告</a>';
+  return '<div class="pcard" onclick="showBatteryModal(' + idx + ')">' +
+    '<div class="pphoto">' + photo + '<div class="photo-hint">👆 点击查看匹配车型</div></div>' +
+    '<div class="pbody">' +
+      '<h3>' + b.展示名 + '<span class="pmodel">' + b.电芯类型 + '</span></h3>' +
+      '<div class="pspecs">' +
+        '<div><span class="lb">电压</span> <span class="vl">' + b.电压_V + 'V</span> <span class="lb">(' + b.电压范围 + ')</span></div>' +
+        '<div><span class="lb">电量</span> <span class="vl">' + b.电量_Wh + 'Wh</span> <span class="lb">' + b.容量_Ah + 'Ah</span></div>' +
+        '<div><span class="lb">尺寸</span> <span class="vl">' + b.长_mm + '×' + b.宽_mm + '×' + b.高_mm + '</span></div>' +
+        '<div><span class="lb">重量</span> <span class="vl">' + (b.重量_kg ? b.重量_kg + 'kg' : '待确认') + '</span></div>' +
+        '<div><span class="lb">放电</span> <span class="vl">' + b.持续放电电流_A + 'A</span></div>' +
+        '<div><span class="lb">壳体</span> <span class="vl">' + (b.壳体材质 || '-') + '</span></div>' +
+      '</div>' +
+      '<div class="pfunc">适配电机 <em>' + (b.适用电机功率_最小_W || 0) + '-' + (b.适用电机功率_最大_W || '不限') + 'W</em>' + (b.备注 ? ' · ' + b.备注 : '') + '</div>' +
+      (pdfs ? '<div class="plinks">' + pdfs + '</div>' : '') +
+      '<div class="click-hint">👆 <b>点击图片查看匹配车型</b></div>' +
+    '</div>' +
+  '</div>';
 }
 
-function closeModal(){document.getElementById('modalOverlay').classList.remove('show');}
+/* ===== 弹窗：电池 → 匹配车型 ===== */
+function showBatteryModal(idx){
+  var b = allBatteries[idx]; if (!b) return;
+  var results = matchBatteryToVehicles(b);
+  var fits = results.filter(function(r){ return r.fits; });
+  var perfect = fits.filter(function(r){ return r.fitLevel === '完美匹配'; });
+  var photo = b.展示图
+    ? '<img src="' + b.展示图 + '" alt="' + b.展示名 + '">'
+    : '<div class="ph"><div class="ph-eng">BENGHU LFP</div><div class="ph-model">' + b.展示名 + '</div><div class="ph-dims">' + b.电压_V + 'V · ' + b.电量_Wh + 'Wh</div><div class="ph-note">📷 产品图待补充</div></div>';
+  var side = '';
+  if (b.参数图) side += '<img src="' + b.参数图 + '" alt="参数图" style="width:100%;border-radius:10px;border:1px solid var(--border)">';
+  side += '<div class="bm-params">' +
+    '<div><span class="lb">标称电压：</span><span class="vl">' + b.电压_V + 'V</span> <span class="lb">(' + b.电压范围 + ')</span></div>' +
+    '<div><span class="lb">容量 / 电量：</span><span class="vl">' + b.容量_Ah + 'Ah / ' + b.电量_Wh + 'Wh</span></div>' +
+    '<div><span class="lb">尺寸：</span><span class="vl">' + b.长_mm + ' × ' + b.宽_mm + ' × ' + b.高_mm + ' mm</span></div>' +
+    '<div><span class="lb">重量：</span><span class="vl">' + (b.重量_kg ? b.重量_kg + ' kg' : '待确认') + '</span></div>' +
+    '<div><span class="lb">放电电流：</span><span class="vl">' + b.持续放电电流_A + 'A 持续 / ' + b.峰值放电电流_A + 'A 峰值</span></div>' +
+    '<div><span class="lb">适配电机：</span><span class="vl">' + (b.适用电机功率_最小_W || 0) + '-' + (b.适用电机功率_最大_W || '不限') + 'W</span></div>' +
+    '<div><span class="lb">电芯类型：</span><span class="vl">' + b.电芯类型 + '</span></div>' +
+    '<div><span class="lb">壳体材质：</span><span class="vl">' + (b.壳体材质 || '待确认') + '</span></div>' +
+  '</div>';
+  if (b.规格书 || b.认证报告) {
+    side += '<div class="bm-pdfs">' +
+      (b.规格书 ? '<a href="' + b.规格书 + '" target="_blank">📄 下载规格书</a>' : '') +
+      (b.认证报告 ? '<a href="' + b.认证报告 + '" target="_blank">✅ 下载认证报告</a>' : '') +
+    '</div>';
+  }
+  var listHTML = fits.length
+    ? fits.map(function(r){
+        var v = r.vehicle;
+        return '<div class="vm-item">' + fitBadge(r.fitLevel) +
+          '<div class="info"><div class="nm">' + v.型号 + '</div><div class="sub">' + (v._brand || '').split('_')[0] + ' · ' + (v.类型 || '') + ' · 电机' + (v.电机_额定功率_W || '-') + 'W · 原厂' + (v.原厂电池规格 || '-') + '</div></div>' +
+          '<div class="dims">' + (r.laid ? '<span class="badge badge-blue">平放</span> ' : '') + '安装 ' + r.installDims + 'mm<br><span style="font-size:11px">电池仓 ' + (v.电池仓_长_mm || '-') + '×' + (v.电池仓_宽_mm || '-') + '×' + (v.电池仓_高_mm || '-') + 'mm</span></div>' +
+        '</div>';
+      }).join('')
+    : '<div class="empty" style="padding:26px"><p>暂无匹配车型</p></div>';
+  document.getElementById('modalContent').innerHTML =
+    '<button class="close" onclick="closeModal()">✕</button>' +
+    '<h2>奔虎' + b.展示名 + '</h2>' +
+    '<div class="m-sub">' + b.电芯类型 + ' · 点击下方车型可查看该车可装的电池</div>' +
+    '<div class="bm-top"><div class="bm-photo">' + photo + '</div><div class="bm-side">' + side + '</div></div>' +
+    '<div class="matches-title">🔋 可匹配车型 <span class="sec-tag">' + fits.length + ' 款</span>' + (perfect.length ? '<span class="badge badge-green">' + perfect.length + ' 款完美匹配</span>' : '') + '</div>' +
+    '<div class="vm-list">' + listHTML + '</div>' +
+    (fits.length && !perfect.length ? '<div class="mt-note">⚠️ 存在匹配车型，但电机功率范围需进一步确认</div>' : '') +
+    (b.备注 ? '<div class="mt-note" style="color:var(--muted)">💡 ' + b.备注 + '</div>' : '');
+  document.getElementById('overlay').classList.add('show');
+  document.getElementById('overlay').scrollTop = 0;
+}
+
+/* ===== 弹窗：车型 → 匹配电池 ===== */
+function showVehicleModal(brand, model){
+  var v = allVehicles.find(function(x){ return x._brand === brand && x.型号 === model; });
+  if (!v) return;
+  var br = matchVehicleToBatteries(v);
+  var fitBatt = br.filter(function(r){ return r.fits; });
+  var perfect = br.filter(function(r){ return r.fitLevel === '完美匹配'; });
+  var src = v.数据来源 || '网络收集', conf = v.可信度 || '中';
+  var confBadge = conf === '高' ? '<span class="badge badge-green">' + conf + '可信</span>' : (conf === '低' ? '<span class="badge badge-red">' + conf + '可信</span>' : '<span class="badge badge-amber">' + conf + '可信</span>');
+  var listHTML = fitBatt.length
+    ? fitBatt.map(function(r){
+        var b = r.battery;
+        return '<div class="vm-item">' + fitBadge(r.fitLevel) +
+          '<div class="info"><div class="nm">奔虎' + b.展示名 + '</div><div class="sub">' + b.电压_V + 'V · ' + b.电量_Wh + 'Wh · ' + b.容量_Ah + 'Ah · 放电' + b.持续放电电流_A + 'A</div></div>' +
+          '<div class="dims">' + (r.laid ? '<span class="badge badge-blue">平放</span> ' : '') + r.installDims + 'mm · ' + (b.重量_kg ? b.重量_kg + 'kg' : '-') + '</div>' +
+        '</div>';
+      }).join('')
+    : '<div class="empty" style="padding:26px"><p>暂无匹配电池</p></div>';
+  document.getElementById('modalContent').innerHTML =
+    '<button class="close" onclick="closeModal()">✕</button>' +
+    '<h2>' + v.型号 + '</h2>' +
+    '<div class="m-sub">' + (brand || '').split('_')[0] + ' · ' + (v.类型 || '') + ' · ' + src + ' ' + confBadge + '</div>' +
+    '<div class="bm-params" style="margin-bottom:6px">' +
+      '<div><span class="lb">电池仓：</span><span class="vl">' + (v.电池仓_长_mm || '-') + ' × ' + (v.电池仓_宽_mm || '-') + ' × ' + (v.电池仓_高_mm || '-') + ' mm</span></div>' +
+      (v.电池仓_宽窄处_mm ? '<div><span class="lb">窄处宽：</span><span class="vl">' + v.电池仓_宽窄处_mm + ' mm' + (v.电池仓_T型 ? '（T型仓）' : '') + '</span></div>' : '<div></div>') +
+      '<div><span class="lb">额定功率：</span><span class="vl">' + (v.电机_额定功率_W || '-') + 'W</span></div>' +
+      '<div><span class="lb">峰值功率：</span><span class="vl">' + (v.电机_峰值功率_W || '-') + 'W</span></div>' +
+      '<div><span class="lb">原厂电池：</span><span class="vl">' + (v.原厂电池规格 || '-') + '</span></div>' +
+      (v.电池仓_双仓 ? '<div><span class="lb">电池仓：</span><span class="vl">双电池仓设计</span></div>' : '<div></div>') +
+    '</div>' +
+    (v.备注 ? '<div class="mt-note" style="color:var(--muted)">💡 ' + v.备注 + '</div>' : '') +
+    '<div class="matches-title">🔋 可装奔虎电池 <span class="sec-tag">' + fitBatt.length + ' 款</span>' + (perfect.length ? '<span class="badge badge-green">' + perfect.length + ' 款完美匹配</span>' : '') + '</div>' +
+    '<div class="vm-list">' + listHTML + '</div>' +
+    (fitBatt.length && !perfect.length ? '<div class="mt-note">⚠️ 存在可装电池，但电机功率范围需进一步确认</div>' : '');
+  document.getElementById('overlay').classList.add('show');
+  document.getElementById('overlay').scrollTop = 0;
+}
+
+function closeModal(){ document.getElementById('overlay').classList.remove('show'); }
+
+/* ===== 统一搜索 ===== */
+function runSearch(){
+  var q = curQuery.toLowerCase();
+  var grid = document.getElementById('matchGrid');
+  var summary = document.getElementById('resultSummary');
+  var empty = document.getElementById('emptyState');
+  if (!q) {
+    summary.innerHTML = '';
+    grid.innerHTML = '';
+    empty.style.display = 'none';
+    return;
+  }
+  var brand = document.getElementById('brandFilter').value;
+  var battRes = allBatteries.filter(function(b){
+    return (b.型号 + ' ' + b.展示名 + ' ' + b.电压_V + 'V ' + b.容量_Ah + 'Ah ' + b.电量_Wh + 'Wh ' + (b.壳体材质 || '')).toLowerCase().indexOf(q) >= 0;
+  });
+  var vehRes = allVehicles.filter(function(v){
+    if (brand && v._brand.indexOf(brand) < 0) return false;
+    return (v._brand + ' ' + v.型号 + ' ' + (v.类型 || '') + ' ' + (v.备注 || '') + ' ' + (v.原厂电池规格 || '')).toLowerCase().indexOf(q) >= 0;
+  });
+  var html = '';
+  if (vehRes.length) {
+    html += '<div class="result-group-title">🚗 匹配车型 <span class="badge badge-gray">' + vehRes.length + ' 款</span></div><div class="grid">' + vehRes.map(vehicleCardHTML).join('') + '</div>';
+  }
+  if (battRes.length) {
+    html += '<div class="result-group-title">🔋 匹配电池 <span class="badge badge-gray">' + battRes.length + ' 款</span>，点击图片查看可匹配车型</div><div class="pgrid">' + battRes.map(function(b){
+      return productCardHTML(b, allBatteries.indexOf(b));
+    }).join('') + '</div>';
+  }
+  if (html) {
+    summary.innerHTML = '找到 <strong>' + vehRes.length + '</strong> 款车型、<strong>' + battRes.length + '</strong> 款电池';
+    empty.style.display = 'none';
+  } else {
+    summary.innerHTML = '';
+    empty.style.display = 'block';
+  }
+  grid.innerHTML = html;
+}
+
+function vehicleCardHTML(v){
+  var brandShort = (v._brand || '').split('_')[0];
+  var pwr = v.电机_额定功率_W || 0;
+  var pwrTag = pwr >= 3000 ? '<span class="badge badge-red">高功率</span>' : (pwr >= 1200 ? '<span class="badge badge-amber">中功率</span>' : '<span class="badge badge-blue">低功率</span>');
+  var src = v.数据来源 || '网络收集', conf = v.可信度 || '中';
+  var confBadge = conf === '高' ? '<span class="badge badge-green">' + conf + '可信</span>' : (conf === '低' ? '<span class="badge badge-red">' + conf + '可信</span>' : '<span class="badge badge-amber">' + conf + '可信</span>');
+  var br = matchVehicleToBatteries(v);
+  var fitBatt = br.filter(function(r){ return r.fits; });
+  var perfect = br.filter(function(r){ return r.fitLevel === '完美匹配'; });
+  var battHTML = fitBatt.length
+    ? fitBatt.slice(0, 3).map(function(r){
+        var b = r.battery;
+        return '<div class="batt-item"><span class="nm">' + b.展示名 + '</span> ' + b.电压_V + 'V' + b.容量_Ah + 'Ah <span class="sz">' + (r.laid ? '<span class="badge badge-blue">平放</span> ' : '') + r.installDims + 'mm</span> ' + fitBadge(r.fitLevel) + '</div>';
+      }).join('') + (fitBatt.length > 3 ? '<div class="batt-more">+ ' + (fitBatt.length - 3) + ' 款更多，点击查看全部 →</div>' : '')
+    : '<div class="batt-item" style="color:var(--red)">⚠️ 暂无匹配电池</div>';
+  return '<div class="vcard" onclick="showVehicleModal(\'' + v._brand.replace(/'/g, "\\'") + '\',\'' + v.型号.replace(/'/g, "\\'") + '\')">' +
+    '<div class="vcard-top"><div><h3>' + v.型号 + '</h3><div class="brand">' + brandShort + ' · ' + (v.类型 || '') + ' · ' + src + '</div></div>' + pwrTag + '</div>' +
+    '<div class="vspecs">' +
+      '<div><span class="lb">电池仓：</span><span class="vl">' + (v.电池仓_长_mm || '-') + '×' + (v.电池仓_宽_mm || '-') + '×' + (v.电池仓_高_mm || '-') + ' mm</span></div>' +
+      '<div><span class="lb">电机功率：</span><span class="vl">' + pwr + 'W' + (v.电机_峰值功率_W ? ' / 峰值' + v.电机_峰值功率_W + 'W' : '') + '</span></div>' +
+      '<div><span class="lb">原厂电池：</span><span class="vl">' + (v.原厂电池规格 || '-') + '</span></div>' +
+      '<div><span class="lb">可信度：</span><span class="vl">' + confBadge + '</span></div>' +
+    '</div>' +
+    (v.备注 ? '<div style="margin-top:8px;font-size:11.5px;color:var(--muted)">💡 ' + v.备注 + '</div>' : '') +
+    '<div class="batt-list"><div class="t">🔋 可装奔虎电池：<b style="color:var(--yellow)">' + fitBatt.length + ' 款</b>' + (perfect.length ? '（' + perfect.length + ' 款完美）' : '') + '</div>' + battHTML + '</div>' +
+  '</div>';
+}
+
+function doSearch(){
+  curQuery = document.getElementById('searchMain').value.trim();
+  document.getElementById('searchTop').value = curQuery;
+  runSearch();
+}
+
+function resetSearch(){
+  curQuery = '';
+  document.getElementById('searchMain').value = '';
+  document.getElementById('searchTop').value = '';
+  document.getElementById('brandFilter').value = '';
+  runSearch();
+}
+
+function showDataInfo(){
+  alert('数据来源说明：\n高可信 = 多源验证 / 官方参数 / 经销商数据\n中可信 = 单源实测 / 车友实测\n数据来源：品牌官方参数 + 车友实测 + 经销商 + 网络收集\n电池数据更新时间：' + (BATTERIES.length ? '见 batteries.json' : '') + '\n来电咨询：奔虎锂电');
+}
+
 init();
 </script>
 </body>

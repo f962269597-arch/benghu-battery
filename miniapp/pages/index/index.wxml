@@ -95,7 +95,7 @@
         <view class="battery-label">🔋 可装奔虎电池：</view>
         <view class="battery-item" wx:for="{{item._fitBatteries}}" wx:for-item="br" wx:key="*this" wx:if="{{index < 3}}">
           <text class="batt-name">{{br.battery['型号']}}</text>
-          {{br.battery['电压_V']}}V{{br.battery['容量_Ah']}}Ah {{br.battery['长_mm']}}×{{br.battery['宽_mm']}}×{{br.battery['高_mm']}}mm
+          {{br.battery['电压_V']}}V{{br.battery['容量_Ah']}}Ah {{br.installDims}}mm{{br.laid ? '（平放）' : ''}}
           <text class="match-badge fit">{{br.fitLevel}}</text>
         </view>
         <view class="more-hint" wx:if="{{item._fitBatteries.length > 3}}">+ {{item._fitBatteries.length - 3}} 款更多...</view>
@@ -117,7 +117,7 @@
       </view>
       <view class="card-specs">
         <view class="spec-row"><text class="spec-label">电池仓：</text><text class="spec-value">{{r.vehicle['电池仓_长_mm']}}×{{r.vehicle['电池仓_宽_mm']}}×{{r.vehicle['电池仓_高_mm']}} mm</text></view>
-        <view class="spec-row"><text class="spec-label">电池：</text><text class="spec-value">{{r.battery['型号']}} ({{r.battery['长_mm']}}×{{r.battery['宽_mm']}}×{{r.battery['高_mm']}}mm)</text></view>
+        <view class="spec-row"><text class="spec-label">电池：</text><text class="spec-value">{{r.battery['型号']}} ({{r.installDims}}mm{{r.laid ? '，平放' : ''}})</text></view>
         <view class="spec-row"><text class="spec-label">电机：</text><text class="spec-value">{{r.vehicle['电机_额定功率_W']}}W / 电池{{r.battery['电压_V']}}V</text></view>
       </view>
       <view class="card-warning" wx:if="{{r.reasons.length > 0 && r.fitLevel !== '完美匹配'}}">⚠️ {{r.reasons.join('；')}}</view>
@@ -154,7 +154,7 @@
         <text class="mbi-name">{{br.battery['型号']}}</text>
         <text class="match-badge fit">{{br.fitLevel}}</text>
       </view>
-      <view class="mbi-info">{{br.battery['电压_V']}}V {{br.battery['容量_Ah']}}Ah | {{br.battery['长_mm']}}×{{br.battery['宽_mm']}}×{{br.battery['高_mm']}}mm | {{br.battery['持续放电电流_A']}}A/{{br.battery['峰值放电电流_A']}}A{{br.battery['重量_kg'] ? ' | '+br.battery["重量_kg"]+'kg' : ''}}</view>
+      <view class="mbi-info">{{br.battery['电压_V']}}V {{br.battery['容量_Ah']}}Ah | {{br.installDims}}mm{{br.laid ? '（平放）' : ''}} | {{br.battery['持续放电电流_A']}}A/{{br.battery['峰值放电电流_A']}}A{{br.battery['重量_kg'] ? ' | '+br.battery["重量_kg"]+'kg' : ''}}</view>
       <view class="mbi-extra">适配电机：{{br.battery['适用电机功率_最小_W']}}-{{br.battery['适用电机功率_最大_W']}}W | {{br.battery['电芯类型']}} | {{br.battery['壳体材质']}}</view>
     </view>
     <view class="modal-warning" wx:if="{{detail._perfectCount === 0 && detail._fitBatteries.length > 0}}">⚠️ 功率范围需进一步确认</view>

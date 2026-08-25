@@ -1,5 +1,5 @@
 // 奔虎锂电匹配系统 - Service Worker
-const CACHE = 'benghu-battery-v2';
+const CACHE = 'benghu-battery-v3';
 
 self.addEventListener('install', e => {
   e.waitUntil(

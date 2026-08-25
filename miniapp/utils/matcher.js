@@ -12,14 +12,33 @@ for (var brand in vehiclesData) {
 }
 
 function checkFit(battery, vehicle) {
-  var bl = battery.长_mm || 0, bw = battery.宽_mm || 0, bh = battery.高_mm || 0;
-  var vl = vehicle.电池仓_长_mm || 0, vw = vehicle.电池仓_宽_mm || 0, vh = vehicle.电池仓_高_mm || 0;
-  var lOk = bl <= vl, wOk = bw <= vw, hOk = bh <= vh, reasons = [];
-  if (!lOk) reasons.push('长度超限(' + bl + '>' + vl + 'mm)');
-  if (!wOk) reasons.push('宽度超限(' + bw + '>' + vw + 'mm)');
-  if (!hOk) reasons.push('高度超限(' + bh + '>' + vh + 'mm)');
-  if (vehicle.电池仓_宽窄处_mm && bw > vehicle.电池仓_宽窄处_mm) reasons.push('宽度超窄处限制');
-  var sizeFit = lOk && wOk && hOk;
+  // 电池可任意姿态安装：立装 / 平放 / 侧放，6 种旋转逐一尝试
+  var D = [battery.长_mm || 0, battery.宽_mm || 0, battery.高_mm || 0];
+  var V = [vehicle.电池仓_长_mm || 0, vehicle.电池仓_宽_mm || 0, vehicle.电池仓_高_mm || 0];
+  var narrow = vehicle.电池仓_宽窄处_mm || 0;
+  var perms = [];
+  [[0, 1, 2], [0, 2, 1], [1, 0, 2], [1, 2, 0], [2, 0, 1], [2, 1, 0]].forEach(function (p) {
+    var d = [D[p[0]], D[p[1]], D[p[2]]];
+    var key = d.join('x');
+    if (!perms.some(function (x) { return x.key === key; })) perms.push({ d: d, laid: p[2] !== 2, key: key });
+  });
+  perms.sort(function (a, b) { return (a.laid ? 1 : 0) - (b.laid ? 1 : 0); });
+  var fitPerm = null, reasons = [], bestOver = Infinity;
+  for (var i = 0; i < perms.length; i++) {
+    var d = perms[i].d;
+    if (d[0] <= V[0] && d[1] <= V[1] && d[2] <= V[2] && (!narrow || d[1] <= narrow)) { fitPerm = perms[i]; break; }
+    var over = [d[0] - V[0], d[1] - V[1], d[2] - V[2]].map(function (x) { return x > 0 ? x : 0; });
+    var total = over[0] + over[1] + over[2] + (narrow && d[1] > narrow ? 10000 : 0);
+    if (total < bestOver) {
+      bestOver = total;
+      reasons = [];
+      if (over[0]) reasons.push('长度超限(' + d[0] + '>' + V[0] + 'mm)');
+      if (over[1]) reasons.push('宽度超限(' + d[1] + '>' + V[1] + 'mm)');
+      if (over[2]) reasons.push('高度超限(' + d[2] + '>' + V[2] + 'mm)');
+      if (narrow && d[1] > narrow) reasons.push('宽度超窄处限制');
+    }
+  }
+  var sizeFit = !!fitPerm;
   // Voltage matching
   var vSpec = (vehicle.原厂电池规格 || '').toLowerCase();
   var vMatch = vSpec.match(/(\d+)\s*v/i);
@@ -40,6 +59,8 @@ function checkFit(battery, vehicle) {
     voltOk: voltOk,
     fitLevel: level,
     reasons: reasons,
+    laid: fitPerm ? fitPerm.laid : false,
+    installDims: fitPerm ? fitPerm.d.join('×') : '',
     battery: battery,
     vehicle: vehicle
   };

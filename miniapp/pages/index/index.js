@@ -93,7 +93,7 @@ Page({
         _powerLevel: pwr >= 3000 ? 'high' : (pwr >= 1200 ? 'mid' : 'low'),
         _powerLabel: pwr >= 3000 ? '高功率' : (pwr >= 1200 ? '中功率' : '低功率'),
         _confClass: v.可信度 === '高' ? 'high' : (v.可信度 === '低' ? 'low' : 'mid'),
-        _fitBatteries: fitBatt.slice(0, 3).map(function (r) { return { battery: r.battery, fitLevel: r.fitLevel }; }),
+        _fitBatteries: fitBatt.slice(0, 3).map(function (r) { return { battery: r.battery, fitLevel: r.fitLevel, laid: r.laid, installDims: r.installDims }; }),
         _fitCount: fitBatt.length,
         _perfectCount: perfect.length,
         _allFitResults: br
@@ -112,7 +112,9 @@ Page({
           vehicle: Object.assign({}, r.vehicle, { _brandShort: (r.vehicle._brand || '').split('_')[0] }),
           fitLevel: r.fitLevel,
           fits: r.fits,
-          reasons: r.reasons
+          reasons: r.reasons,
+          laid: r.laid,
+          installDims: r.installDims
         });
       });
     });
@@ -129,7 +131,7 @@ Page({
     var detail = Object.assign({}, v, {
       _brandName: (v._brand || '').replace('_', ' '),
       _confClass: v.可信度 === '高' ? 'high' : (v.可信度 === '低' ? 'low' : 'mid'),
-      _fitBatteries: fitBatt.map(function (r) { return { battery: r.battery, fitLevel: r.fitLevel }; }),
+      _fitBatteries: fitBatt.map(function (r) { return { battery: r.battery, fitLevel: r.fitLevel, laid: r.laid, installDims: r.installDims }; }),
       _perfectCount: perfect.length
     });
     this.setData({ showModal: true, detail: detail });
