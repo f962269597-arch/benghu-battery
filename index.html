@@ -41,7 +41,8 @@ button{font-family:inherit;cursor:pointer}
 .topbar{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
 .topbar-in{max-width:1280px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .logo{display:flex;align-items:center;gap:9px;flex-shrink:0}
-.logo-badge{width:34px;height:34px;border-radius:9px;background:var(--yellow);display:flex;align-items:center;justify-content:center;font-size:19px;color:var(--yellow-fg);box-shadow:0 2px 8px rgba(232,178,10,.35)}
+.logo-img{width:38px;height:38px;border-radius:8px;overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.14);border:1px solid var(--border)}
+.logo-img img{width:100%;height:100%;object-fit:contain}
 .logo-name{font-weight:800;font-size:17px;letter-spacing:1px;background:linear-gradient(to right,var(--gray-start),var(--gray-end));-webkit-background-clip:text;background-clip:text;color:transparent}
 .top-search{flex:1;min-width:200px;max-width:480px;position:relative}
 .top-search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--muted)}
@@ -57,10 +58,11 @@ button{font-family:inherit;cursor:pointer}
 .hero{position:relative;overflow:hidden;color:#fff;text-align:center}
 .hero-bg{position:absolute;inset:0;background:url('assets/img/hero-bg.jpg') center 38%/cover no-repeat}
 .hero-mask{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,12,16,.62) 0%,rgba(10,12,16,.45) 55%,var(--bg) 100%)}
-.hero-in{position:relative;max-width:1280px;margin:0 auto;padding:64px 16px 46px}
+.hero-in{position:relative;max-width:1280px;margin:0 auto;padding:70px 16px 50px}
 .hero h1{font-size:clamp(26px,5vw,40px);font-weight:800;letter-spacing:3px;text-shadow:0 2px 14px rgba(0,0,0,.45)}
 .hero h1 em{font-style:normal;color:var(--yellow)}
 .hero p{margin-top:10px;font-size:15px;opacity:.88;letter-spacing:1px}
+.hero-line{width:56px;height:3px;border-radius:2px;background:var(--yellow);margin:16px auto 0;box-shadow:0 0 12px rgba(232,178,10,.6)}
 .hero-stats{margin-top:26px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 .hstat{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(6px);border-radius:12px;padding:10px 20px;min-width:96px}
 .hstat .n{font-size:24px;font-weight:800;color:var(--yellow)}
@@ -68,12 +70,14 @@ button{font-family:inherit;cursor:pointer}
 /* ===== 主体 ===== */
 .container{max-width:1280px;margin:0 auto;padding:26px 16px 60px}
 section.block{margin-bottom:34px}
-.sec-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px}
-.sec-head h2{font-size:21px;font-weight:800;letter-spacing:1px}
+.sec-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.sec-head h2{font-size:21px;font-weight:800;letter-spacing:1px;display:flex;align-items:center;gap:9px}
+.sec-head h2::before{content:'';width:4px;height:20px;border-radius:2px;background:var(--yellow);box-shadow:0 0 8px rgba(232,178,10,.5)}
 .sec-head .sub{font-size:13px;color:var(--muted)}
 .sec-tag{display:inline-block;background:var(--yellow-soft);color:var(--yellow);font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px}
 /* ===== 搜索区 ===== */
-.search-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+.search-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.search-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--yellow),rgba(232,178,10,.25),transparent)}
 .search-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .search-row .input-wrap{flex:1;min-width:230px;position:relative}
 .search-row .input-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--muted)}
@@ -81,8 +85,9 @@ section.block{margin-bottom:34px}
 .search-row input:focus{border-color:var(--yellow)}
 .search-row select{height:44px;padding:0 12px;border-radius:10px;border:1.5px solid var(--border);background:var(--bg);color:var(--fg);font-size:14px;outline:none}
 .btn{height:44px;padding:0 22px;border-radius:10px;border:none;font-size:14px;font-weight:700;transition:all .15s}
+.btn:active{transform:scale(.97)}
 .btn-primary{background:var(--yellow);color:var(--yellow-fg);box-shadow:0 3px 10px rgba(232,178,10,.3)}
-.btn-primary:hover{filter:brightness(1.06)}
+.btn-primary:hover{filter:brightness(1.06);box-shadow:0 4px 16px rgba(232,178,10,.4)}
 .btn-ghost{background:var(--card);color:var(--fg);border:1.5px solid var(--border)}
 .btn-ghost:hover{border-color:var(--yellow);color:var(--yellow)}
 .search-tip{margin-top:10px;font-size:12px;color:var(--muted)}
@@ -94,8 +99,9 @@ section.block{margin-bottom:34px}
 .result-group-title::after{content:'';flex:1;height:1px;background:var(--border)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px}
 /* ===== 车辆卡片 ===== */
-.vcard{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s}
-.vcard:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.1);border-color:var(--yellow)}
+.vcard{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);cursor:pointer;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.vcard:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(0,0,0,.12);border-color:var(--yellow)}
+.vcard:active{transform:translateY(-1px) scale(.99)}
 .vcard-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
 .vcard h3{font-size:16px}
 .vcard .brand{font-size:12px;color:var(--muted);margin-top:2px}
@@ -117,11 +123,13 @@ section.block{margin-bottom:34px}
 /* ===== 产品卡片 ===== */
 .chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
 .chip{padding:7px 16px;border-radius:999px;border:1.5px solid var(--border);background:var(--card);color:var(--muted);font-size:13px;font-weight:600;transition:all .15s}
-.chip:hover{border-color:var(--yellow);color:var(--yellow)}
-.chip.active{background:var(--yellow);border-color:var(--yellow);color:var(--yellow-fg)}
+.chip:hover{border-color:var(--yellow);color:var(--yellow);transform:translateY(-1px)}
+.chip:active{transform:scale(.96)}
+.chip.active{background:var(--yellow);border-color:var(--yellow);color:var(--yellow-fg);box-shadow:0 3px 10px rgba(232,178,10,.35)}
 .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(262px,1fr));gap:16px}
-.pcard{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s;display:flex;flex-direction:column}
-.pcard:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,.12);border-color:var(--yellow)}
+.pcard{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;display:flex;flex-direction:column}
+.pcard:hover{transform:translateY(-4px);box-shadow:0 14px 32px rgba(0,0,0,.14);border-color:var(--yellow)}
+.pcard:active{transform:translateY(-1px) scale(.99)}
 .pphoto{position:relative;height:190px;overflow:hidden;background:#2a2d34;flex-shrink:0}
 .pphoto img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
 .pcard:hover .pphoto img{transform:scale(1.05)}
@@ -143,7 +151,7 @@ section.block{margin-bottom:34px}
 .pfunc em{font-style:normal;color:var(--yellow);font-weight:600}
 .plinks{display:flex;gap:8px;flex-wrap:wrap}
 .plink{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;padding:5px 11px;border-radius:8px;border:1px solid var(--border);color:var(--muted);transition:all .15s}
-.plink:hover{border-color:var(--gray-end);color:var(--fg)}
+.plink:hover{border-color:var(--yellow);color:var(--yellow);background:var(--yellow-soft)}
 .click-hint{margin-top:auto;padding-top:9px;border-top:1px dashed var(--border);font-size:11.5px;color:var(--muted);display:flex;align-items:center;gap:5px}
 .click-hint b{color:var(--yellow);font-weight:700}
 .empty{background:var(--card);border:1.5px dashed var(--border);border-radius:var(--radius);padding:44px 16px;text-align:center;color:var(--muted)}
@@ -178,9 +186,12 @@ section.block{margin-bottom:34px}
 .vm-item .dims{font-size:12px;color:var(--muted);white-space:nowrap}
 .mt-note{margin-top:10px;font-size:12px;color:var(--amber)}
 /* ===== 页脚 ===== */
-.footer{border-top:1px solid var(--border);padding:26px 16px 40px;text-align:center;font-size:12.5px;color:var(--muted)}
-.footer a{color:var(--yellow)}
+.footer{border-top:1px solid var(--border);padding:30px 16px 44px;text-align:center;font-size:12.5px;color:var(--muted)}
+.footer a{color:var(--yellow);font-weight:600}
+.footer a:hover{text-decoration:underline}
 .footer .row{margin-top:6px}
+.footer-brand{margin-bottom:10px}
+.footer-brand .logo-img{display:inline-flex;align-items:center;justify-content:center;background:#fff;border-radius:6px;overflow:hidden}
 /* ===== 响应式 ===== */
 @media(max-width:720px){
   .bm-top{grid-template-columns:1fr}
@@ -198,7 +209,7 @@ section.block{margin-bottom:34px}
 <header class="topbar">
   <div class="topbar-in">
     <a class="logo" href="#top">
-      <span class="logo-badge">⚡</span>
+      <span class="logo-img"><img src="assets/img/logo-small.png" alt="奔虎锂电"></span>
       <span class="logo-name">奔虎锂电</span>
     </a>
     <div class="top-search">
@@ -221,6 +232,7 @@ section.block{margin-bottom:34px}
   <div class="hero-in">
     <h1>奔虎锂电 · <em>产品展示</em></h1>
     <p>磷酸铁锂(LFP)电池专家 · 为二轮电动车提供安全、长续航的电池方案</p>
+    <div class="hero-line"></div>
     <div class="hero-stats" id="heroStats"></div>
   </div>
 </section>
@@ -268,8 +280,13 @@ section.block{margin-bottom:34px}
 </main>
 
 <footer class="footer">
-  <div>奔虎锂电 · 产品展示与智能匹配系统 v3.0 | 数据持续更新 | <a href="javascript:void(0)" onclick="showDataInfo()">📋 数据来源说明</a></div>
+  <div class="footer-brand">
+    <span class="logo-img" style="width:30px;height:30px;display:inline-flex;vertical-align:middle;margin-right:8px"><img src="assets/img/logo-small.png" alt="logo"></span>
+    <span style="font-weight:700;font-size:14px;vertical-align:middle">奔虎锂电</span>
+  </div>
+  <div>产品展示与智能匹配系统 v3.0 | 数据持续更新 | <a href="javascript:void(0)" onclick="showDataInfo()">📋 数据来源说明</a></div>
   <div class="row">备案信息 · 技术支持：比克新动力</div>
+  <div class="row"><a href="https://www.baknewpower.com/" target="_blank" rel="noopener">🌐 官方网站：www.baknewpower.com</a></div>
 </footer>
 
 <div class="overlay" id="overlay"><div class="modal" id="modalContent"></div></div>
