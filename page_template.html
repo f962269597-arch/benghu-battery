@@ -44,11 +44,6 @@ button{font-family:inherit;cursor:pointer}
 .logo-img{width:38px;height:38px;border-radius:8px;overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.14);border:1px solid var(--border)}
 .logo-img img{width:100%;height:100%;object-fit:contain}
 .logo-name{font-weight:800;font-size:17px;letter-spacing:1px;background:linear-gradient(to right,var(--gray-start),var(--gray-end));-webkit-background-clip:text;background-clip:text;color:transparent}
-.top-search{flex:1;min-width:200px;max-width:480px;position:relative}
-.top-search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--muted)}
-.top-search input{width:100%;height:38px;padding:0 36px 0 34px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--fg);font-size:14px;outline:none;transition:border-color .15s}
-.top-search input:focus{border-color:var(--yellow)}
-.top-search input::placeholder{color:var(--muted)}
 .top-actions{margin-left:auto;display:flex;align-items:center;gap:8px}
 .top-link{font-size:13px;color:var(--muted);padding:6px 10px;border-radius:8px;transition:all .15s}
 .top-link:hover{color:var(--fg);background:color-mix(in srgb,var(--fg) 6%,transparent)}
@@ -63,10 +58,6 @@ button{font-family:inherit;cursor:pointer}
 .hero h1 em{font-style:normal;color:var(--yellow)}
 .hero p{margin-top:10px;font-size:15px;opacity:.88;letter-spacing:1px}
 .hero-line{width:56px;height:3px;border-radius:2px;background:var(--yellow);margin:16px auto 0;box-shadow:0 0 12px rgba(232,178,10,.6)}
-.hero-stats{margin-top:26px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.hstat{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(6px);border-radius:12px;padding:10px 20px;min-width:96px}
-.hstat .n{font-size:24px;font-weight:800;color:var(--yellow)}
-.hstat .l{font-size:12px;opacity:.85;margin-top:2px}
 /* ===== 主体 ===== */
 .container{max-width:1280px;margin:0 auto;padding:26px 16px 60px}
 section.block{margin-bottom:34px}
@@ -200,7 +191,6 @@ section.block{margin-bottom:34px}
   .pgrid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
   .pphoto{height:140px}
   .pspecs{grid-template-columns:1fr}
-  .top-search{order:3;flex-basis:100%;max-width:none}
 }
 </style>
 </head>
@@ -212,10 +202,6 @@ section.block{margin-bottom:34px}
       <span class="logo-img"><img src="assets/img/logo黑-small.png" alt="奔虎锂电"></span>
       <span class="logo-name">奔虎锂电</span>
     </a>
-    <div class="top-search">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
-      <input type="text" id="searchTop" placeholder="搜索车型 / 电池型号，如：NX、M95c、AE5、6435…">
-    </div>
     <div class="top-actions">
       <a class="top-link" href="#match">智能匹配</a>
       <a class="top-link" href="#products">产品展示</a>
@@ -233,7 +219,6 @@ section.block{margin-bottom:34px}
     <h1>奔虎锂电 · <em>产品展示</em></h1>
     <p>磷酸铁锂(LFP)电池专家 · 为二轮电动车提供安全、长续航的电池方案</p>
     <div class="hero-line"></div>
-    <div class="hero-stats" id="heroStats"></div>
   </div>
 </section>
 
@@ -314,7 +299,6 @@ function init(){
       sel.appendChild(opt);
     }
   }
-  renderHeroStats();
   renderProducts('');
   bindEvents();
   if ('serviceWorker' in navigator && location.protocol === 'https:') {
@@ -322,31 +306,12 @@ function init(){
   }
 }
 
-function renderHeroStats(){
-  var high = allVehicles.filter(function(v){ return v.可信度 === '高'; }).length;
-  var pct = Math.round(high / allVehicles.length * 100);
-  var brands = 0;
-  for (var b in VEHICLES) if (Array.isArray(VEHICLES[b]) && VEHICLES[b].length > 0) brands++;
-  document.getElementById('heroStats').innerHTML =
-    '<div class="hstat"><div class="n">' + allVehicles.length + '</div><div class="l">收录车型</div></div>' +
-    '<div class="hstat"><div class="n">' + allBatteries.length + '</div><div class="l">电池型号</div></div>' +
-    '<div class="hstat"><div class="n">' + brands + '</div><div class="l">覆盖品牌</div></div>' +
-    '<div class="hstat"><div class="n">' + pct + '%</div><div class="l">高可信数据</div></div>';
-}
-
 function bindEvents(){
   document.getElementById('searchMain').addEventListener('input', function(){
-    document.getElementById('searchTop').value = this.value;
     curQuery = this.value.trim();
     runSearch();
   });
   document.getElementById('searchMain').addEventListener('keypress', function(e){ if (e.key === 'Enter') runSearch(); });
-  document.getElementById('searchTop').addEventListener('input', function(){
-    document.getElementById('searchMain').value = this.value;
-    curQuery = this.value.trim();
-    runSearch();
-    if (this.value.trim()) document.getElementById('match').scrollIntoView({behavior:'smooth'});
-  });
   document.getElementById('brandFilter').addEventListener('change', runSearch);
   document.getElementById('prodChips').addEventListener('click', function(e){
     var chip = e.target.closest('.chip'); if (!chip) return;
@@ -631,14 +596,12 @@ function vehicleCardHTML(v){
 
 function doSearch(){
   curQuery = document.getElementById('searchMain').value.trim();
-  document.getElementById('searchTop').value = curQuery;
   runSearch();
 }
 
 function resetSearch(){
   curQuery = '';
   document.getElementById('searchMain').value = '';
-  document.getElementById('searchTop').value = '';
   document.getElementById('brandFilter').value = '';
   runSearch();
 }
