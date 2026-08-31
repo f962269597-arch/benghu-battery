@@ -9,7 +9,7 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "assets/img/logo-512.png",
+      "src": "assets/img/logo黑-512.png",
       "sizes": "512x362",
       "type": "image/png",
       "purpose": "any"
