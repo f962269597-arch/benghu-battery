@@ -239,7 +239,7 @@ section.block{margin-bottom:34px}
         <button class="btn btn-primary" onclick="doSearch()">搜 索</button>
         <button class="btn btn-ghost" onclick="resetSearch()">重 置</button>
       </div>
-      <div class="search-tip">💡 车型示例：<b>NX Sport</b>、<b>M95c</b>、<b>AE5</b>、<b>苍穹酷版</b>；电池示例：<b>6435</b>、<b>7650</b>、<b>76.8V</b>。也可以只输入品牌名，如 <b>九号</b>、<b>小牛</b>。</div>
+      <div class="search-tip">💡 车型示例：<b>NX Sport</b>、<b>M95c</b>、<b>AE5</b>、<b>苍穹酷版</b>；电池示例：<b>4820</b>、<b>6435</b>、<b>7650</b>、<b>76.8V</b>。也可以只输入品牌名，如 <b>九号</b>、<b>小牛</b>。</div>
     </div>
     <div class="result-summary" id="resultSummary"></div>
     <div id="matchGrid"></div>
@@ -257,8 +257,10 @@ section.block{margin-bottom:34px}
     </div>
     <div class="chips" id="prodChips">
       <button class="chip active" data-v="">全部</button>
+      <button class="chip" data-v="48">48V 系列</button>
       <button class="chip" data-v="64">64V 系列</button>
       <button class="chip" data-v="76.8">76.8V 系列</button>
+      <button class="chip" data-v="轮椅">轮椅系列</button>
     </div>
     <div class="pgrid" id="prodGrid"></div>
   </section>
@@ -334,6 +336,9 @@ function bindEvents(){
 
 /* ===== 匹配核心 ===== */
 function checkFit(battery, vehicle){
+  if (battery.参与匹配 === false) {
+    return { fits: false, powerFit: false, voltOk: false, fitLevel: '不参与匹配', reasons: ['本品为独立产品，不参与车型匹配'], laid: false, installDims: '' };
+  }
   // 电池可任意姿态安装：立装 / 平放 / 侧放，6 种旋转逐一尝试
   var D = [battery.长_mm || 0, battery.宽_mm || 0, battery.高_mm || 0];
   var V = [vehicle.电池仓_长_mm || 0, vehicle.电池仓_宽_mm || 0, vehicle.电池仓_高_mm || 0];
@@ -379,6 +384,7 @@ function checkFit(battery, vehicle){
 }
 
 function matchBatteryToVehicles(battery){
+  if (battery.参与匹配 === false) return [];
   return allVehicles.map(function(v){
     var r = checkFit(battery, v); r.vehicle = v; return r;
   }).sort(function(a, b){
@@ -388,7 +394,7 @@ function matchBatteryToVehicles(battery){
 }
 
 function matchVehicleToBatteries(vehicle){
-  return allBatteries.map(function(b){
+  return allBatteries.filter(function(b){ return b.参与匹配 !== false; }).map(function(b){
     var r = checkFit(b, vehicle); r.battery = b; return r;
   }).sort(function(a, b){
     var o = {'完美匹配':0, '尺寸合适(功率需确认)':1, '尺寸不匹配':2, '电压不匹配':3};
@@ -404,7 +410,10 @@ function fitBadge(level){
 
 /* ===== 产品展示 ===== */
 function renderProducts(volt){
-  var list = volt ? allBatteries.filter(function(b){ return String(b.电压_V) === volt; }) : allBatteries;
+  var list = volt ? allBatteries.filter(function(b){
+    if (volt === '轮椅') return b.系列 === '轮椅';
+    return String(b.电压_V) === volt;
+  }) : allBatteries;
   document.getElementById('prodCount').textContent = list.length;
   var grid = document.getElementById('prodGrid');
   grid.innerHTML = list.map(function(b, i){
@@ -412,7 +421,13 @@ function renderProducts(volt){
   }).join('');
 }
 
+function pwrLabel(b){
+  if (b.系列 === '轮椅') return '轮椅/助行车专用';
+  return (b.适用电机功率_最小_W || 0) + '-' + (b.适用电机功率_最大_W || '不限') + 'W';
+}
+
 function productCardHTML(b, idx){
+  var hint = b.参与匹配 === false ? '查看产品详情' : '点击查看匹配车型';
   var photo = b.展示图
     ? '<img src="' + b.展示图 + '" alt="' + b.展示名 + '" loading="lazy">'
     : '<div class="ph"><div class="ph-eng">BENGHU LFP</div><div class="ph-model">' + b.展示名 + '</div><div class="ph-dims">' + b.电压_V + 'V · ' + b.电量_Wh + 'Wh · ' + b.长_mm + '×' + b.宽_mm + '×' + b.高_mm + 'mm</div><div class="ph-note">📷 产品图待补充</div></div>';
@@ -420,7 +435,7 @@ function productCardHTML(b, idx){
   if (b.规格书) pdfs += '<a class="plink" href="' + b.规格书 + '" target="_blank" onclick="event.stopPropagation()">📄 规格书</a>';
   if (b.认证报告) pdfs += '<a class="plink" href="' + b.认证报告 + '" target="_blank" onclick="event.stopPropagation()">✅ 认证报告</a>';
   return '<div class="pcard" onclick="showBatteryModal(' + idx + ')">' +
-    '<div class="pphoto">' + photo + '<div class="photo-hint">👆 点击查看匹配车型</div></div>' +
+    '<div class="pphoto">' + photo + '<div class="photo-hint">👆 ' + hint + '</div></div>' +
     '<div class="pbody">' +
       '<h3>' + b.展示名 + '<span class="pmodel">' + b.电芯类型 + '</span></h3>' +
       '<div class="pspecs">' +
@@ -431,9 +446,9 @@ function productCardHTML(b, idx){
         '<div><span class="lb">放电</span> <span class="vl">' + b.持续放电电流_A + 'A</span></div>' +
         '<div><span class="lb">壳体</span> <span class="vl">' + (b.壳体材质 || '-') + '</span></div>' +
       '</div>' +
-      '<div class="pfunc">适配电机 <em>' + (b.适用电机功率_最小_W || 0) + '-' + (b.适用电机功率_最大_W || '不限') + 'W</em>' + (b.备注 ? ' · ' + b.备注 : '') + '</div>' +
+      '<div class="pfunc">' + (b.系列 === '轮椅' ? '<em>' + pwrLabel(b) + '</em>' : '适配电机 <em>' + pwrLabel(b) + '</em>') + (b.备注 ? ' · ' + b.备注 : '') + '</div>' +
       (pdfs ? '<div class="plinks">' + pdfs + '</div>' : '') +
-      '<div class="click-hint">👆 <b>点击图片查看匹配车型</b></div>' +
+      '<div class="click-hint">👆 <b>' + hint + '</b></div>' +
     '</div>' +
   '</div>';
 }
@@ -455,7 +470,7 @@ function showBatteryModal(idx){
     '<div><span class="lb">尺寸：</span><span class="vl">' + b.长_mm + ' × ' + b.宽_mm + ' × ' + b.高_mm + ' mm</span></div>' +
     '<div><span class="lb">重量：</span><span class="vl">' + (b.重量_kg ? b.重量_kg + ' kg' : '待确认') + '</span></div>' +
     '<div><span class="lb">放电电流：</span><span class="vl">' + b.持续放电电流_A + 'A 持续 / ' + b.峰值放电电流_A + 'A 峰值</span></div>' +
-    '<div><span class="lb">适配电机：</span><span class="vl">' + (b.适用电机功率_最小_W || 0) + '-' + (b.适用电机功率_最大_W || '不限') + 'W</span></div>' +
+    '<div><span class="lb">' + (b.系列 === '轮椅' ? '适用：' : '适配电机：') + '</span><span class="vl">' + pwrLabel(b) + '</span></div>' +
     '<div><span class="lb">电芯类型：</span><span class="vl">' + b.电芯类型 + '</span></div>' +
     '<div><span class="lb">壳体材质：</span><span class="vl">' + (b.壳体材质 || '待确认') + '</span></div>' +
   '</div>';
@@ -474,14 +489,17 @@ function showBatteryModal(idx){
         '</div>';
       }).join('')
     : '<div class="empty" style="padding:26px"><p>暂无匹配车型</p></div>';
+  var matchSection = b.参与匹配 === false
+    ? '<div class="mt-note">ℹ️ 本品为独立产品，不参与车型匹配</div>'
+    : '<div class="matches-title">🔋 可匹配车型 <span class="sec-tag">' + fits.length + ' 款</span>' + (perfect.length ? '<span class="badge badge-green">' + perfect.length + ' 款完美匹配</span>' : '') + '</div>' +
+      '<div class="vm-list">' + listHTML + '</div>' +
+      (fits.length && !perfect.length ? '<div class="mt-note">⚠️ 存在匹配车型，但电机功率范围需进一步确认</div>' : '');
   document.getElementById('modalContent').innerHTML =
     '<button class="close" onclick="closeModal()">✕</button>' +
     '<h2>奔虎' + b.展示名 + '</h2>' +
-    '<div class="m-sub">' + b.电芯类型 + ' · 点击下方车型可查看该车可装的电池</div>' +
+    '<div class="m-sub">' + b.电芯类型 + (b.参与匹配 === false ? '' : ' · 点击下方车型可查看该车可装的电池') + '</div>' +
     '<div class="bm-top"><div class="bm-photo">' + photo + '</div><div class="bm-side">' + side + '</div></div>' +
-    '<div class="matches-title">🔋 可匹配车型 <span class="sec-tag">' + fits.length + ' 款</span>' + (perfect.length ? '<span class="badge badge-green">' + perfect.length + ' 款完美匹配</span>' : '') + '</div>' +
-    '<div class="vm-list">' + listHTML + '</div>' +
-    (fits.length && !perfect.length ? '<div class="mt-note">⚠️ 存在匹配车型，但电机功率范围需进一步确认</div>' : '') +
+    matchSection +
     (b.备注 ? '<div class="mt-note" style="color:var(--muted)">💡 ' + b.备注 + '</div>' : '');
   document.getElementById('overlay').classList.add('show');
   document.getElementById('overlay').scrollTop = 0;
