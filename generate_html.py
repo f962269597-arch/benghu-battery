@@ -23,33 +23,49 @@ ASSET_MAP = {
     ("GX4820", "157×182×265"): ("assets/img/4820.png", "", "assets/files/4820-规格书.pdf", ""),
     ("GX4824", "157×182×265"): ("assets/img/4824.png", "", "assets/files/4824-规格书.pdf", ""),
     ("6428LFP", "185×165×340"): ("assets/img/6428.png", "", "", ""),
-    ("6435LFP", "185×165×340"): ("assets/img/6435LFP.png", "assets/img/6435LFP-参数.png",
+    ("6435LFP", "180×156×334"): ("assets/img/6435LFP.png", "assets/img/6435LFP-参数.png",
                                 "assets/files/6435LFP-规格书.pdf", "assets/files/6435LFP-认证报告.pdf"),
-    ("6450LFP", "240×170×350"): ("assets/img/6450LFP.png", "assets/img/6450LFP-参数.png",
+    ("6450LFP", "232×161×344"): ("assets/img/6450LFP.png", "assets/img/6450LFP-参数.png",
                                 "assets/files/6450LFP-规格书.pdf", "assets/files/6450LFP-认证报告.pdf"),
-    ("6460LFP", "400×265×185"): ("assets/img/6460LFP.png", "assets/img/6460LFP-参数.png",
+    ("6460LFP", "400×259×185"): ("assets/img/6460LFP.png", "assets/img/6460LFP-参数.png",
                                 "assets/files/6460LFP-规格书.pdf", "assets/files/6460LFP-认证报告.pdf"),
     ("6460LFP塑壳", "462×267×170"): ("assets/img/6460（PC+ABS）.png", "", "", ""),
-    ("6480LFP钣金", "400×265×210"): ("", "", "", ""),
+    ("6480LFP钣金", "400×259×210"): ("", "", "", ""),
     ("64120LFP*S款", "570×330×180"): ("assets/img/64120S款.png", "", "", ""),
     ("64120LFP-4G智能钣金", "570×300×200"): ("assets/img/64120-4G智能钣金.png", "", "", ""),
     ("64120LFP-4G智能电池", "500×460×200"): ("assets/img/64120-4G智能电池.jpg", "", "", ""),
-    ("7635LFP", "220×165×340"): ("", "", "", ""),
+    ("7635LFP", "214×156×334"): ("", "", "", ""),
     ("7635LFP（卧款）", "400×185×168"): ("assets/img/7635LFP.png", "assets/img/7635LFP-参数.png",
                                 "assets/files/7635LFP-规格书.pdf", "assets/files/7635LFP-认证报告.pdf"),
-    ("7650LFP（卧款）", "460×220×168"): ("assets/img/7650LFP.png", "assets/img/7650LFP-参数.png",
+    ("7650LFP（卧款）", "460×214×168"): ("assets/img/7650LFP.png", "assets/img/7650LFP-参数.png",
                                 "assets/files/7650LFP-规格书.pdf", "assets/files/7650LFP-认证报告.pdf"),
-    ("7660LFP", "464×265×185"): ("assets/img/7660（钣金）.png", "", "", ""),
+    ("7660LFP", "464×259×185"): ("assets/img/7660（钣金）.png", "", "", ""),
     ("7660LFP塑壳", "462×267×170"): ("assets/img/7660.png", "", "", ""),
     ("7670LFP 4G钣金款", "560×230×170"): ("assets/img/7670-4G钣金款.png", "", "", ""),
     ("7680LFP塑壳", "462×267×200"): ("assets/img/7680.png", "", "", ""),
     ("76120LFP-4G智能电池", "500×460×200"): ("assets/img/76120-4G智能电池.png", "", "", ""),
+    ("72100LFP", "595×230×175"): ("", "", "", ""),
+    ("76120LFP", "670×330×180"): ("assets/img/76120.png", "", "", ""),
+    ("7628LFP", "185×165×340"): ("assets/img/7628（立）.png", "", "", ""),
     ("LY24V12Ah", "245×195×102"): ("assets/img/24V12Ah.png", "", "assets/files/轮椅-BA012L-AS21A-规格书.pdf", ""),
     ("LY36V8Ah", "308×134×75"): ("assets/img/36V8Ah.png", "", "assets/files/轮椅-ADCF120292237-规格书.pdf", ""),
     ("LY25.6V7Ah", "192×169×48.5"): ("assets/img/25.6V7Ah.png", "", "assets/files/轮椅-ACF83AV060-规格书.pdf", ""),
     ("LY25.6V12Ah", "367×158×116.8"): ("assets/img/25.6V12Ah.png", "", "assets/files/轮椅-ADCF080379238-规格书.pdf", ""),
     ("LY25.2V10.4Ah", "212.4×190×50"): ("assets/img/25.2V10.4Ah.png", "", "assets/files/轮椅-ADCN07040F32D-规格书.pdf", ""),
 }
+
+# 展示排序：48V → 64V → 76.8V → 轮椅
+def series_key(b):
+    if b.get('系列') == '轮椅':
+        return 3
+    v = b.get('电压_V', 0)
+    if v == 48:
+        return 0
+    if v == 64:
+        return 1
+    return 2
+
+batteries.sort(key=series_key)
 
 # 给电池附加展示字段：展示名（同名加壳体材质区分）、图片、PDF
 name_count = {}
