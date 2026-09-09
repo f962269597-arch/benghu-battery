@@ -198,7 +198,7 @@ section.block{margin-bottom:34px}
 
 <header class="topbar">
   <div class="topbar-in">
-    <a class="logo" href="#top">
+    <a class="logo" href="https://www.baknewpower.com/" target="_blank" rel="noopener">
       <span class="logo-img"><img src="assets/img/logo黑-small.png" alt="奔虎锂电"></span>
       <span class="logo-name">奔虎锂电</span>
     </a>
@@ -261,6 +261,9 @@ section.block{margin-bottom:34px}
       <button class="chip" data-v="64">64V 系列</button>
       <button class="chip" data-v="76.8">76.8V 系列</button>
       <button class="chip" data-v="轮椅">轮椅系列</button>
+      <button class="chip" data-v="电摩">电摩系列</button>
+      <button class="chip" data-v="铅改锂">铅改锂系列</button>
+      <button class="chip" data-v="储能">储能系列</button>
     </div>
     <div class="pgrid" id="prodGrid"></div>
   </section>
@@ -411,8 +414,8 @@ function fitBadge(level){
 /* ===== 产品展示 ===== */
 function renderProducts(volt){
   var list = volt ? allBatteries.filter(function(b){
-    if (volt === '轮椅') return b.系列 === '轮椅';
-    return String(b.电压_V) === volt;
+    if (volt === '48' || volt === '64' || volt === '76.8') return String(b.电压_V) === volt && !b.系列;
+    return b.系列 === volt;
   }) : allBatteries;
   document.getElementById('prodCount').textContent = list.length;
   var grid = document.getElementById('prodGrid');
@@ -423,6 +426,9 @@ function renderProducts(volt){
 
 function pwrLabel(b){
   if (b.系列 === '轮椅') return '轮椅/助行车专用';
+  if (b.系列 === '电摩') return '电摩专用';
+  if (b.系列 === '铅改锂') return '铅酸电池替换';
+  if (b.系列 === '储能') return '储能专用';
   return (b.适用电机功率_最小_W || 0) + '-' + (b.适用电机功率_最大_W || '不限') + 'W';
 }
 
@@ -446,7 +452,7 @@ function productCardHTML(b, idx){
         '<div><span class="lb">放电</span> <span class="vl">' + b.持续放电电流_A + 'A</span></div>' +
         '<div><span class="lb">壳体</span> <span class="vl">' + (b.壳体材质 || '-') + '</span></div>' +
       '</div>' +
-      '<div class="pfunc">' + (b.系列 === '轮椅' ? '<em>' + pwrLabel(b) + '</em>' : '适配电机 <em>' + pwrLabel(b) + '</em>') + (b.备注 ? ' · ' + b.备注 : '') + '</div>' +
+      '<div class="pfunc">' + (b.系列 ? '<em>' + pwrLabel(b) + '</em>' : '适配电机 <em>' + pwrLabel(b) + '</em>') + (b.备注 ? ' · ' + b.备注 : '') + '</div>' +
       (pdfs ? '<div class="plinks">' + pdfs + '</div>' : '') +
       '<div class="click-hint">👆 <b>' + hint + '</b></div>' +
     '</div>' +
@@ -470,7 +476,7 @@ function showBatteryModal(idx){
     '<div><span class="lb">尺寸：</span><span class="vl">' + b.长_mm + ' × ' + b.宽_mm + ' × ' + b.高_mm + ' mm</span></div>' +
     '<div><span class="lb">重量：</span><span class="vl">' + (b.重量_kg ? b.重量_kg + ' kg' : '待确认') + '</span></div>' +
     '<div><span class="lb">放电电流：</span><span class="vl">' + b.持续放电电流_A + 'A 持续 / ' + b.峰值放电电流_A + 'A 峰值</span></div>' +
-    '<div><span class="lb">' + (b.系列 === '轮椅' ? '适用：' : '适配电机：') + '</span><span class="vl">' + pwrLabel(b) + '</span></div>' +
+    '<div><span class="lb">' + (b.系列 ? '适用：' : '适配电机：') + '</span><span class="vl">' + pwrLabel(b) + '</span></div>' +
     '<div><span class="lb">电芯类型：</span><span class="vl">' + b.电芯类型 + '</span></div>' +
     '<div><span class="lb">壳体材质：</span><span class="vl">' + (b.壳体材质 || '待确认') + '</span></div>' +
   '</div>';

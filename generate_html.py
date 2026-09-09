@@ -30,7 +30,7 @@ ASSET_MAP = {
     ("6460LFP", "400×260×185"): ("assets/img/6460LFP.png", "assets/img/6460LFP-参数.png",
                                 "assets/files/6460LFP-规格书.pdf", "assets/files/6460LFP-认证报告.pdf"),
     ("6460LFP塑壳", "462×267×170"): ("assets/img/6460（PC+ABS）.png", "", "", ""),
-    ("6480LFP钣金", "400×260×210"): ("", "", "", ""),
+    ("6480LFP钣金", "400×260×210"): ("assets/img/6480LFP钣金.png", "", "", ""),
     ("64120LFP*S款", "570×330×180"): ("assets/img/64120S款.png", "", "", ""),
     ("64120LFP-4G智能钣金", "570×300×200"): ("assets/img/64120-4G智能钣金.png", "", "", ""),
     ("64120LFP-4G智能电池", "500×460×200"): ("assets/img/64120-4G智能电池.jpg", "", "", ""),
@@ -44,19 +44,34 @@ ASSET_MAP = {
     ("7670LFP 4G钣金款", "560×230×170"): ("assets/img/7670-4G钣金款.png", "", "", ""),
     ("7680LFP塑壳", "462×267×200"): ("assets/img/7680.png", "", "", ""),
     ("76120LFP-4G智能电池", "500×460×200"): ("assets/img/76120-4G智能电池.png", "", "", ""),
-    ("72100LFP", "595×230×175"): ("", "", "", ""),
+    ("72100LFP", "595×230×175"): ("assets/img/72100LFP.png", "", "", ""),
     ("76120LFP", "670×330×180"): ("assets/img/76120.png", "", "", ""),
     ("LY24V12Ah", "245×195×102"): ("assets/img/24V12Ah.png", "", "assets/files/轮椅-BA012L-AS21A-规格书.pdf", ""),
     ("LY36V8Ah", "308×134×75"): ("assets/img/36V8Ah.png", "", "assets/files/轮椅-ADCF120292237-规格书.pdf", ""),
     ("LY25.6V7Ah", "192×169×48.5"): ("assets/img/25.6V7Ah.png", "", "assets/files/轮椅-ACF83AV060-规格书.pdf", ""),
     ("LY25.6V12Ah", "367×158×116.8"): ("assets/img/25.6V12Ah.png", "", "assets/files/轮椅-ADCF080379238-规格书.pdf", ""),
     ("LY25.2V10.4Ah", "212.4×190×50"): ("assets/img/25.2V10.4Ah.png", "", "assets/files/轮椅-ADCN07040F32D-规格书.pdf", ""),
+    ("DM48V30Ah", "180×155×265"): ("assets/img/DM48V30Ah.png", "", "assets/files/电摩-DM48V30Ah-规格书.pdf", ""),
+    ("DM64V30Ah", "185×165×340"): ("assets/img/DM64V30Ah.png", "", "assets/files/电摩-DM64V30Ah-规格书.pdf", ""),
+    ("DM76.8V30Ah", "214×165×358"): ("assets/img/DM76.8V30Ah.png", "", "assets/files/电摩-DM76.8V30Ah-规格书.pdf", ""),
+    ("QGL12V20Ah", "181×78×164"): ("assets/img/QGL12V20Ah.png", "", "assets/files/铅改锂-QGL12V20Ah-规格书.pdf", ""),
+    ("QGL12V100Ah", "260×168×211"): ("assets/img/QGL12V100Ah.png", "", "assets/files/铅改锂-QGL12V100Ah-规格书.pdf", ""),
+    ("QGL12V200Ah", "532×207×215"): ("assets/img/QGL12V200Ah.png", "", "assets/files/铅改锂-QGL12V200Ah-规格书.pdf", ""),
+    ("QGL12V300Ah", "520×268×220"): ("assets/img/QGL12V300Ah.png", "", "assets/files/铅改锂-QGL12V300Ah-规格书.pdf", ""),
+    ("QGL12V314Ah-1", "520×268×220"): ("assets/img/QGL12V314Ah-1.png", "", "assets/files/铅改锂-QGL12V314Ah-1-规格书.pdf", ""),
+    ("QGL12V314Ah-2", "384×194×248"): ("assets/img/QGL12V314Ah-2.png", "", "assets/files/铅改锂-QGL12V314Ah-2-规格书.pdf", ""),
+    ("QGL12V460Ah", "522×238×218"): ("assets/img/QGL12V460Ah.png", "", "assets/files/铅改锂-QGL12V460Ah-规格书.pdf", ""),
+    ("QGL24V100Ah", "532×207×215"): ("assets/img/QGL24V100Ah.png", "", "assets/files/铅改锂-QGL24V100Ah-规格书.pdf", ""),
+    ("CN48V100Ah", "431.5×440×133"): ("", "", "assets/files/储能-CN48V100Ah-规格书.pdf", ""),
+    ("CN51.2V100Ah", "450×452×133"): ("assets/img/CN51.2V100Ah.png", "", "assets/files/储能-CN51.2V100Ah-规格书.pdf", ""),
 }
 
 # 展示排序：48V → 64V → 76.8V → 轮椅
 def series_key(b):
-    if b.get('系列') == '轮椅':
-        return 3
+    order = {'48V': 0, '64V': 1, '76.8V': 2, '轮椅': 3, '电摩': 4, '铅改锂': 5, '储能': 6}
+    s = b.get('系列', '')
+    if s in order:
+        return order[s]
     v = b.get('电压_V', 0)
     if v == 48:
         return 0
