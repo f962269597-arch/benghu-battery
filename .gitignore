@@ -3,3 +3,5 @@ pdf_images/
 pdf_pages/
 __pycache__/
 *.pyc
+*.bak
+assets/img/webp.tmp/

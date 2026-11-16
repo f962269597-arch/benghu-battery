@@ -1,6 +1,6 @@
 // 奔虎锂电匹配系统 - Service Worker
 // HTML 网络优先(保证每次拿到最新页面)，静态资源缓存优先(图片/PDF基本不变)
-const CACHE = 'benghu-battery-v4';
+const CACHE = 'benghu-battery-v5';
 
 self.addEventListener('install', e => {
   e.waitUntil(

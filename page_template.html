@@ -38,7 +38,7 @@ img{display:block}
 a{color:inherit;text-decoration:none}
 button{font-family:inherit;cursor:pointer}
 /* ===== 顶栏 ===== */
-.topbar{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.topbar{position:sticky;top:0;z-index:50;background:var(--bg);background:color-mix(in srgb,var(--bg) 88%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
 .topbar-in{max-width:1280px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .logo{display:flex;align-items:center;gap:9px;flex-shrink:0}
 .logo-img{width:38px;height:38px;border-radius:8px;overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.14);border:1px solid var(--border)}
@@ -46,17 +46,17 @@ button{font-family:inherit;cursor:pointer}
 .logo-name{font-weight:800;font-size:17px;letter-spacing:1px;background:linear-gradient(to right,var(--gray-start),var(--gray-end));-webkit-background-clip:text;background-clip:text;color:transparent}
 .top-actions{margin-left:auto;display:flex;align-items:center;gap:8px}
 .top-link{font-size:13px;color:var(--muted);padding:6px 10px;border-radius:8px;transition:all .15s}
-.top-link:hover{color:var(--fg);background:color-mix(in srgb,var(--fg) 6%,transparent)}
+.top-link:hover{color:var(--fg);background:rgba(128,128,128,.12);background:color-mix(in srgb,var(--fg) 6%,transparent)}
 .icon-btn{width:36px;height:36px;border-radius:9px;border:1px solid var(--border);background:var(--card);color:var(--fg);display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .15s}
 .icon-btn:hover{border-color:var(--yellow)}
 /* ===== Hero ===== */
 .hero{position:relative;overflow:hidden;color:#fff;text-align:center}
-.hero-bg{position:absolute;inset:0;background:url('assets/img/hero-bg.jpg') center 38%/cover no-repeat}
-.hero-mask{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,12,16,.62) 0%,rgba(10,12,16,.45) 55%,var(--bg) 100%)}
+.hero-bg{position:absolute;inset:0;background:url('assets/img/webp/hero-bg.webp') center 38%/cover no-repeat}
+.hero-mask{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,12,16,.66) 0%,rgba(10,12,16,.52) 60%,var(--bg) 100%)}
 .hero-in{position:relative;max-width:1280px;margin:0 auto;padding:70px 16px 50px}
 .hero h1{font-size:clamp(26px,5vw,40px);font-weight:800;letter-spacing:3px;text-shadow:0 2px 14px rgba(0,0,0,.45)}
 .hero h1 em{font-style:normal;color:var(--yellow)}
-.hero p{margin-top:10px;font-size:15px;opacity:.88;letter-spacing:1px}
+.hero p{margin-top:10px;font-size:15px;opacity:.95;letter-spacing:1px;text-shadow:0 1px 10px rgba(0,0,0,.6)}
 .hero-line{width:56px;height:3px;border-radius:2px;background:var(--yellow);margin:16px auto 0;box-shadow:0 0 12px rgba(232,178,10,.6)}
 /* ===== 主体 ===== */
 .container{max-width:1280px;margin:0 auto;padding:26px 16px 60px}
@@ -104,7 +104,7 @@ section.block{margin-bottom:34px}
 .badge-red{background:var(--red-bg);color:var(--red)}
 .badge-amber{background:var(--amber-bg);color:var(--amber)}
 .badge-blue{background:var(--blue-bg);color:var(--blue)}
-.badge-gray{background:color-mix(in srgb,var(--fg) 8%,transparent);color:var(--muted)}
+.badge-gray{background:rgba(128,128,128,.14);color:var(--muted)}
 .batt-list{margin-top:10px;padding-top:10px;border-top:1px dashed var(--border)}
 .batt-list .t{font-size:11px;color:var(--muted);margin-bottom:5px}
 .batt-item{display:flex;align-items:center;gap:7px;font-size:12px;padding:3px 0;flex-wrap:wrap}
@@ -121,9 +121,11 @@ section.block{margin-bottom:34px}
 .pcard{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;display:flex;flex-direction:column}
 .pcard:hover{transform:translateY(-4px);box-shadow:0 14px 32px rgba(0,0,0,.14);border-color:var(--yellow)}
 .pcard:active{transform:translateY(-1px) scale(.99)}
-.pphoto{position:relative;height:190px;overflow:hidden;background:#2a2d34;flex-shrink:0}
-.pphoto img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
-.pcard:hover .pphoto img{transform:scale(1.05)}
+.pphoto{position:relative;height:190px;overflow:hidden;background:#f4f6f8;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.pphoto img{width:100%;height:100%;object-fit:contain;padding:6px;transition:transform .4s}
+.pcard:hover .pphoto img{transform:scale(1.04)}
+.pstatus{position:absolute;top:8px;right:8px;background:var(--amber-bg);color:var(--amber);font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;border:1px solid rgba(180,83,9,.3)}
+.psell{font-size:11.5px;color:var(--muted);background:var(--yellow-soft);border-radius:8px;padding:5px 9px;line-height:1.45}
 .photo-hint{position:absolute;left:50%;bottom:9px;transform:translateX(-50%);background:rgba(0,0,0,.62);color:#fff;font-size:11px;padding:4px 12px;border-radius:999px;white-space:nowrap;backdrop-filter:blur(4px);pointer-events:none}
 /* 占位图 */
 .ph{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:linear-gradient(140deg,#2a2d34 0%,#3d4149 55%,#33363d 100%);color:#fff;position:relative}
@@ -147,8 +149,68 @@ section.block{margin-bottom:34px}
 .click-hint b{color:var(--yellow);font-weight:700}
 .empty{background:var(--card);border:1.5px dashed var(--border);border-radius:var(--radius);padding:44px 16px;text-align:center;color:var(--muted)}
 .empty .ic{font-size:34px;margin-bottom:8px}
+/* ===== 续航估算 ===== */
+.calc{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px}
+.calc-row{display:grid;grid-template-columns:1.5fr .8fr 1.2fr .9fr;gap:12px}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field label{font-size:11.5px;color:var(--muted)}
+.field input,.field select{height:42px;border:1px solid var(--border);background:var(--bg);border-radius:10px;padding:0 12px;font-size:14px;color:var(--fg);font-family:inherit;width:100%;-webkit-appearance:none;appearance:none}
+.field input:focus,.field select:focus{outline:none;border-color:var(--yellow);background:var(--card)}
+.unit-wrap{position:relative}
+.unit-wrap input{padding-right:32px}
+.unit-wrap .unit{position:absolute;right:12px;top:12px;font-size:12px;color:var(--muted)}
+.calc-out{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.cres{border-radius:12px;padding:14px 16px;border:1px solid var(--border)}
+.cres.warm{background:linear-gradient(135deg,#fff8e6,#fffdf7)}
+.cres.cold{background:linear-gradient(135deg,#eef4ff,#f8fbff)}
+html.dark .cres.warm{background:#241f12;border-color:#3a331c}
+html.dark .cres.cold{background:#151d2b;border-color:#22314a}
+.clabel{font-size:12px;color:var(--muted)}
+.cnum{margin-top:4px;display:flex;align-items:baseline;gap:6px}
+.cnum b{font-size:38px;font-weight:800;line-height:1.1;letter-spacing:.5px}
+.cnum i{font-style:normal;font-size:13px;color:var(--muted)}
+.crange{margin-top:2px;font-size:12px;color:var(--muted)}
+.cdetail{grid-column:1/-1;font-size:12px;color:var(--muted);line-height:1.6}
+.cnote{margin-top:12px;font-size:11.5px;color:var(--muted);line-height:1.6;border-top:1px dashed var(--border);padding-top:10px}
+/* ===== 产品查找 ===== */
+.finder{background:var(--card);border:1px solid var(--border);border-radius:14px}
+.fbar{display:flex;gap:10px;align-items:center;padding:12px;border-bottom:1px solid var(--border)}
+.fsearch{flex:1;position:relative;min-width:0}
+.fsearch svg{position:absolute;left:12px;top:12px;width:17px;height:17px;color:var(--muted);pointer-events:none}
+.fsearch input{width:100%;height:42px;border:1px solid var(--border);background:var(--bg);border-radius:10px;padding:0 40px 0 38px;font-size:14px;color:var(--fg);font-family:inherit;-webkit-appearance:none;appearance:none}
+.fsearch input:focus{outline:none;border-color:var(--yellow);background:var(--card)}
+.fsearch input::-webkit-search-cancel-button{-webkit-appearance:none}
+.fsearch .fclear{position:absolute;right:5px;top:5px;width:32px;height:32px;border:0;background:transparent;color:var(--muted);font-size:14px;border-radius:8px;display:none;cursor:pointer}
+.fsearch.has .fclear{display:block}
+.fsort{height:42px;flex:0 0 auto;border:1px solid var(--border);background:var(--bg);color:var(--fg);border-radius:10px;padding:0 10px;font-size:13px;font-family:inherit}
+.fchips{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:10px 12px;border-bottom:1px solid var(--border)}
+.fgroup{display:flex;align-items:center;gap:6px}
+.flb{font-size:11.5px;color:var(--muted)}
+.fchip{height:28px;padding:0 11px;border-radius:999px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:12px;font-family:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.fchip:active{-webkit-transform:scale(.97);transform:scale(.97)}
+.fchip.on{background:var(--yellow);border-color:var(--yellow);color:var(--yellow-fg);font-weight:700}
+.freset{margin-left:auto;border:0;background:transparent;color:var(--muted);font-size:12px;font-family:inherit;text-decoration:underline;cursor:pointer;display:none}
+.freset.show{display:block}
+.fhead,.frow{display:grid;grid-template-columns:minmax(220px,2.1fr) .8fr .7fr 1.4fr .75fr .7fr .8fr;align-items:center;gap:8px;padding:9px 14px}
+.fhead{font-size:11px;color:var(--muted);background:var(--bg);border-bottom:1px solid var(--border);position:-webkit-sticky;position:sticky;top:58px;z-index:20}
+.frow{border-bottom:1px solid var(--border);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.frow:active{background:rgba(232,178,10,.1)}
+.frow:hover{background:rgba(232,178,10,.06)}
+.fprod{display:flex;align-items:center;gap:10px;min-width:0}
+.fthumb{width:44px;height:44px;border-radius:8px;background:#f4f6f8;display:flex;align-items:center;justify-content:center;flex:0 0 auto;overflow:hidden}
+.fthumb img{max-width:100%;max-height:100%;object-fit:contain}
+.fnm{font-size:13.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fsub{font-size:11px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fsub2{display:none}
+.fv{font-size:12.5px;white-space:nowrap;color:var(--fg)}
+.fv b{font-size:13.5px;font-weight:700}
+.fv i{font-style:normal;font-size:10.5px;color:var(--muted);margin-left:2px}
+.fv.dim{color:var(--muted);font-size:12px}
+.fits{font-size:11.5px;color:#128a4b;font-weight:700;text-align:right;white-space:nowrap}
+.fits.z{color:var(--muted);font-weight:400}
+.fempty{padding:40px 16px;text-align:center;color:var(--muted);font-size:13px}
 /* ===== 弹窗 ===== */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);z-index:100;display:none;align-items:flex-start;justify-content:center;padding:26px 14px;overflow-y:auto}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);z-index:100;display:none;align-items:flex-start;justify-content:center;padding:26px 14px;overflow-y:auto}
 .overlay.show{display:flex}
 .modal{background:var(--card);border:1px solid var(--border);border-radius:16px;max-width:960px;width:100%;padding:22px;position:relative;box-shadow:0 24px 70px rgba(0,0,0,.35);animation:pop .18s ease}
 @keyframes pop{from{transform:translateY(14px);opacity:0}to{transform:none;opacity:1}}
@@ -157,8 +219,8 @@ section.block{margin-bottom:34px}
 .modal h2{font-size:20px;padding-right:44px}
 .modal .m-sub{font-size:13px;color:var(--muted);margin:4px 0 14px}
 .bm-top{display:grid;grid-template-columns:minmax(200px,300px) 1fr;gap:16px;margin-bottom:18px}
-.bm-photo{border-radius:12px;overflow:hidden;border:1px solid var(--border);background:#2a2d34;min-height:220px}
-.bm-photo img{width:100%;height:100%;object-fit:cover}
+.bm-photo{border-radius:12px;overflow:hidden;border:1px solid var(--border);background:#f4f6f8;min-height:220px;display:flex;align-items:center;justify-content:center}
+.bm-photo img{width:100%;height:100%;object-fit:contain;padding:6px}
 .bm-photo .ph{min-height:220px}
 .bm-side{display:flex;flex-direction:column;gap:12px}
 .bm-params{display:grid;grid-template-columns:1fr 1fr;gap:7px 14px;font-size:13px}
@@ -184,11 +246,38 @@ section.block{margin-bottom:34px}
 .footer-brand{margin-bottom:10px}
 .footer-brand .logo-img{display:inline-flex;align-items:center;justify-content:center;background:#fff;border-radius:6px;overflow:hidden}
 /* ===== 响应式 ===== */
+@media(max-width:900px){
+  .calc-row{grid-template-columns:1fr 1fr;gap:10px}
+  .calc-row .field:nth-child(1){grid-column:1/-1}
+  .calc-row .field:nth-child(3){grid-column:1/-1;order:3}
+  .calc-row .field:nth-child(2){order:2}
+  .calc-row .field:nth-child(4){order:4}
+  .calc-out{grid-template-columns:1fr 1fr;gap:10px}
+  .cnum b{font-size:30px}
+  .fbar{padding:9px;gap:8px}
+  .fsearch input{height:40px;font-size:14px}
+  .fsort{height:40px;font-size:12.5px;padding:0 8px}
+  .fchips{flex-wrap:nowrap;overflow-x:auto;gap:6px 12px;padding:9px 10px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .fchips::-webkit-scrollbar{display:none}
+  .fgroup{flex:0 0 auto}
+  .freset{flex:0 0 auto;margin-left:4px;white-space:nowrap}
+  .fhead{display:none}
+  .frow{display:flex;gap:10px;padding:10px 12px;align-items:center}
+  .fprod{flex:1}
+  .fthumb{width:52px;height:52px}
+  .fv{display:none}
+  .fits{flex:0 0 auto;font-size:11px}
+  .fsub{display:none}
+  .fsub2{display:block;font-size:11px;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.4}
+}
 @media(max-width:720px){
   .bm-top{grid-template-columns:1fr}
   .hero-in{padding:44px 14px 34px}
   .grid{grid-template-columns:1fr}
   .pgrid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+  .chips{flex-wrap:nowrap;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{flex:0 0 auto}
   .pphoto{height:140px}
   .pspecs{grid-template-columns:1fr}
 }
@@ -217,7 +306,6 @@ section.block{margin-bottom:34px}
   <div class="hero-mask"></div>
   <div class="hero-in">
     <h1>奔虎锂电 · <em>产品展示</em></h1>
-    <p>磷酸铁锂(LFP)电池专家 · 为二轮电动车提供安全、长续航的电池方案</p>
     <div class="hero-line"></div>
   </div>
 </section>
@@ -249,23 +337,114 @@ section.block{margin-bottom:34px}
     </div>
   </section>
 
+  <section class="block" id="range">
+    <div class="sec-head">
+      <h2>🔋 续航估算</h2>
+      <span class="sec-tag">理论值</span>
+      <span class="sub">选车型和电池，算夏季 / 冬季能跑多远</span>
+    </div>
+
+    <div class="calc">
+      <div class="calc-row">
+        <div class="field">
+          <label for="rVeh">车型（选填，选了自动带出电机功率）</label>
+          <input id="rVeh" list="vehList" autocomplete="off" placeholder="如：九号 M95C / 小牛 NX 风速">
+          <datalist id="vehList"></datalist>
+        </div>
+        <div class="field field-sm">
+          <label for="rPower">电机功率</label>
+          <div class="unit-wrap"><input id="rPower" type="number" inputmode="numeric" value="1200" min="200" max="8000" step="100"><span class="unit">W</span></div>
+        </div>
+        <div class="field">
+          <label for="rBatt">电池型号</label>
+          <select id="rBatt"></select>
+        </div>
+        <div class="field field-sm">
+          <label for="rScene">骑行方式</label>
+          <select id="rScene">
+            <option value="25">市区 25km/h</option>
+            <option value="35" selected>常规 35km/h</option>
+            <option value="45">快速 45km/h</option>
+            <option value="load">载货（25km/h + 300kg）</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="calc-out">
+        <div class="cres warm">
+          <div class="clabel">☀️ 夏季（25℃ 以上）</div>
+          <div class="cnum"><b id="rSummer">—</b><i>km</i></div>
+          <div class="crange" id="rSummerRange"></div>
+        </div>
+        <div class="cres cold">
+          <div class="clabel">❄️ 冬季（0℃ 左右）</div>
+          <div class="cnum"><b id="rWinter">—</b><i>km</i></div>
+          <div class="crange" id="rWinterRange"></div>
+        </div>
+        <div class="cdetail" id="rDetail"></div>
+      </div>
+      <div class="cnote">算法：可用电量（Wh×92%×99%）÷ 每公里耗电（滚阻 + 风阻，除 85% 传动效率，再加辅助功耗，最后乘工况系数）。<b>均速是最大变量</b>：同一块电池 25 与 45km/h 能差将近一倍，各车型另有速度上限。<br><b>已用实测校准</b>：九号 M3 95c MAX 换装 7670LFP（4608Wh），载重 85kg、均速 45km/h 实跑 144.4km；模型同条件给 144km（差 0.4km）。冬季按 LFP 0℃ 保留 80% 计（-10℃ 约 70%）。实际还受胎压、坡度、风向影响，对外说“大约”。</div>
+    </div>
+  </section>
+
   <section class="block" id="products">
     <div class="sec-head">
-      <h2>⚡ 产品展示</h2>
-      <span class="sec-tag">共 <span id="prodCount"></span> 款</span>
-      <span class="sub">点击产品图片，查看该电池可匹配的车型</span>
+      <h2>⚡ 产品查找</h2>
+      <span class="sec-tag">共 <span id="prodCount">0</span> 款</span>
+      <span class="sub">输入型号 / 电压 / 容量，或按条件筛选</span>
     </div>
-    <div class="chips" id="prodChips">
-      <button class="chip active" data-v="">全部</button>
-      <button class="chip" data-v="48">48V 系列</button>
-      <button class="chip" data-v="64">64V 系列</button>
-      <button class="chip" data-v="76.8">76.8V 系列</button>
-      <button class="chip" data-v="轮椅">轮椅系列</button>
-      <button class="chip" data-v="电摩">电摩系列</button>
-      <button class="chip" data-v="铅改锂">铅改锂系列</button>
-      <button class="chip" data-v="储能">储能系列</button>
+
+    <div class="finder">
+      <div class="fbar">
+        <div class="fsearch" id="pSearchWrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input id="pQuery" type="search" inputmode="search" autocomplete="off" placeholder="搜型号或参数：6435 / 7650 / 76.8 / 100Ah">
+          <button class="fclear" id="pClear" type="button" aria-label="清空">✕</button>
+        </div>
+        <select id="pSort" class="fsort" aria-label="排序">
+          <option value="rec" selected>推荐排序</option>
+          <option value="wh_a">电量 低→高</option>
+          <option value="wh_d">电量 高→低</option>
+          <option value="kg_a">重量 轻→重</option>
+          <option value="name">型号 A→Z</option>
+        </select>
+      </div>
+
+      <div class="fchips" id="pFilters">
+        <div class="fgroup" data-k="volt">
+          <span class="flb">电压</span>
+          <button type="button" class="fchip" data-v="64">64V</button>
+          <button type="button" class="fchip" data-v="76.8">76.8V</button>
+          <button type="button" class="fchip" data-v="48">48V</button>
+          <button type="button" class="fchip" data-v="other">其他</button>
+        </div>
+        <div class="fgroup" data-k="gen">
+          <span class="flb">款</span>
+          <button type="button" class="fchip" data-v="4G">4G 新款</button>
+          <button type="button" class="fchip" data-v="蓝牙">蓝牙 老款</button>
+        </div>
+        <div class="fgroup" data-k="shell">
+          <span class="flb">壳体</span>
+          <button type="button" class="fchip" data-v="钣金">钣金</button>
+          <button type="button" class="fchip" data-v="塑壳">塑壳</button>
+        </div>
+        <div class="fgroup" data-k="use">
+          <span class="flb">用途</span>
+          <button type="button" class="fchip" data-v="三轮车">三轮车</button>
+          <button type="button" class="fchip" data-v="轮椅">轮椅</button>
+          <button type="button" class="fchip" data-v="储能">储能</button>
+          <button type="button" class="fchip" data-v="电摩">电摩</button>
+          <button type="button" class="fchip" data-v="铅改锂">铅改锂</button>
+        </div>
+        <button type="button" class="freset" id="pReset">清空筛选</button>
+      </div>
+
+      <div class="fhead">
+        <span>产品</span><span>电量</span><span>容量</span><span>尺寸 mm</span><span>重量</span><span>放电</span><span style="text-align:right">可装车型</span>
+      </div>
+      <div class="flist" id="prodList"></div>
+      <div class="fempty" id="prodEmpty" style="display:none">没有符合条件的产品，清掉几个筛选试试</div>
     </div>
-    <div class="pgrid" id="prodGrid"></div>
   </section>
 </main>
 
@@ -304,7 +483,8 @@ function init(){
       sel.appendChild(opt);
     }
   }
-  renderProducts('');
+  initRange();
+  initFinder();
   bindEvents();
   if ('serviceWorker' in navigator && location.protocol === 'https:') {
     navigator.serviceWorker.register('sw.js').catch(function(){});
@@ -318,12 +498,6 @@ function bindEvents(){
   });
   document.getElementById('searchMain').addEventListener('keypress', function(e){ if (e.key === 'Enter') runSearch(); });
   document.getElementById('brandFilter').addEventListener('change', runSearch);
-  document.getElementById('prodChips').addEventListener('click', function(e){
-    var chip = e.target.closest('.chip'); if (!chip) return;
-    this.querySelectorAll('.chip').forEach(function(c){ c.classList.remove('active'); });
-    chip.classList.add('active');
-    renderProducts(chip.dataset.v);
-  });
   document.getElementById('overlay').addEventListener('click', function(e){ if (e.target === this) closeModal(); });
   document.addEventListener('keydown', function(e){
     if (e.key === 'Escape') closeModal();
@@ -373,13 +547,28 @@ function checkFit(battery, vehicle){
   var vm = vSpec.match(/(\d+)\s*v/);
   var vVolt = vm ? parseInt(vm[1]) : 0;
   var battVolt = battery.电压_V || 0;
+  // 电压平台映射：在售只有 60V→64V、72V→76.8V 两档
+  // 48V 系列已停产，只做展示、不参与车型匹配（2026.11 确认）
+  // 原厂标称值归一：64→64 平台、71/73→72、76/76.8→76.8、58~61→60、47~52→48
+  if (vVolt >= 63 && vVolt <= 66) vVolt = 64;
+  else if (vVolt >= 70 && vVolt <= 74) vVolt = 72;
+  else if (vVolt >= 75 && vVolt <= 78) vVolt = 76.8;
+  else if (vVolt >= 56 && vVolt <= 62) vVolt = 60;
+  else if (vVolt >= 46 && vVolt <= 53) vVolt = 48;
+  var VOLT_MAP = { 60: 64, 64: 64, 72: 76.8, 76.8: 76.8 };
   var voltOk = true;
-  if (vVolt === 60 && battVolt !== 64) { voltOk = false; reasons.push('电压不匹配：60V原厂需用64V锂电'); }
-  if (vVolt === 72 && battVolt !== 76.8) { voltOk = false; reasons.push('电压不匹配：72V原厂需用76.8V锂电'); }
-  if (vVolt === 48 && battVolt !== 64) { voltOk = false; reasons.push('电压不匹配：48V原厂需用64V锂电'); }
+  if (!vVolt) {
+    voltOk = false; reasons.push('原厂电压未标注，需人工确认');
+  } else if (vVolt === 48) {
+    voltOk = false; reasons.push('48V 车型已停止匹配（48V 系列仅作展示）');
+  } else if (VOLT_MAP[vVolt] === undefined) {
+    voltOk = false; reasons.push('原厂电压 ' + vVolt + 'V 暂无对应锂电平台');
+  } else if (battVolt !== VOLT_MAP[vVolt]) {
+    voltOk = false; reasons.push('电压不匹配：' + vVolt + 'V 原厂需用 ' + VOLT_MAP[vVolt] + 'V 锂电');
+  }
   var battMaxPwr = battery.适用电机功率_最大_W || 99999;
   var vehPwr = vehicle.电机_额定功率_W || 0;
-  var powerFit = vehPwr <= battMaxPwr;
+  var powerFit = vehPwr ? (vehPwr <= battMaxPwr) : false;
   var level = (sizeFit && voltOk) ? (powerFit ? '完美匹配' : '尺寸合适(功率需确认)') : (sizeFit && !voltOk ? '电压不匹配' : '尺寸不匹配');
   var fits = sizeFit && voltOk;
   return { fits: fits, powerFit: powerFit, voltOk: voltOk, fitLevel: level, reasons: reasons,
@@ -411,39 +600,291 @@ function fitBadge(level){
   return '<span class="badge badge-red">✖ ' + level + '</span>';
 }
 
-/* ===== 产品展示 ===== */
-function renderProducts(volt){
-  var list = volt ? allBatteries.filter(function(b){
-    if (volt === '48' || volt === '64' || volt === '76.8') return String(b.电压_V) === volt && !b.系列;
-    return b.系列 === volt;
-  }) : allBatteries;
+/* ===== 产品查找 ===== */
+var pState = { q: '', volt: [], gen: [], shell: [], use: [], sort: 'rec' };
+var fitCount = {};
+
+/* ===== 续航估算（物理模型 + 保守修正） ===== */
+// 车型基础参数：车重(含人)kg、均速 km/h、风阻面积 CdA m²、滚阻系数、辅助功耗 W、工况系数
+var RANGE_CLASS = {
+  '国标':   { m: 125, cda: 0.55, crr: 0.018, aux: 10, k: 1.45, vmax: 25 },
+  '电轻摩': { m: 160, cda: 0.60, crr: 0.018, aux: 12, k: 1.20, vmax: 30 },
+  '电摩':   { m: 185, cda: 0.55, crr: 0.016, aux: 14, k: 1.02, vmax: 50 },
+  '高速':   { m: 195, cda: 0.63, crr: 0.015, aux: 15, k: 1.00, vmax: 60 },
+  '三轮':   { m: 375, cda: 0.95, crr: 0.016, aux: 20, k: 1.25, vmax: 30 }
+};
+var DOD = 0.92;        // 可用放电深度（按标称 92% 计，预留过放与一致性余量）
+var PACK = 0.99;       // 一致性/线束损耗
+var ETA = 0.85;        // 控制器+电机效率
+var WINTER = 0.80;     // 0℃ 时 LFP 可用容量保留
+
+function rangeClass(b, power){
+  if (b.用途 === '三轮车') return '三轮';
+  if (power <= 400) return '国标';
+  if (power <= 1000) return '电轻摩';
+  if (power <= 2500) return '电摩';
+  return '高速';
+}
+
+function estimateRange(b, power, sceneKey){
+  var cls = rangeClass(b, power);
+  var p = RANGE_CLASS[cls];
+  var v = parseInt(sceneKey, 10) || 35;
+  var extra = 0, kMul = 1;
+  if (sceneKey === 'load') {
+    v = (cls === '三轮') ? 20 : 25;
+    extra = (cls === '三轮') ? 300 : 120;
+    kMul = 1.10;
+  }
+  v = Math.min(v, p.vmax);
+
+  // 电池重量进质量项：以 35kg 为基准，大容量电池更重、更费电
+  var bw = b.重量_kg || 0;
+  var dMass = bw ? Math.max(-10, Math.min(40, bw - 35)) : 0;
+  var m = p.m + extra + dMass;
+  var ms = v / 3.6;
+  var pRoll = p.crr * m * 9.81 * ms;
+  var pAero = 0.5 * 1.205 * p.cda * ms * ms * ms;
+  var pTotal = (pRoll + pAero) / ETA + p.aux;
+  var whkm = pTotal / v * p.k * kMul;
+
+  var whNom = b.实测电量_Wh || b.电量_Wh;   // 有实测容量就用实测
+  var eUse = whNom * DOD * PACK;
+  var summer = eUse / whkm;
+  var winter = summer * WINTER;
+  return {
+    cls: cls, m: m, v: v, whkm: whkm, eUse: eUse,
+    summer: summer, winter: winter,
+    summerLo: summer / 1.12, summerHi: summer / 0.95,
+    winterLo: winter / 1.12, winterHi: winter / 0.95,
+    pRoll: pRoll, pAero: pAero
+  };
+}
+
+function initRange(){
+  var dl = document.getElementById('vehList');
+  var h = '';
+  for (var i = 0; i < allVehicles.length; i++){
+    var v = allVehicles[i];
+    h += '<option value="' + (v._brand.split('_')[0] + ' ' + v.型号).replace(/"/g, '') + '"></option>';
+  }
+  dl.innerHTML = h;
+
+  var sel = document.getElementById('rBatt');
+  var groups = {}, volts = [];
+  for (var j = 0; j < allBatteries.length; j++){
+    var b = allBatteries[j], k = b.电压_V;
+    if (!groups[k]) { groups[k] = []; volts.push(k); }
+    groups[k].push({ i: j, b: b });
+  }
+  volts.sort(function(a, c){ return c - a; });
+  var opts = '';
+  for (var x = 0; x < volts.length; x++){
+    var g = groups[volts[x]];
+    opts += '<optgroup label="' + volts[x] + 'V">';
+    for (var y = 0; y < g.length; y++){
+      opts += '<option value="' + g[y].i + '">' + g[y].b.展示名 + ' · ' + g[y].b.电量_Wh + 'Wh</option>';
+    }
+    opts += '</optgroup>';
+  }
+  sel.innerHTML = opts;
+  for (var z = 0; z < allBatteries.length; z++){
+    if (allBatteries[z].展示名.indexOf('7650LFP') === 0 && allBatteries[z].款 === '4G') { sel.value = z; break; }
+  }
+
+  var veh = document.getElementById('rVeh');
+  veh.addEventListener('input', function(){
+    var q = this.value.trim().toLowerCase();
+    if (!q) return;
+    for (var i = 0; i < allVehicles.length; i++){
+      var v = allVehicles[i];
+      var name = (v._brand.split('_')[0] + ' ' + v.型号).toLowerCase();
+      if (name === q || v.型号.toLowerCase() === q){
+        if (v.电机_额定功率_W) document.getElementById('rPower').value = v.电机_额定功率_W;
+        break;
+      }
+    }
+    calcRange();
+  });
+  document.getElementById('rPower').addEventListener('input', calcRange);
+  sel.addEventListener('change', calcRange);
+  document.getElementById('rScene').addEventListener('change', calcRange);
+  calcRange();
+}
+
+function calcRange(){
+  var sel = document.getElementById('rBatt');
+  var b = allBatteries[+sel.value];
+  if (!b) return;
+  var power = +document.getElementById('rPower').value || 1200;
+  var scene = document.getElementById('rScene').value;
+  var r = estimateRange(b, power, scene);
+
+  var rr = Math.round;
+  document.getElementById('rSummer').textContent = Math.floor(r.summer);
+  document.getElementById('rSummerRange').textContent = '最少 ' + Math.floor(r.summerLo) + ' · 最多 ' + Math.floor(r.summerHi) + ' km';
+  document.getElementById('rWinter').textContent = Math.floor(r.winter);
+  document.getElementById('rWinterRange').textContent = '最少 ' + Math.floor(r.winterLo) + ' · 最多 ' + Math.floor(r.winterHi) + ' km';
+  document.getElementById('rDetail').innerHTML =
+    '电池 <b>' + b.展示名 + '</b> ' + b.电压_V + 'V×' + b.容量_Ah + 'Ah = ' + b.电量_Wh + 'Wh' +
+    '，可用 <b>' + rr(r.eUse) + 'Wh</b>（DOD 92% × 一致性 99%）' +
+    '；' + r.cls + ' 车+人 ' + rr(r.m) + 'kg、均速 ' + r.v + 'km/h、耗电 <b>' + r.whkm.toFixed(1) + ' Wh/km</b>' +
+    '（滚阻 ' + rr(r.pRoll) + 'W + 风阻 ' + rr(r.pAero) + 'W，÷效率 85%）' +
+    ' → 夏季 <b>' + Math.floor(r.summer) + ' km</b>、冬季 <b>' + Math.floor(r.winter) + ' km</b>';
+}
+
+function initFinder(){
+  computeFitCount();
+  var q = document.getElementById('pQuery');
+  var wrap = document.getElementById('pSearchWrap');
+  q.addEventListener('input', function(){
+    pState.q = this.value.trim().toLowerCase();
+    wrap.className = 'fsearch' + (this.value ? ' has' : '');
+    renderFinder();
+  });
+  document.getElementById('pClear').addEventListener('click', function(){
+    q.value = ''; pState.q = ''; wrap.className = 'fsearch'; q.focus(); renderFinder();
+  });
+  document.getElementById('pSort').addEventListener('change', function(){
+    pState.sort = this.value; renderFinder();
+  });
+  var box = document.getElementById('pFilters');
+  box.addEventListener('click', function(e){
+    var t = e.target;
+    while (t && t !== box && !t.className.match(/fchip/)) t = t.parentNode;
+    if (!t || t === box) return;
+    var g = t.parentNode.getAttribute('data-k');
+    var v = t.getAttribute('data-v');
+    var arr = pState[g];
+    var i = arr.indexOf(v);
+    if (i >= 0) { arr.splice(i, 1); t.className = 'fchip'; }
+    else { arr.push(v); t.className = 'fchip on'; }
+    renderFinder();
+  });
+  document.getElementById('pReset').addEventListener('click', function(){
+    pState.volt = []; pState.gen = []; pState.shell = []; pState.use = []; pState.q = '';
+    q.value = ''; wrap.className = 'fsearch';
+    var chips = box.getElementsByTagName('button');
+    for (var i = 0; i < chips.length; i++) chips[i].className = 'fchip';
+    renderFinder();
+  });
+  renderFinder();
+}
+
+function computeFitCount(){
+  for (var i = 0; i < allBatteries.length; i++){
+    var b = allBatteries[i];
+    if (b.参与匹配 === false) { fitCount[i] = -1; continue; }
+    var n = 0;
+    for (var j = 0; j < allVehicles.length; j++){ if (checkFit(b, allVehicles[j]).fits) n++; }
+    fitCount[i] = n;
+  }
+}
+
+function shellOf(b){
+  var m = (b.壳体材质 || '') + '';
+  if (m.indexOf('钣金') >= 0) return '钣金';
+  if (m.indexOf('塑') >= 0 || m.indexOf('ABS') >= 0) return '塑壳';
+  return m || '其他';
+}
+
+function finderMatch(b){
+  if (pState.q){
+    var s = (b.展示名 + ' ' + b.型号 + ' ' + b.电压_V + 'V ' + b.容量_Ah + 'Ah ' + b.电量_Wh + 'Wh ' +
+             b.长_mm + '×' + b.宽_mm + '×' + b.高_mm + ' ' + (b.卖点 || '') + ' ' + (b.壳体材质 || '') + ' ' + (b.款 || '')).toLowerCase();
+    if (s.indexOf(pState.q) < 0) return false;
+  }
+  if (pState.volt.length){
+    var v = b.电压_V, hit = false;
+    for (var i = 0; i < pState.volt.length; i++){
+      var t = pState.volt[i];
+      if (t === 'other') { if (v != 64 && v != 76.8 && v != 48) hit = true; }
+      else if (String(v) === t) hit = true;
+    }
+    if (!hit) return false;
+  }
+  if (pState.gen.length && pState.gen.indexOf(b.款 || '') < 0) return false;
+  if (pState.shell.length && pState.shell.indexOf(shellOf(b)) < 0) return false;
+  if (pState.use.length){
+    var u = b.用途 || b.系列 || '';
+    if (pState.use.indexOf(u) < 0) return false;
+  }
+  return true;
+}
+
+function recRank(b){
+  var v = b.电压_V;
+  var vr = (v == 64) ? 0 : (v == 76.8 ? 1 : (v == 48 ? 2 : 3));
+  var gr = (b.款 === '4G') ? 0 : (b.款 === '蓝牙' ? 1 : 2);
+  return vr * 1000000 + gr * 10000 + b.电量_Wh;
+}
+
+function renderFinder(){
+  var list = [];
+  for (var i = 0; i < allBatteries.length; i++){
+    if (finderMatch(allBatteries[i])) list.push({ b: allBatteries[i], i: i });
+  }
+  var s = pState.sort;
+  list.sort(function(x, y){
+    if (s === 'rec') return recRank(x.b) - recRank(y.b);
+    if (s === 'name') return x.b.展示名.localeCompare(y.b.展示名);
+    if (s === 'kg_a') return (x.b.重量_kg || 999) - (y.b.重量_kg || 999);
+    if (s === 'wh_d') return y.b.电量_Wh - x.b.电量_Wh;
+    return x.b.电量_Wh - y.b.电量_Wh;
+  });
+  var html = '';
+  for (var k = 0; k < list.length; k++){
+    var b = list[k].b, idx = list[k].i;
+    var n = fitCount[idx];
+    var fitHtml = n < 0 ? '<span class="fits z">—</span>'
+      : (n === 0 ? '<span class="fits z">0 款</span>' : '<span class="fits">' + n + ' 款</span>');
+    var sub = b.电压_V + 'V' + (b.款 ? ' · ' + b.款 : '') + (b.用途 ? ' · ' + b.用途 : (b.系列 ? ' · ' + b.系列 : ''));
+    var sub2 = sub + ' · ' + b.电量_Wh + 'Wh/' + b.容量_Ah + 'Ah · ' + b.长_mm + '×' + b.宽_mm + '×' + b.高_mm + 'mm';
+    var img = b.展示图 ? '<img src="' + b.展示图 + '" alt="' + b.展示名 + '" loading="lazy">' : '';
+    html += '<div class="frow" onclick="showBatteryModal(' + idx + ')">' +
+      '<div class="fprod"><div class="fthumb">' + img + '</div>' +
+        '<div style="min-width:0"><div class="fnm">' + b.展示名 + '</div>' +
+        '<div class="fsub">' + sub + '</div><div class="fsub2">' + sub2 + '</div></div></div>' +
+      '<div class="fv"><b>' + b.电量_Wh + '</b><i>Wh</i></div>' +
+      '<div class="fv"><b>' + b.容量_Ah + '</b><i>Ah</i></div>' +
+      '<div class="fv dim">' + b.长_mm + '×' + b.宽_mm + '×' + b.高_mm + '</div>' +
+      '<div class="fv"><b>' + (b.重量_kg || '-') + '</b><i>kg</i></div>' +
+      '<div class="fv"><b>' + b.持续放电电流_A + '</b><i>A</i></div>' +
+      fitHtml + '</div>';
+  }
+  document.getElementById('prodList').innerHTML = html;
   document.getElementById('prodCount').textContent = list.length;
-  var grid = document.getElementById('prodGrid');
-  grid.innerHTML = list.map(function(b, i){
-    return productCardHTML(b, allBatteries.indexOf(b));
-  }).join('');
+  document.getElementById('prodEmpty').style.display = list.length ? 'none' : 'block';
+  var reset = document.getElementById('pReset');
+  var active = pState.q || pState.volt.length || pState.gen.length || pState.shell.length || pState.use.length;
+  reset.className = 'freset' + (active ? ' show' : '');
 }
 
 function pwrLabel(b){
+  if (b.用途) return b.用途 + '专用';
   if (b.系列 === '轮椅') return '轮椅/助行车专用';
   if (b.系列 === '电摩') return '电摩专用';
   if (b.系列 === '铅改锂') return '铅酸电池替换';
   if (b.系列 === '储能') return '储能专用';
-  return (b.适用电机功率_最小_W || 0) + '-' + (b.适用电机功率_最大_W || '不限') + 'W';
+  var mn = b.适用电机功率_最小_W, mx = b.适用电机功率_最大_W;
+  if (!mx) return '待确认';
+  if (mn) return mn + '-' + mx + 'W';
+  return '≤' + mx + 'W';
 }
 
 function productCardHTML(b, idx){
   var hint = b.参与匹配 === false ? '查看产品详情' : '点击查看匹配车型';
   var photo = b.展示图
-    ? '<img src="' + b.展示图 + '" alt="' + b.展示名 + '" loading="lazy">'
+    ? '<img src="' + b.展示图 + '" alt="' + b.展示名 + '" loading="lazy" decoding="async">'
     : '<div class="ph"><div class="ph-eng">BENGHU LFP</div><div class="ph-model">' + b.展示名 + '</div><div class="ph-dims">' + b.电压_V + 'V · ' + b.电量_Wh + 'Wh · ' + b.长_mm + '×' + b.宽_mm + '×' + b.高_mm + 'mm</div><div class="ph-note">📷 产品图待补充</div></div>';
+  var statusTag = b.上市状态 ? '<span class="pstatus">' + b.上市状态 + '</span>' : '';
   var pdfs = '';
   if (b.规格书) pdfs += '<a class="plink" href="' + b.规格书 + '" target="_blank" onclick="event.stopPropagation()">📄 规格书</a>';
   if (b.认证报告) pdfs += '<a class="plink" href="' + b.认证报告 + '" target="_blank" onclick="event.stopPropagation()">✅ 认证报告</a>';
   return '<div class="pcard" onclick="showBatteryModal(' + idx + ')">' +
-    '<div class="pphoto">' + photo + '<div class="photo-hint">👆 ' + hint + '</div></div>' +
+    '<div class="pphoto">' + photo + statusTag + '<div class="photo-hint">👆 ' + hint + '</div></div>' +
     '<div class="pbody">' +
-      '<h3>' + b.展示名 + '<span class="pmodel">' + b.电芯类型 + '</span></h3>' +
+      '<h3>' + b.展示名 + '</h3>' +
       '<div class="pspecs">' +
         '<div><span class="lb">电压</span> <span class="vl">' + b.电压_V + 'V</span> <span class="lb">(' + b.电压范围 + ')</span></div>' +
         '<div><span class="lb">电量</span> <span class="vl">' + b.电量_Wh + 'Wh</span> <span class="lb">' + b.容量_Ah + 'Ah</span></div>' +
@@ -452,7 +893,8 @@ function productCardHTML(b, idx){
         '<div><span class="lb">放电</span> <span class="vl">' + b.持续放电电流_A + 'A</span></div>' +
         '<div><span class="lb">壳体</span> <span class="vl">' + (b.壳体材质 || '-') + '</span></div>' +
       '</div>' +
-      '<div class="pfunc">' + (b.系列 ? '<em>' + pwrLabel(b) + '</em>' : '适配电机 <em>' + pwrLabel(b) + '</em>') + (b.备注 ? ' · ' + b.备注 : '') + '</div>' +
+      '<div class="pfunc">' + (b.系列 ? '<em>' + pwrLabel(b) + '</em>' : (b.用途 ? '适用 <em>' + pwrLabel(b) + '</em>' : '适配电机 <em>' + pwrLabel(b) + '</em>')) + '</div>' +
+      (b.卖点 ? '<div class="psell">' + b.卖点 + '</div>' : '') +
       (pdfs ? '<div class="plinks">' + pdfs + '</div>' : '') +
       '<div class="click-hint">👆 <b>' + hint + '</b></div>' +
     '</div>' +
@@ -470,13 +912,14 @@ function showBatteryModal(idx){
     : '<div class="ph"><div class="ph-eng">BENGHU LFP</div><div class="ph-model">' + b.展示名 + '</div><div class="ph-dims">' + b.电压_V + 'V · ' + b.电量_Wh + 'Wh</div><div class="ph-note">📷 产品图待补充</div></div>';
   var side = '';
   if (b.参数图) side += '<img src="' + b.参数图 + '" alt="参数图" style="width:100%;border-radius:10px;border:1px solid var(--border)">';
+  if (b.卖点) side += '<div class="psell">' + b.卖点 + '</div>';
   side += '<div class="bm-params">' +
     '<div><span class="lb">标称电压：</span><span class="vl">' + b.电压_V + 'V</span> <span class="lb">(' + b.电压范围 + ')</span></div>' +
     '<div><span class="lb">容量 / 电量：</span><span class="vl">' + b.容量_Ah + 'Ah / ' + b.电量_Wh + 'Wh</span></div>' +
     '<div><span class="lb">尺寸：</span><span class="vl">' + b.长_mm + ' × ' + b.宽_mm + ' × ' + b.高_mm + ' mm</span></div>' +
     '<div><span class="lb">重量：</span><span class="vl">' + (b.重量_kg ? b.重量_kg + ' kg' : '待确认') + '</span></div>' +
     '<div><span class="lb">放电电流：</span><span class="vl">' + b.持续放电电流_A + 'A 持续 / ' + b.峰值放电电流_A + 'A 峰值</span></div>' +
-    '<div><span class="lb">' + (b.系列 ? '适用：' : '适配电机：') + '</span><span class="vl">' + pwrLabel(b) + '</span></div>' +
+    '<div><span class="lb">' + (b.用途 ? '用途：' : (b.系列 ? '适用：' : '适配电机：')) + '</span><span class="vl">' + pwrLabel(b) + '</span></div>' +
     '<div><span class="lb">电芯类型：</span><span class="vl">' + b.电芯类型 + '</span></div>' +
     '<div><span class="lb">壳体材质：</span><span class="vl">' + (b.壳体材质 || '待确认') + '</span></div>' +
   '</div>';
@@ -502,8 +945,8 @@ function showBatteryModal(idx){
       (fits.length && !perfect.length ? '<div class="mt-note">⚠️ 存在匹配车型，但电机功率范围需进一步确认</div>' : '');
   document.getElementById('modalContent').innerHTML =
     '<button class="close" onclick="closeModal()">✕</button>' +
-    '<h2>奔虎' + b.展示名 + '</h2>' +
-    '<div class="m-sub">' + b.电芯类型 + (b.参与匹配 === false ? '' : ' · 点击下方车型可查看该车可装的电池') + '</div>' +
+    '<h2>奔虎' + b.展示名 + (b.上市状态 ? ' <span class="pstatus" style="position:static;vertical-align:middle">' + b.上市状态 + '</span>' : '') + '</h2>' +
+    '<div class="m-sub">' + b.电芯类型 + (b.款 ? ' · ' + b.款 + '版' : '') + (b.参与匹配 === false ? '' : ' · 点击下方车型可查看该车可装的电池') + '</div>' +
     '<div class="bm-top"><div class="bm-photo">' + photo + '</div><div class="bm-side">' + side + '</div></div>' +
     matchSection +
     (b.备注 ? '<div class="mt-note" style="color:var(--muted)">💡 ' + b.备注 + '</div>' : '');
@@ -536,8 +979,8 @@ function showVehicleModal(brand, model){
     '<div class="bm-params" style="margin-bottom:6px">' +
       '<div><span class="lb">电池仓：</span><span class="vl">' + (v.电池仓_长_mm || '-') + ' × ' + (v.电池仓_宽_mm || '-') + ' × ' + (v.电池仓_高_mm || '-') + ' mm</span></div>' +
       (v.电池仓_宽窄处_mm ? '<div><span class="lb">窄处宽：</span><span class="vl">' + v.电池仓_宽窄处_mm + ' mm' + (v.电池仓_T型 ? '（T型仓）' : '') + '</span></div>' : '<div></div>') +
-      '<div><span class="lb">额定功率：</span><span class="vl">' + (v.电机_额定功率_W || '-') + 'W</span></div>' +
-      '<div><span class="lb">峰值功率：</span><span class="vl">' + (v.电机_峰值功率_W || '-') + 'W</span></div>' +
+      '<div><span class="lb">额定功率：</span><span class="vl">' + (v.电机_额定功率_W ? v.电机_额定功率_W + 'W' : '待核') + '</span></div>' +
+      '<div><span class="lb">峰值功率：</span><span class="vl">' + (v.电机_峰值功率_W ? v.电机_峰值功率_W + 'W' : '待核') + '</span></div>' +
       '<div><span class="lb">原厂电池：</span><span class="vl">' + (v.原厂电池规格 || '-') + '</span></div>' +
       (v.电池仓_双仓 ? '<div><span class="lb">电池仓：</span><span class="vl">双电池仓设计</span></div>' : '<div></div>') +
     '</div>' +
@@ -593,9 +1036,11 @@ function runSearch(){
 function vehicleCardHTML(v){
   var brandShort = (v._brand || '').split('_')[0];
   var pwr = v.电机_额定功率_W || 0;
-  var pwrTag = pwr >= 3000 ? '<span class="badge badge-red">高功率</span>' : (pwr >= 1200 ? '<span class="badge badge-amber">中功率</span>' : '<span class="badge badge-blue">低功率</span>');
+  var pwrTag = !pwr ? '<span class="badge badge-gray">功率待核</span>' : (pwr >= 3000 ? '<span class="badge badge-red">高功率</span>' : (pwr >= 1200 ? '<span class="badge badge-amber">中功率</span>' : '<span class="badge badge-blue">低功率</span>'));
   var src = v.数据来源 || '网络收集', conf = v.可信度 || '中';
-  var confBadge = conf === '高' ? '<span class="badge badge-green">' + conf + '可信</span>' : (conf === '低' ? '<span class="badge badge-red">' + conf + '可信</span>' : '<span class="badge badge-amber">' + conf + '可信</span>');
+  var confBadge = v.核对源数
+    ? '<span class="badge badge-' + (v.核对源数 >= 3 ? 'green' : (v.核对源数 >= 2 ? 'amber' : 'gray')) + '">' + v.核对源数 + ' 源核对</span>'
+    : (conf === '高' ? '<span class="badge badge-green">' + conf + '可信</span>' : (conf === '低' ? '<span class="badge badge-red">' + conf + '可信</span>' : '<span class="badge badge-amber">' + conf + '可信</span>'));
   var br = matchVehicleToBatteries(v);
   var fitBatt = br.filter(function(r){ return r.fits; });
   var perfect = br.filter(function(r){ return r.fitLevel === '完美匹配'; });
@@ -609,9 +1054,9 @@ function vehicleCardHTML(v){
     '<div class="vcard-top"><div><h3>' + v.型号 + '</h3><div class="brand">' + brandShort + ' · ' + (v.类型 || '') + ' · ' + src + '</div></div>' + pwrTag + '</div>' +
     '<div class="vspecs">' +
       '<div><span class="lb">电池仓：</span><span class="vl">' + (v.电池仓_长_mm || '-') + '×' + (v.电池仓_宽_mm || '-') + '×' + (v.电池仓_高_mm || '-') + ' mm</span></div>' +
-      '<div><span class="lb">电机功率：</span><span class="vl">' + pwr + 'W' + (v.电机_峰值功率_W ? ' / 峰值' + v.电机_峰值功率_W + 'W' : '') + '</span></div>' +
+      '<div><span class="lb">电机功率：</span><span class="vl">' + (pwr ? pwr + 'W' + (v.电机_峰值功率_W ? ' / 峰值' + v.电机_峰值功率_W + 'W' : '') : '待核') + '</span></div>' +
       '<div><span class="lb">原厂电池：</span><span class="vl">' + (v.原厂电池规格 || '-') + '</span></div>' +
-      '<div><span class="lb">可信度：</span><span class="vl">' + confBadge + '</span></div>' +
+      '<div><span class="lb">' + (v.核对源数 ? '核对：' : '可信度：') + '</span><span class="vl">' + confBadge + '</span></div>' +
     '</div>' +
     (v.备注 ? '<div style="margin-top:8px;font-size:11.5px;color:var(--muted)">💡 ' + v.备注 + '</div>' : '') +
     '<div class="batt-list"><div class="t">🔋 可装奔虎电池：<b style="color:var(--yellow)">' + fitBatt.length + ' 款</b>' + (perfect.length ? '（' + perfect.length + ' 款完美）' : '') + '</div>' + battHTML + '</div>' +

@@ -6,7 +6,23 @@
 """
 import json, os
 
-BASE = r'F:\Claude项目\电车数据'
+# 以脚本所在目录为根，换电脑/换路径都不用改（原为硬编码 F:\Claude项目\电车数据）
+BASE = os.path.dirname(os.path.abspath(__file__))
+
+# ============================================================
+# 图片改用 WebP：assets/img/webp/ 里有同名 .webp 就用它，否则回退原图
+# （optimize_images.py 生成；单张从 1–3MB 降到 20–60KB）
+# ============================================================
+def webp_of(path):
+    if not path:
+        return path
+    rel = path.replace('\\', '/')
+    d, fn = os.path.split(rel)
+    stem = os.path.splitext(fn)[0]
+    cand = os.path.join(BASE, d, 'webp', stem + '.webp')
+    if os.path.exists(cand):
+        return d + '/webp/' + stem + '.webp'
+    return rel
 
 with open(os.path.join(BASE, 'vehicles.json'), 'r', encoding='utf-8') as f:
     vehicles = json.load(f)
@@ -89,15 +105,23 @@ for b in batteries:
 
 for b in batteries:
     short = b['型号'].replace('奔虎', '')
-    if name_count[short] > 1:
-        b['展示名'] = short + '（' + (b.get('壳体材质') or '款') + '）'
-    else:
-        b['展示名'] = short
+    if not b.get('展示名'):
+        if name_count[short] > 1:
+            b['展示名'] = short + '（' + (b.get('壳体材质') or '款') + '）'
+        else:
+            b['展示名'] = short
     dims = f"{b['长_mm']}×{b['宽_mm']}×{b['高_mm']}"
+    if b.get('图'):
+        # 手册版产品：图直接写在数据里
+        b['展示图'] = webp_of(b['图'])
+        b['参数图'] = b.get('参数图', '')
+        b['规格书'] = b.get('规格书', '')
+        b['认证报告'] = b.get('认证报告', '')
+        continue
     asset = ASSET_MAP.get((short, dims)) or ASSET_MAP.get((b['型号'], dims))
     if asset:
-        b['展示图'] = asset[0]
-        b['参数图'] = asset[1]
+        b['展示图'] = webp_of(asset[0])
+        b['参数图'] = webp_of(asset[1])
         b['规格书'] = asset[2]
         b['认证报告'] = asset[3]
     else:
