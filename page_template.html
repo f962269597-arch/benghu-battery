@@ -159,6 +159,7 @@ section.block{margin-bottom:34px}
 .unit-wrap{position:relative}
 .unit-wrap input{padding-right:32px}
 .unit-wrap .unit{position:absolute;right:12px;top:12px;font-size:12px;color:var(--muted)}
+.field-hint{font-size:10.5px;color:var(--muted);line-height:1.3;min-height:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .calc-out{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
 .cres{border-radius:12px;padding:14px 16px;border:1px solid var(--border)}
 .cres.warm{background:linear-gradient(135deg,#fff8e6,#fffdf7)}
@@ -354,6 +355,7 @@ html.dark .cres.cold{background:#151d2b;border-color:#22314a}
         <div class="field field-sm">
           <label for="rPower">电机功率</label>
           <div class="unit-wrap"><input id="rPower" type="number" inputmode="numeric" value="1200" min="200" max="8000" step="100"><span class="unit">W</span></div>
+          <div class="field-hint" id="rPowerHint"></div>
         </div>
         <div class="field">
           <label for="rBatt">电池型号</label>
@@ -607,11 +609,11 @@ var fitCount = {};
 /* ===== 续航估算（物理模型 + 保守修正） ===== */
 // 车型基础参数：车重(含人)kg、均速 km/h、风阻面积 CdA m²、滚阻系数、辅助功耗 W、工况系数
 var RANGE_CLASS = {
-  '国标':   { m: 125, cda: 0.55, crr: 0.018, aux: 10, k: 1.45, vmax: 25 },
-  '电轻摩': { m: 160, cda: 0.60, crr: 0.018, aux: 12, k: 1.20, vmax: 30 },
-  '电摩':   { m: 185, cda: 0.55, crr: 0.016, aux: 14, k: 1.02, vmax: 50 },
-  '高速':   { m: 195, cda: 0.63, crr: 0.015, aux: 15, k: 1.00, vmax: 60 },
-  '三轮':   { m: 375, cda: 0.95, crr: 0.016, aux: 20, k: 1.25, vmax: 30 }
+  '国标':   { m: 125, cda: 0.55, crr: 0.018, aux: 10, k: 1.45, vmax: 25, ptyp: 400 },
+  '电轻摩': { m: 160, cda: 0.60, crr: 0.018, aux: 12, k: 1.20, vmax: 30, ptyp: 800 },
+  '电摩':   { m: 185, cda: 0.55, crr: 0.016, aux: 14, k: 1.02, vmax: 50, ptyp: 1500 },
+  '高速':   { m: 195, cda: 0.63, crr: 0.015, aux: 15, k: 1.00, vmax: 60, ptyp: 3000 },
+  '三轮':   { m: 375, cda: 0.95, crr: 0.016, aux: 20, k: 1.25, vmax: 30, ptyp: 1200 }
 };
 var DOD = 0.92;        // 可用放电深度（按标称 92% 计，预留过放与一致性余量）
 var PACK = 0.99;       // 一致性/线束损耗
@@ -624,6 +626,38 @@ function rangeClass(b, power){
   if (power <= 1000) return '电轻摩';
   if (power <= 2500) return '电摩';
   return '高速';
+}
+
+function loadFactor(load){
+  // 相对额定负载的效率系数（1.0 = 0.37 负载的基准点）
+  var pts = [[0.05, 0.80], [0.15, 0.88], [0.25, 0.94], [0.37, 1.00],
+             [0.55, 1.02], [0.80, 1.03], [1.00, 1.00]];
+  if (load <= pts[0][0]) return pts[0][1];
+  for (var i = 1; i < pts.length; i++){
+    if (load <= pts[i][0]){
+      var x0 = pts[i-1][0], y0 = pts[i-1][1], x1 = pts[i][0], y1 = pts[i][1];
+      return y0 + (y1 - y0) * (load - x0) / (x1 - x0);
+    }
+  }
+  return pts[pts.length-1][1];
+}
+
+function guessPower(v){
+  var t = (v.类型 || '') + '';
+  if (t.indexOf('三轮') >= 0) return 1200;
+  if (t.indexOf('轻') >= 0) return 800;
+  if (t.indexOf('自行') >= 0 || t.indexOf('电自') >= 0) return 400;
+  var spec = (v.原厂电池规格 || '');
+  if (/48V/i.test(spec)) return 400;
+  if (/60V/i.test(spec)) return 1000;
+  return 1500;
+}
+
+function speedForPower(power, type){
+  if ((type || '').indexOf('三轮') >= 0) return '35';
+  if (power <= 600) return '25';
+  if (power <= 2500) return '35';
+  return '45';
 }
 
 function estimateRange(b, power, sceneKey){
@@ -641,11 +675,21 @@ function estimateRange(b, power, sceneKey){
   // 电池重量进质量项：以 35kg 为基准，大容量电池更重、更费电
   var bw = b.重量_kg || 0;
   var dMass = bw ? Math.max(-10, Math.min(40, bw - 35)) : 0;
-  var m = p.m + extra + dMass;
+  // 电机越大、车越重：每 1kW 约 +9kg（相对 1.5kW 基准）
+  var dMotor = power ? Math.max(-15, Math.min(30, (power - (p.ptyp || 1500)) * 0.009)) : 0;
+  var m = p.m + extra + dMass + dMotor;
+
   var ms = v / 3.6;
   var pRoll = p.crr * m * 9.81 * ms;
   var pAero = 0.5 * 1.205 * p.cda * ms * ms * ms;
-  var pTotal = (pRoll + pAero) / ETA + p.aux;
+  var pShaft = pRoll + pAero;
+
+  // 电机部分负载效率：偏离额定负载越远越低效（大电机小负载最吃亏）
+  var pRated = power > 0 ? power : 1500;
+  var load = Math.max(0.05, Math.min(1.2, pShaft / pRated));
+  var eta = ETA * loadFactor(load);
+
+  var pTotal = pShaft / eta + p.aux;
   var whkm = pTotal / v * p.k * kMul;
 
   var whNom = b.实测电量_Wh || b.电量_Wh;   // 有实测容量就用实测
@@ -657,7 +701,7 @@ function estimateRange(b, power, sceneKey){
     summer: summer, winter: winter,
     summerLo: summer / 1.12, summerHi: summer / 0.95,
     winterLo: winter / 1.12, winterHi: winter / 0.95,
-    pRoll: pRoll, pAero: pAero
+    pRoll: pRoll, pAero: pAero, eta: eta, load: load, power: pRated
   };
 }
 
@@ -700,7 +744,13 @@ function initRange(){
       var v = allVehicles[i];
       var name = (v._brand.split('_')[0] + ' ' + v.型号).toLowerCase();
       if (name === q || v.型号.toLowerCase() === q){
-        if (v.电机_额定功率_W) document.getElementById('rPower').value = v.电机_额定功率_W;
+        var known = !!v.电机_额定功率_W;
+        var pwr = known ? v.电机_额定功率_W : guessPower(v);
+        document.getElementById('rPower').value = pwr;
+        var sp = speedForPower(pwr, v.类型);
+        if (document.getElementById('rScene').value !== 'load') document.getElementById('rScene').value = sp;
+        document.getElementById('rPowerHint').textContent = known ? '车型库：' + pwr + 'W' : '未录入，按 ' + pwr + 'W 估算';
+        document.getElementById('rPowerHint').style.color = known ? '' : '#b45309';
         break;
       }
     }
@@ -729,7 +779,7 @@ function calcRange(){
     '电池 <b>' + b.展示名 + '</b> ' + b.电压_V + 'V×' + b.容量_Ah + 'Ah = ' + b.电量_Wh + 'Wh' +
     '，可用 <b>' + rr(r.eUse) + 'Wh</b>（DOD 92% × 一致性 99%）' +
     '；' + r.cls + ' 车+人 ' + rr(r.m) + 'kg、均速 ' + r.v + 'km/h、耗电 <b>' + r.whkm.toFixed(1) + ' Wh/km</b>' +
-    '（滚阻 ' + rr(r.pRoll) + 'W + 风阻 ' + rr(r.pAero) + 'W，÷效率 85%）' +
+    '（滚阻 ' + rr(r.pRoll) + 'W + 风阻 ' + rr(r.pAero) + 'W，电机 ' + rr(r.power) + 'W 负载 ' + Math.round(r.load*100) + '%、效率 ' + Math.round(r.eta*100) + '%）' +
     ' → 夏季 <b>' + Math.floor(r.summer) + ' km</b>、冬季 <b>' + Math.floor(r.winter) + ' km</b>';
 }
 
