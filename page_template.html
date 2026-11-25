@@ -681,6 +681,7 @@ function estimateRange(b, power, speedKmh){
 }
 
 function initRange(){
+  var speedTouched = false;   // 用户手动改过速度后，选车型不再自动覆盖
   var dl = document.getElementById('vehList');
   var h = '';
   for (var i = 0; i < allVehicles.length; i++){
@@ -731,7 +732,7 @@ function initRange(){
       document.getElementById('rPower').value = pwr;
       var sp = speedForPower(pwr, '');
       var spEl = document.getElementById('rSpeed');
-      if (!spEl.value || spEl.value == 35 || spEl.value == 25 || spEl.value == 45) spEl.value = sp;
+      if (!speedTouched) spEl.value = sp;
       document.getElementById('rPowerHint').textContent = hintText;
       document.getElementById('rPowerHint').style.color = hintColor || '';
       calcRange();
@@ -785,12 +786,12 @@ function initRange(){
     calcRange();
   });
   var spIn = document.getElementById('rSpeed');
-  spIn.addEventListener('input', calcRange);
+  spIn.addEventListener('input', function(){ speedTouched = true; calcRange(); });
   spIn.addEventListener('blur', function(){
     var v = parseFloat(this.value);
-    if (!v) { this.value = 35; }
-    else if (v < 15) { this.value = 15; }
-    else if (v > 100) { this.value = 100; }
+    if (isNaN(v)) return;              // 空着就空着，不自动跳数字
+    if (v < 15) this.value = 15;
+    else if (v > 100) this.value = 100;
     calcRange();
   });
   sel.addEventListener('change', calcRange);
@@ -812,11 +813,16 @@ function calcRange(){
     clearRange('这台车没有录入电机功率，请在上面填写（常见 400W / 800W / 1200W / 2000W / 3000W）');
     return;
   }
-  var spEl = document.getElementById('rSpeed');
-  var speed = parseFloat(spEl.value) || 35;
-  if (speed < 15) speed = 15;
-  if (speed > 100) speed = 100;
-  if (String(speed) !== String(spEl.value)) spEl.value = speed;
+  var spRaw = String(document.getElementById('rSpeed').value).trim();
+  var speed = parseFloat(spRaw);
+  if (!spRaw || isNaN(speed)){
+    clearRange('请输入骑行速度（15–100 km/h）');
+    return;
+  }
+  if (speed < 15 || speed > 100){
+    clearRange('骑行速度请填 15–100 km/h 之间');
+    return;
+  }
 
   var r = estimateRange(b, power, speed);
   var rr = Math.round;
