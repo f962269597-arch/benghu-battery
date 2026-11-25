@@ -760,14 +760,33 @@ function initRange(){
       var v = allVehicles[i];
       var name = (v._brand.split('_')[0] + ' ' + v.型号).toLowerCase();
       if (name === q || v.型号.toLowerCase() === q){
-        var known = !!v.电机_额定功率_W;
-        var pwr = known ? v.电机_额定功率_W : guessPower(v);
-        document.getElementById('rPower').value = pwr;
-        var sp = speedForPower(pwr, v.类型);
-        if (document.getElementById('rScene').value !== 'load') document.getElementById('rScene').value = sp;
-        document.getElementById('rPowerHint').textContent = known ? '车型库：' + pwr + 'W' : '未录入，按 ' + pwr + 'W 估算';
-        document.getElementById('rPowerHint').style.color = known ? '' : '#b45309';
-        return calcRange();
+        if (v.电机_额定功率_W){
+          var pwr = v.电机_额定功率_W;
+          document.getElementById('rPower').value = pwr;
+          var sp = speedForPower(pwr, v.类型);
+          if (document.getElementById('rScene').value !== 'load') document.getElementById('rScene').value = sp;
+          document.getElementById('rPowerHint').textContent = '车型库：' + pwr + 'W';
+          document.getElementById('rPowerHint').style.color = '';
+          return calcRange();
+        }
+        // 车型库没功率 -> 再查电摩之家功率库
+        for (var pz = 0; pz < POWER_DB.length; pz++){
+          if ((POWER_DB[pz][0] + ' ' + POWER_DB[pz][1]).toLowerCase() === q){
+            var pv = POWER_DB[pz][2];
+            document.getElementById('rPower').value = pv;
+            var sv = speedForPower(pv, '');
+            if (document.getElementById('rScene').value !== 'load') document.getElementById('rScene').value = sv;
+            document.getElementById('rPowerHint').textContent = '电摩之家：' + pv + 'W' + (POWER_DB[pz][3] ? ' · ' + POWER_DB[pz][3] + 'kg' : '');
+            document.getElementById('rPowerHint').style.color = '';
+            return calcRange();
+          }
+        }
+        // 两边都没有 -> 要求手动填
+        document.getElementById('rPower').value = '';
+        document.getElementById('rPowerHint').textContent = '该车型未录功率，请手动填写';
+        document.getElementById('rPowerHint').style.color = '#b45309';
+        clearRange('「' + v.型号 + '」还没有电机功率数据，填一个数值就能算（常见 400W / 800W / 1200W / 2000W / 3000W）');
+        return;
       }
     }
     // 车型库没有 -> 查电摩之家功率库
@@ -785,17 +804,35 @@ function initRange(){
     }
     calcRange();
   });
-  document.getElementById('rPower').addEventListener('input', calcRange);
+  document.getElementById('rPower').addEventListener('input', function(){
+    if (this.value){
+      document.getElementById('rPowerHint').textContent = '手动填写';
+      document.getElementById('rPowerHint').style.color = 'var(--muted)';
+    }
+    calcRange();
+  });
   sel.addEventListener('change', calcRange);
   document.getElementById('rScene').addEventListener('change', calcRange);
   calcRange();
+}
+
+function clearRange(msg){
+  document.getElementById('rSummer').textContent = '—';
+  document.getElementById('rWinter').textContent = '—';
+  document.getElementById('rSummerRange').textContent = '';
+  document.getElementById('rWinterRange').textContent = '';
+  document.getElementById('rDetail').innerHTML = msg || '请先填写电机功率，再计算续航';
 }
 
 function calcRange(){
   var sel = document.getElementById('rBatt');
   var b = allBatteries[+sel.value];
   if (!b) return;
-  var power = +document.getElementById('rPower').value || 1200;
+  var power = +document.getElementById('rPower').value || 0;
+  if (!power){
+    clearRange('这台车没有录入电机功率，请在上面填写（常见 400W / 800W / 1200W / 2000W / 3000W）');
+    return;
+  }
   var scene = document.getElementById('rScene').value;
   var r = estimateRange(b, power, scene);
 
