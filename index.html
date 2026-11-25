@@ -654,6 +654,10 @@ function guessPower(v){
   return 1500;
 }
 
+function normName(x){
+  return (x || '').toLowerCase().replace(/[\s（）()\/·\-—_、,，]/g, '').replace(/新品|新款|款/g, '');
+}
+
 function speedForPower(power, type){
   if ((type || '').indexOf('三轮') >= 0) return '35';
   if (power <= 600) return '25';
@@ -781,11 +785,28 @@ function initRange(){
             return calcRange();
           }
         }
-        // 两边都没有 -> 要求手动填
+        // 精确匹配失败 -> 归一化后做近似匹配，只有一个候选才用
+        var nq = normName(q), cands = [];
+        for (var cc = 0; cc < POWER_DB.length; cc++){
+          var nb = normName(POWER_DB[cc][0] + ' ' + POWER_DB[cc][1]);
+          if (nb && (nb.indexOf(nq) === 0 || nq.indexOf(nb) === 0)) cands.push(POWER_DB[cc]);
+        }
+        if (cands.length === 1){
+          var pc = cands[0][2];
+          document.getElementById('rPower').value = pc;
+          var sc = speedForPower(pc, '');
+          if (document.getElementById('rScene').value !== 'load') document.getElementById('rScene').value = sc;
+          document.getElementById('rPowerHint').textContent = '近似匹配：' + cands[0][1] + ' · ' + pc + 'W';
+          document.getElementById('rPowerHint').style.color = '#b45309';
+          return calcRange();
+        }
+        // 多个候选或没有 -> 要求手动填
         document.getElementById('rPower').value = '';
         document.getElementById('rPowerHint').textContent = '该车型未录功率，请手动填写';
         document.getElementById('rPowerHint').style.color = '#b45309';
-        clearRange('「' + v.型号 + '」还没有电机功率数据，填一个数值就能算（常见 400W / 800W / 1200W / 2000W / 3000W）');
+        clearRange('「' + v.型号 + '」还没有电机功率数据' +
+          (cands.length > 1 ? '（功率库里有 ' + cands.length + ' 个相近车型，无法确定）' : '') +
+          '，填一个数值就能算（常见 400W / 800W / 1200W / 2000W / 3000W）');
         return;
       }
     }
