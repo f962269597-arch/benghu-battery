@@ -140,12 +140,19 @@ b_json = json.dumps(batteries, ensure_ascii=False)
 # ============================================================
 # 页面模板（__VJSON__ / __BJSON__ 在生成时替换为数据）
 # ============================================================
+# 电摩之家功率库（只给续航计算器用，不参与车型匹配）
+POWER_DB = []
+_pdb = os.path.join(BASE, 'power_db.json')
+if os.path.exists(_pdb):
+    POWER_DB = json.load(open(_pdb, encoding='utf-8'))
+
 TEMPLATE = open(os.path.join(BASE, 'page_template.html'), 'r', encoding='utf-8').read()
 
-html = TEMPLATE.replace('__VJSON__', v_json).replace('__BJSON__', b_json)
+html = (TEMPLATE.replace('__VJSON__', v_json).replace('__BJSON__', b_json)
+        .replace('__POWERDB__', json.dumps(POWER_DB, ensure_ascii=False, separators=(',', ':'))))
 
 out = os.path.join(BASE, 'index.html')
 with open(out, 'w', encoding='utf-8') as f:
     f.write(html)
-print(f'Vehicles: {total_v} | Batteries: {total_b} | Brands: {brand_count}')
+print(f'Vehicles: {total_v} | Batteries: {total_b} | Brands: {brand_count} | PowerDB: {len(POWER_DB)}')
 print(f'Generated: {out} ({len(html)} bytes)')

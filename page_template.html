@@ -465,6 +465,7 @@ html.dark .cres.cold{background:#151d2b;border-color:#22314a}
 <script>
 var VEHICLES = __VJSON__;
 var BATTERIES = __BJSON__;
+var POWER_DB = __POWERDB__;   // [[品牌,车型,额定W,整备kg,极速],...] 只用于续航估算
 var allVehicles = [];
 var allBatteries = BATTERIES;
 var curQuery = '';
@@ -712,7 +713,22 @@ function initRange(){
     var v = allVehicles[i];
     h += '<option value="' + (v._brand.split('_')[0] + ' ' + v.型号).replace(/"/g, '') + '"></option>';
   }
+  // 补上功率库里的车型（只用于查功率，不进匹配库）
+  var seenName = {};
+  for (var i2 = 0; i2 < allVehicles.length; i2++){
+    seenName[(allVehicles[i2]._brand.split('_')[0] + ' ' + allVehicles[i2].型号).toLowerCase()] = 1;
+  }
+  var extra = 0;
+  for (var k2 = 0; k2 < POWER_DB.length; k2++){
+    var full2 = POWER_DB[k2][0] + ' ' + POWER_DB[k2][1];
+    var low2 = full2.toLowerCase();
+    if (seenName[low2]) continue;
+    seenName[low2] = 1;
+    h += '<option value="' + full2.replace(/"/g, '') + '"></option>';
+    extra++;
+  }
   dl.innerHTML = h;
+  window.__pdbCount = extra;
 
   var sel = document.getElementById('rBatt');
   var groups = {}, volts = [];
@@ -751,6 +767,19 @@ function initRange(){
         if (document.getElementById('rScene').value !== 'load') document.getElementById('rScene').value = sp;
         document.getElementById('rPowerHint').textContent = known ? '车型库：' + pwr + 'W' : '未录入，按 ' + pwr + 'W 估算';
         document.getElementById('rPowerHint').style.color = known ? '' : '#b45309';
+        return calcRange();
+      }
+    }
+    // 车型库没有 -> 查电摩之家功率库
+    for (var m3 = 0; m3 < POWER_DB.length; m3++){
+      var pb = POWER_DB[m3];
+      if ((pb[0] + ' ' + pb[1]).toLowerCase() === q){
+        var p3 = pb[2];
+        document.getElementById('rPower').value = p3;
+        var sp3 = speedForPower(p3, '');
+        if (document.getElementById('rScene').value !== 'load') document.getElementById('rScene').value = sp3;
+        document.getElementById('rPowerHint').textContent = '电摩之家：' + p3 + 'W' + (pb[3] ? ' · ' + pb[3] + 'kg' : '');
+        document.getElementById('rPowerHint').style.color = '';
         break;
       }
     }
