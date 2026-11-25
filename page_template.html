@@ -169,6 +169,9 @@ html.dark .cres{background:#241f12;border-color:#3a331c}
 .cnum i{font-style:normal;font-size:14px;color:var(--muted)}
 .crange{margin-top:4px;font-size:12.5px;color:var(--muted)}
 .cdetail{font-size:12px;color:var(--muted);line-height:1.65}
+.cadv{margin-top:2px;font-size:11.5px;color:var(--muted)}
+.cadv summary{cursor:pointer;color:var(--muted);text-decoration:underline;padding:2px 0}
+.cadv #rAdvanced{margin-top:6px;line-height:1.7;padding:8px 10px;background:var(--bg);border-radius:8px}
 .cwarn{margin-top:12px;font-size:13px;font-weight:800;color:#b45309;letter-spacing:.3px}
 .cnote{margin-top:10px;font-size:11.5px;color:var(--muted);line-height:1.6;border-top:1px dashed var(--border);padding-top:10px}
 /* ===== 产品查找 ===== */
@@ -372,6 +375,7 @@ html.dark .cres{background:#241f12;border-color:#3a331c}
           <div class="crange" id="rRangeBand"></div>
         </div>
         <div class="cdetail" id="rDetail"></div>
+        <details class="cadv"><summary>查看计算过程（车重、风阻、效率）</summary><div id="rAdvanced"></div></details>
       </div>
 
       <div class="cwarn">实际骑行里程会受温度、路况、车况、载重、速度影响。</div>
@@ -818,12 +822,18 @@ function calcRange(){
   var rr = Math.round;
   document.getElementById('rRange').textContent = Math.floor(r.range);
   document.getElementById('rRangeBand').textContent = '区间 ' + Math.floor(r.lo) + '–' + Math.floor(r.hi) + ' km（已含 5% 保守折减）';
+  var kwhNom = b.电量_Wh / 1000, kwhUse = r.eUse / 1000, kwhKm = r.whkm / 1000;
+  var raw = r.range / 0.95;
   document.getElementById('rDetail').innerHTML =
-    '电池 <b>' + b.展示名 + '</b> ' + b.电压_V + 'V×' + b.容量_Ah + 'Ah = ' + b.电量_Wh + 'Wh' +
-    '，可用 <b>' + rr(r.eUse) + 'Wh</b>（DOD 92% × 一致性 99%）' +
-    '；' + r.cls + ' 车+人 ' + rr(r.m) + 'kg、均速 ' + r.v + 'km/h、耗电 <b>' + r.whkm.toFixed(1) + ' Wh/km</b>' +
-    '（滚阻 ' + rr(r.pRoll) + 'W + 风阻 ' + rr(r.pAero) + 'W，电机 ' + rr(r.power) + 'W 负载 ' + Math.round(r.load*100) + '%、效率 ' + Math.round(r.eta*100) + '%）' +
-    ' → 理论 <b>' + Math.floor(r.range) + ' km</b>';
+    '这块电池标称 <b>' + kwhNom.toFixed(2) + ' 度电</b>（' + b.电压_V + 'V × ' + b.容量_Ah + 'Ah = ' + b.电量_Wh + 'Wh），' +
+    '实际能放出 <b>' + kwhUse.toFixed(2) + ' 度</b>（留 8% 不放干 + 1% 线路损耗）<br>' +
+    '按 <b>' + r.v + 'km/h</b> 骑，每公里耗电约 <b>' + kwhKm.toFixed(3) + ' 度</b>（' + r.whkm.toFixed(1) + 'Wh）<br>' +
+    '理论能跑 <b>' + Math.floor(raw) + ' km</b>，保守折减 5% → <b>' + Math.floor(r.range) + ' km</b>';
+  document.getElementById('rAdvanced').innerHTML =
+    '整车+人 ' + rr(r.m) + 'kg（' + r.cls + '档）· 均速 ' + r.v + 'km/h<br>' +
+    '滚阻 ' + rr(r.pRoll) + 'W ＋ 风阻 ' + rr(r.pAero) + 'W ＝ ' + rr(r.pRoll + r.pAero) + 'W<br>' +
+    '电机 ' + rr(r.power) + 'W，当前负载 ' + Math.round(r.load*100) + '%，传动效率 ' + Math.round(r.eta*100) + '%<br>' +
+    '每公里耗电 = 功率 ÷ 车速 × 工况系数 ＝ ' + r.whkm.toFixed(1) + 'Wh/km';
 }
 
 function initFinder(){
