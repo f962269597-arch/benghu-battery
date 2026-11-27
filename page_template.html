@@ -569,7 +569,9 @@ function checkFit(battery, vehicle){
   var powerFit = vehPwr ? (vehPwr <= battMaxPwr) : false;
   var level = (sizeFit && voltOk) ? (powerFit ? '完美匹配' : '尺寸合适(功率需确认)') : (sizeFit && !voltOk ? '电压不匹配' : '尺寸不匹配');
   var fits = sizeFit && voltOk;
-  return { fits: fits, powerFit: powerFit, voltOk: voltOk, fitLevel: level, reasons: reasons,
+  // 宽松匹配：这几款小容量电池，电压对就先列出来，尺寸仅提示（客户仓大、主动选小电池）
+  var loose = (!sizeFit && voltOk && battery.宽松匹配 === true);
+  return { fits: fits, loose: loose, powerFit: powerFit, voltOk: voltOk, fitLevel: level, reasons: reasons,
            laid: fitPerm ? fitPerm.laid : false, installDims: fitPerm ? fitPerm.d.join('×') : '' };
 }
 
@@ -1038,6 +1040,15 @@ function showBatteryModal(idx){
       (b.认证报告 ? '<a href="' + b.认证报告 + '" target="_blank">✅ 下载认证报告</a>' : '') +
     '</div>';
   }
+  var looseR = results.filter(function(r){ return r.loose; });
+  var looseHTML = looseR.length
+    ? '<div class="matches-title" style="margin-top:14px">📐 电压匹配 · 尺寸待确认 <span class="sec-tag">' + looseR.length + ' 款</span></div>' +
+      '<div class="vm-list">' + looseR.map(function(r){
+        var v = r.vehicle;
+        return '<div class="vm-item"><span class="badge badge-amber">需现场确认</span>' +
+          '<div class="info"><div class="nm">' + v.型号 + '</div><div class="sub">' + (v._brand || '').split('_')[0] + ' · ' + (v.类型 || '') + ' · 仓 ' + (v.电池仓_长_mm||'-') + '×' + (v.电池仓_宽_mm||'-') + '×' + (v.电池仓_高_mm||'-') + 'mm</div></div></div>';
+      }).join('') + '</div>'
+    : '';
   var listHTML = fits.length
     ? fits.map(function(r){
         var v = r.vehicle;
@@ -1050,7 +1061,7 @@ function showBatteryModal(idx){
   var matchSection = b.参与匹配 === false
     ? '<div class="mt-note">ℹ️ 本品为独立产品，不参与车型匹配</div>'
     : '<div class="matches-title">🔋 可匹配车型 <span class="sec-tag">' + fits.length + ' 款</span>' + (perfect.length ? '<span class="badge badge-green">' + perfect.length + ' 款完美匹配</span>' : '') + '</div>' +
-      '<div class="vm-list">' + listHTML + '</div>' +
+      '<div class="vm-list">' + listHTML + '</div>' + looseHTML +
       (fits.length && !perfect.length ? '<div class="mt-note">⚠️ 存在匹配车型，但电机功率范围需进一步确认</div>' : '');
   document.getElementById('modalContent').innerHTML =
     '<button class="close" onclick="closeModal()">✕</button>' +
@@ -1072,6 +1083,15 @@ function showVehicleModal(brand, model){
   var perfect = br.filter(function(r){ return r.fitLevel === '完美匹配'; });
   var src = v.数据来源 || '网络收集', conf = v.可信度 || '中';
   var confBadge = conf === '高' ? '<span class="badge badge-green">' + conf + '可信</span>' : (conf === '低' ? '<span class="badge badge-red">' + conf + '可信</span>' : '<span class="badge badge-amber">' + conf + '可信</span>');
+  var looseB = br.filter(function(r){ return r.loose; });
+  var looseBHTML = looseB.length
+    ? '<div class="matches-title" style="margin-top:14px">📐 电压匹配 · 尺寸待确认 <span class="sec-tag">' + looseB.length + ' 款</span></div>' +
+      '<div class="vm-list">' + looseB.map(function(r){
+        var bb = r.battery;
+        return '<div class="vm-item"><span class="badge badge-amber">需现场确认</span>' +
+          '<div class="info"><div class="nm">奔虎' + bb.展示名 + '</div><div class="sub">' + bb.电压_V + 'V · ' + bb.电量_Wh + 'Wh · ' + bb.长_mm + '×' + bb.宽_mm + '×' + bb.高_mm + 'mm</div></div></div>';
+      }).join('') + '</div>'
+    : '';
   var listHTML = fitBatt.length
     ? fitBatt.map(function(r){
         var b = r.battery;
@@ -1095,7 +1115,7 @@ function showVehicleModal(brand, model){
     '</div>' +
     (v.备注 ? '<div class="mt-note" style="color:var(--muted)">💡 ' + v.备注 + '</div>' : '') +
     '<div class="matches-title">🔋 可装奔虎电池 <span class="sec-tag">' + fitBatt.length + ' 款</span>' + (perfect.length ? '<span class="badge badge-green">' + perfect.length + ' 款完美匹配</span>' : '') + '</div>' +
-    '<div class="vm-list">' + listHTML + '</div>' +
+    '<div class="vm-list">' + listHTML + '</div>' + looseBHTML +
     (fitBatt.length && !perfect.length ? '<div class="mt-note">⚠️ 存在可装电池，但电机功率范围需进一步确认</div>' : '');
   document.getElementById('overlay').classList.add('show');
   document.getElementById('overlay').scrollTop = 0;
