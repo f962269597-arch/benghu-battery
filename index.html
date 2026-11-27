@@ -240,6 +240,13 @@ html.dark .cres{background:#241f12;border-color:#3a331c}
 .vm-item .sub{font-size:11.5px;color:var(--muted);margin-top:2px}
 .vm-item .dims{font-size:12px;color:var(--muted);white-space:nowrap}
 .mt-note{margin-top:10px;font-size:12px;color:var(--amber)}
+.plat-note{margin-top:8px;font-size:12.5px;background:var(--yellow-soft);border:1px solid #f3e6bf;border-radius:8px;padding:7px 11px;color:#7a6314}
+.plat-note b{color:#5c4a0c}
+.mt-details{margin-top:14px;font-size:12px;color:var(--muted)}
+.mt-details summary{cursor:pointer;text-decoration:underline;padding:3px 0}
+.mt-details .ex{display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px dashed var(--border);flex-wrap:wrap}
+.mt-details .ex .nm{min-width:170px;color:var(--fg)}
+.mt-details .ex .rs{flex:1;font-size:11.5px}
 /* ===== 页脚 ===== */
 .footer{border-top:1px solid var(--border);padding:30px 16px 44px;text-align:center;font-size:12.5px;color:var(--muted)}
 .footer a{color:var(--yellow);font-weight:600}
@@ -562,7 +569,7 @@ function checkFit(battery, vehicle){
   } else if (VOLT_MAP[vVolt] === undefined) {
     voltOk = false; reasons.push('原厂电压 ' + vVolt + 'V 暂无对应锂电平台');
   } else if (battVolt !== VOLT_MAP[vVolt]) {
-    voltOk = false; reasons.push('电压不匹配：' + vVolt + 'V 原厂需用 ' + VOLT_MAP[vVolt] + 'V 锂电');
+    voltOk = false; reasons.push('电压不匹配：原厂 ' + vVolt + 'V 平台，要配 ' + VOLT_MAP[vVolt] + 'V 锂电（这款是 ' + battVolt + 'V）');
   }
   var battMaxPwr = battery.适用电机功率_最大_W || 99999;
   var vehPwr = vehicle.电机_额定功率_W || 0;
@@ -1092,6 +1099,30 @@ function showVehicleModal(brand, model){
           '<div class="info"><div class="nm">奔虎' + bb.展示名 + '</div><div class="sub">' + bb.电压_V + 'V · ' + bb.电量_Wh + 'Wh · ' + bb.长_mm + '×' + bb.宽_mm + '×' + bb.高_mm + 'mm</div></div></div>';
       }).join('') + '</div>'
     : '';
+  var vSpec2 = (v.原厂电池规格 || '').toLowerCase();
+  var vm2 = vSpec2.match(/(\d+(?:\.\d+)?)\s*v/);
+  var vv2 = vm2 ? parseFloat(vm2[1]) : 0;
+  if (vv2 >= 63 && vv2 <= 66) vv2 = 64;
+  else if (vv2 >= 70 && vv2 <= 74) vv2 = 72;
+  else if (vv2 >= 75 && vv2 <= 78) vv2 = 76.8;
+  else if (vv2 >= 56 && vv2 <= 62) vv2 = 60;
+  else if (vv2 >= 46 && vv2 <= 53) vv2 = 48;
+  var PLAT = { 60: 64, 64: 64, 72: 76.8, 76.8: 76.8, 48: 48 };
+  var platTxt = PLAT[vv2] ? ('原厂 ' + vv2 + 'V 平台 → 只能配 <b>' + PLAT[vv2] + 'V</b> 锂电，其它电压装不上（欠压保护/控制器不匹配）') : '';
+  var platHTML = platTxt ? '<div class="plat-note">🔌 ' + platTxt + '</div>' : '';
+
+  var excluded = br.filter(function(r){ return !r.fits && !r.loose; });
+  var exHTML = excluded.length
+    ? '<details class="mt-details"><summary>还有 ' + excluded.length + ' 款电池没列出来（点开看原因）</summary>' +
+      excluded.map(function(r){
+        var bb = r.battery;
+        var why = (r.reasons && r.reasons.length) ? r.reasons[r.reasons.length - 1] : r.fitLevel;
+        var tag = (r.voltOk === false) ? '电压不匹配' : '尺寸不匹配';
+        var cls = (r.voltOk === false) ? 'badge-red' : 'badge-gray';
+        return '<div class="ex"><span class="nm">' + bb.展示名 + '</span><span class="badge ' + cls + '">' + tag + '</span><span class="rs">' + why + '</span></div>';
+      }).join('') + '</details>'
+    : '';
+
   var listHTML = fitBatt.length
     ? fitBatt.map(function(r){
         var b = r.battery;
@@ -1114,8 +1145,9 @@ function showVehicleModal(brand, model){
       (v.电池仓_双仓 ? '<div><span class="lb">电池仓：</span><span class="vl">双电池仓设计</span></div>' : '<div></div>') +
     '</div>' +
     (v.备注 ? '<div class="mt-note" style="color:var(--muted)">💡 ' + v.备注 + '</div>' : '') +
+    platHTML +
     '<div class="matches-title">🔋 可装奔虎电池 <span class="sec-tag">' + fitBatt.length + ' 款</span>' + (perfect.length ? '<span class="badge badge-green">' + perfect.length + ' 款完美匹配</span>' : '') + '</div>' +
-    '<div class="vm-list">' + listHTML + '</div>' + looseBHTML +
+    '<div class="vm-list">' + listHTML + '</div>' + looseBHTML + exHTML +
     (fitBatt.length && !perfect.length ? '<div class="mt-note">⚠️ 存在可装电池，但电机功率范围需进一步确认</div>' : '');
   document.getElementById('overlay').classList.add('show');
   document.getElementById('overlay').scrollTop = 0;
