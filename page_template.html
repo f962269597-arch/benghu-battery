@@ -574,10 +574,15 @@ function checkFit(battery, vehicle){
   var battMaxPwr = battery.适用电机功率_最大_W || 99999;
   var vehPwr = vehicle.电机_额定功率_W || 0;
   var powerFit = vehPwr ? (vehPwr <= battMaxPwr) : false;
+  // 尺寸适配款（6435/6450/7635 立款）：只看仓体装不装得下，电压由终端用户自己核控制器
+  if (battery.尺寸适配 === true){
+    return { fits: sizeFit, loose: false, powerFit: powerFit, voltOk: voltOk,
+             fitLevel: sizeFit ? '尺寸适配' : '尺寸不匹配', reasons: reasons,
+             laid: fitPerm ? fitPerm.laid : false, installDims: fitPerm ? fitPerm.d.join('×') : '' };
+  }
   var level = (sizeFit && voltOk) ? (powerFit ? '完美匹配' : '尺寸合适(功率需确认)') : (sizeFit && !voltOk ? '电压不匹配' : '尺寸不匹配');
   var fits = sizeFit && voltOk;
-  // 宽松匹配：这几款小容量电池，电压对就先列出来，尺寸仅提示（客户仓大、主动选小电池）
-  var loose = (!sizeFit && voltOk && battery.宽松匹配 === true);
+  var loose = false;
   return { fits: fits, loose: loose, powerFit: powerFit, voltOk: voltOk, fitLevel: level, reasons: reasons,
            laid: fitPerm ? fitPerm.laid : false, installDims: fitPerm ? fitPerm.d.join('×') : '' };
 }
@@ -587,7 +592,7 @@ function matchBatteryToVehicles(battery){
   return allVehicles.map(function(v){
     var r = checkFit(battery, v); r.vehicle = v; return r;
   }).sort(function(a, b){
-    var o = {'完美匹配':0, '尺寸合适(功率需确认)':1, '尺寸不匹配':2, '电压不匹配':3};
+    var o = {'完美匹配':0, '尺寸适配':1, '尺寸合适(功率需确认)':1, '尺寸不匹配':2, '电压不匹配':3};
     return (o[a.fitLevel] === undefined ? 4 : o[a.fitLevel]) - (o[b.fitLevel] === undefined ? 4 : o[b.fitLevel]);
   });
 }
@@ -602,6 +607,7 @@ function matchVehicleToBatteries(vehicle){
 }
 
 function fitBadge(level){
+  if (level === '尺寸适配') return '<span class="badge badge-blue">📐 尺寸适配（电压自核）</span>';
   if (level === '完美匹配') return '<span class="badge badge-green">✅ 完美匹配</span>';
   if (level === '尺寸合适(功率需确认)') return '<span class="badge badge-amber">⚠️ 尺寸合适(功率需确认)</span>';
   return '<span class="badge badge-red">✖ ' + level + '</span>';
@@ -1148,6 +1154,8 @@ function showVehicleModal(brand, model){
     platHTML +
     '<div class="matches-title">🔋 可装奔虎电池 <span class="sec-tag">' + fitBatt.length + ' 款</span>' + (perfect.length ? '<span class="badge badge-green">' + perfect.length + ' 款完美匹配</span>' : '') + '</div>' +
     '<div class="vm-list">' + listHTML + '</div>' + looseBHTML + exHTML +
+    (fitBatt.some(function(r){ return r.fitLevel === '尺寸适配'; })
+      ? '<div class="mt-note">📐 标「尺寸适配」的是按仓体尺寸列的，电压不一定对得上，控制器兼容性请自行确认</div>' : '') +
     (fitBatt.length && !perfect.length ? '<div class="mt-note">⚠️ 存在可装电池，但电机功率范围需进一步确认</div>' : '');
   document.getElementById('overlay').classList.add('show');
   document.getElementById('overlay').scrollTop = 0;
